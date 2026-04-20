@@ -4,6 +4,7 @@ import EDAInsights from './components/EDAInsights'
 import ModelDashboard from './components/ModelDashboard'
 import BusinessImpact from './components/BusinessImpact'
 import CustomerSegments from './components/CustomerSegments'
+import SentimentAnalysis from './components/SentimentAnalysis'
 import ResumeFooter from './components/ResumeFooter'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -14,6 +15,7 @@ const NAV_LINKS = [
   { label: 'Models', href: '#models' },
   { label: 'Impact', href: '#impact' },
   { label: 'Segments', href: '#segments' },
+  { label: 'Sentiment', href: '#sentiment' },
 ]
 
 const STATS = [
@@ -551,6 +553,8 @@ export default function App() {
       <BusinessImpact />
       <SectionDivider />
       <CustomerSegments />
+      <SectionDivider />
+      <SentimentAnalysis />
       <ResumeFooter />
     </div>
   )
