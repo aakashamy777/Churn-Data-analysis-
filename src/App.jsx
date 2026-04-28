@@ -10,12 +10,14 @@ import ResumeFooter from './components/ResumeFooter'
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'Predictor', href: '#predictor' },
+  { label: 'Problem', href: '#problem' },
+  { label: 'Insights', href: '#insights' },
   { label: 'Models', href: '#models' },
-  { label: 'Impact', href: '#impact' },
   { label: 'Segments', href: '#segments' },
+  { label: 'Impact', href: '#impact' },
+  { label: 'Predictor', href: '#predictor' },
   { label: 'Sentiment', href: '#sentiment' },
+  { label: 'Resume', href: '#resume' },
 ]
 
 const STATS = [
@@ -77,8 +79,8 @@ function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
           {/* Logo */}
           <a
-            href="#overview"
-            onClick={(e) => handleNavClick(e, '#overview')}
+            href="#hero"
+            onClick={(e) => handleNavClick(e, '#hero')}
             style={{
               fontSize: '1.5rem',
               fontWeight: 800,
@@ -183,7 +185,7 @@ function Hero() {
 
   return (
     <section
-      id="overview"
+      id="hero"
       style={{
         minHeight: '100vh',
         display: 'flex',
@@ -534,6 +536,116 @@ function SectionDivider() {
   )
 }
 
+// ─── Problem Statement ───────────────────────────────────────────────────────
+
+function ProblemStatement() {
+  const columns = [
+    {
+      title: 'The Challenge',
+      text: 'E-commerce platforms lose 15–20% of customers every month to churn. Each lost customer = lost lifetime revenue. Most businesses only realise a customer has churned after they\'ve already left.',
+    },
+    {
+      title: 'The Approach',
+      text: 'Analyze behavioral patterns of 5,630 customers. Identify signals that appear before churn happens. Build a model that flags at-risk customers 30 days before they leave.',
+    },
+    {
+      title: 'The Outcome',
+      text: '99.63% prediction accuracy. 348% ROI on retention campaigns. 4 customer segments each with targeted retention strategies.',
+    },
+  ]
+
+  return (
+    <section
+      id="problem"
+      style={{
+        padding: '5rem 1.5rem',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '800px',
+          width: '100%',
+          background: '#1e293b',
+          borderRadius: '1rem',
+          borderLeft: '4px solid #3b82f6',
+          padding: '2.5rem',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+        }}
+      >
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <span style={{ fontSize: '2.5rem' }}>🎯</span>
+          <h2
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 800,
+              color: '#f1f5f9',
+              marginTop: '0.5rem',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            The Business Problem
+          </h2>
+        </div>
+
+        {/* 3 Columns */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1.5rem',
+            marginBottom: '2rem',
+          }}
+        >
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h3
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  color: '#60a5fa',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {col.title}
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  color: '#94a3b8',
+                  lineHeight: 1.7,
+                  margin: 0,
+                }}
+              >
+                {col.text}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Tech line */}
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '0.8rem',
+            color: '#64748b',
+            margin: 0,
+            letterSpacing: '0.02em',
+          }}
+        >
+          Built using Python · Scikit-learn · XGBoost · Random Forest · SHAP · KMeans · TextBlob
+        </p>
+      </div>
+    </section>
+  )
+}
+
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -542,19 +654,20 @@ export default function App() {
       <Navbar />
       <Hero />
       <SectionDivider />
-      <TechStack />
-      <SectionDivider />
-      <ChurnPredictor />
+      <ProblemStatement />
       <SectionDivider />
       <EDAInsights />
       <SectionDivider />
       <ModelDashboard />
       <SectionDivider />
-      <BusinessImpact />
-      <SectionDivider />
       <CustomerSegments />
       <SectionDivider />
+      <BusinessImpact />
+      <SectionDivider />
+      <ChurnPredictor />
+      <SectionDivider />
       <SentimentAnalysis />
+      <SectionDivider />
       <ResumeFooter />
     </div>
   )

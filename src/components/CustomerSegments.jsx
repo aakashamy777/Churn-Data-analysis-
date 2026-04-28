@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-    RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Legend, Tooltip
+    BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine
 } from 'recharts'
 
 // ─── Segment Data ─────────────────────────────────────────────────────────────
@@ -36,16 +36,13 @@ const SEGMENTS = [
     },
 ]
 
-// Normalized 0-1 for radar
-const RADAR_DATA = [
-    { axis: 'Tenure', seg0: 8.15 / 16, seg1: 8.88 / 16, seg2: 12.04 / 16, seg3: 1.0 },
-    { axis: 'Orders', seg0: 1.92 / 9, seg1: 1.23 / 9, seg2: 1.0, seg3: 2.45 / 9 },
-    { axis: 'Cashback', seg0: 155 / 249, seg1: 151 / 249, seg2: 199 / 249, seg3: 1.0 },
-    { axis: 'Low Churn', seg0: 1 - 17 / 34, seg1: 0, seg2: 1 - 16 / 34, seg3: 1 - 9 / 34 },
-    { axis: 'Recency', seg0: 0.5, seg1: 0.4, seg2: 0.85, seg3: 0.9 },
+// Bar chart data
+const CHURN_BAR_DATA = [
+    { segment: 'Seg 1 At-Risk', churnRate: 34, fill: '#ef4444' },
+    { segment: 'Seg 0 Mid-Value', churnRate: 17, fill: '#3b82f6' },
+    { segment: 'Seg 2 Active', churnRate: 16, fill: '#3b82f6' },
+    { segment: 'Seg 3 Loyal', churnRate: 9, fill: '#22c55e' }
 ]
-
-const RADAR_COLORS = ['#f59e0b', '#ef4444', '#22c55e', '#3b82f6']
 
 // ─── Segment Card ─────────────────────────────────────────────────────────────
 
@@ -186,37 +183,42 @@ export default function CustomerSegments() {
                 {SEGMENTS.map((seg) => <SegmentCard key={seg.id} seg={seg} />)}
             </div>
 
-            {/* Radar Chart */}
+            {/* Churn Rate Chart */}
             <div style={{ background: '#1e293b', borderRadius: '0.75rem', padding: '1.75rem', border: '1px solid #334155' }}>
-                <h3 style={{ margin: '0 0 0.5rem', fontSize: '1rem', fontWeight: 700, color: '#f1f5f9', textAlign: 'center' }}>
-                    Segment Comparison — Radar Chart
+                <h3 style={{ margin: '0 0 1.5rem', fontSize: '1rem', fontWeight: 700, color: '#f1f5f9', textAlign: 'center' }}>
+                    Churn Rate by Customer Segment
                 </h3>
-                <p style={{ margin: '0 0 1.5rem', fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center' }}>
-                    Normalized attributes across all 4 segments
-                </p>
-                <ResponsiveContainer width="100%" height={320}>
-                    <RadarChart data={RADAR_DATA} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
-                        <PolarGrid stroke="#334155" />
-                        <PolarAngleAxis dataKey="axis" tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                        {SEGMENTS.map((seg, i) => (
-                            <Radar
-                                key={seg.id}
-                                name={`Seg ${seg.id}: ${seg.name}`}
-                                dataKey={`seg${seg.id}`}
-                                stroke={RADAR_COLORS[i]}
-                                fill={RADAR_COLORS[i]}
-                                fillOpacity={0.08}
-                                strokeWidth={2}
-                            />
-                        ))}
-                        <Legend
-                            formatter={(v) => <span style={{ color: '#94a3b8', fontSize: '0.78rem' }}>{v}</span>}
+                <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={CHURN_BAR_DATA} margin={{ top: 10, right: 10, bottom: 20, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                        <XAxis 
+                            dataKey="segment" 
+                            axisLine={{ stroke: '#334155' }} 
+                            tickLine={false} 
+                            tick={{ fill: '#94a3b8', fontSize: 11 }} 
                         />
-                        <Tooltip
+                        <YAxis 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fill: '#94a3b8', fontSize: 11 }} 
+                            tickFormatter={(v) => `${v}%`} 
+                        />
+                        <Tooltip 
                             contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '0.5rem', color: '#f1f5f9', fontSize: '0.8rem' }}
-                            formatter={(v) => [v.toFixed(2), '']}
+                            cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                         />
-                    </RadarChart>
+                        <ReferenceLine 
+                            y={16.8} 
+                            stroke="#ef4444" 
+                            strokeDasharray="4 4" 
+                            label={{ value: 'Dataset Avg 16.8%', position: 'insideBottomRight', fill: '#ef4444', fontSize: 10 }} 
+                        />
+                        <Bar dataKey="churnRate" radius={[4, 4, 0, 0]} barSize={40}>
+                            {CHURN_BAR_DATA.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                        </Bar>
+                    </BarChart>
                 </ResponsiveContainer>
             </div>
 

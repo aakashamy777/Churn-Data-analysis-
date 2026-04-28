@@ -143,6 +143,7 @@ export default function ResumeFooter() {
         <>
             {/* ── Resume Section ── */}
             <section
+                id="resume"
                 ref={sectionRef}
                 style={{
                     padding: '5rem 1.5rem',
