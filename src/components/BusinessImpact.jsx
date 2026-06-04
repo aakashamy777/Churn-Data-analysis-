@@ -52,7 +52,7 @@ function OutputCard({ label, value, color, large, icon }) {
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
         >
             <div style={{ fontSize: large ? '0.7rem' : '0.65rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem', fontWeight: 600 }}>
-                {icon} {label}
+                {label}
             </div>
             <div style={{ fontSize: large ? 'clamp(1.3rem, 2.5vw, 1.7rem)' : 'clamp(1rem, 2vw, 1.3rem)', fontWeight: 800, color, letterSpacing: '-0.02em' }}>
                 {value}

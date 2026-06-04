@@ -378,7 +378,7 @@ function Hero() {
               e.currentTarget.style.boxShadow = '0 0 24px rgba(59,130,246,0.35)'
             }}
           >
-            ⚡ Try Live Predictor
+            Try Live Predictor
           </button>
           <a
             href="https://github.com"
@@ -408,7 +408,7 @@ function Hero() {
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
-            ⭐ View on GitHub
+            View on GitHub
           </a>
         </div>
 
@@ -752,7 +752,7 @@ function ModeSwitcher({ mode, setMode }) {
         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }}
         onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
       >
-        ⭐ GitHub
+        GitHub
       </a>
     </div>
   )

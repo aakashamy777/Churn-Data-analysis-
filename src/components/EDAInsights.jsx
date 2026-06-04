@@ -81,7 +81,6 @@ function InsightCard({ emoji, title, takeaway, children }) {
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span style={{ fontSize: '1.3rem' }}>{emoji}</span>
                 <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#f1f5f9' }}>{title}</h3>
             </div>
             <div style={{ height: '200px', width: '100%' }}>{children}</div>
