@@ -441,10 +441,10 @@ function StatCard({ stat, delay }) {
   return (
     <div
       style={{
-        background: '#1e293b',
+        background: 'rgba(255,255,255,0.03)',
         borderRadius: '0.75rem',
         padding: '16px 12px',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+        border: '1px solid rgba(255,255,255,0.06)',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(20px)',
         transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
