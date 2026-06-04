@@ -443,8 +443,7 @@ function StatCard({ stat, delay }) {
       style={{
         background: '#1e293b',
         borderRadius: '0.75rem',
-        padding: '1.5rem',
-        borderTop: '3px solid #3b82f6',
+        padding: '16px 12px',
         boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(20px)',
@@ -453,7 +452,7 @@ function StatCard({ stat, delay }) {
     >
       <div
         style={{
-          fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+          fontSize: '22px',
           fontWeight: 800,
           color: '#f1f5f9',
           marginBottom: '0.25rem',
@@ -464,7 +463,7 @@ function StatCard({ stat, delay }) {
       </div>
       <div
         style={{
-          fontSize: '0.8rem',
+          fontSize: '10px',
           color: '#94a3b8',
           fontWeight: 500,
           textTransform: 'uppercase',
