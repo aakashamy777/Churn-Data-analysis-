@@ -6,6 +6,36 @@ import BusinessImpact from './components/BusinessImpact'
 import CustomerSegments from './components/CustomerSegments'
 import SentimentAnalysis from './components/SentimentAnalysis'
 import ResumeFooter from './components/ResumeFooter'
+import BusinessAnalyzer from './components/BusinessAnalyzer'
+
+// ─── Global Styles ───────────────────────────────────────────────────────────
+const GlobalStyles = () => (
+  <style>{`
+    .mode-content {
+      animation: modeFadeIn 0.4s ease-out forwards;
+    }
+    @keyframes modeFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%   { opacity: 1; transform: scale(1); }
+      50%  { opacity: 0.4; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .analyzer-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-left: 8px;
+      vertical-align: middle;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+      animation: pulse 2s infinite ease-in-out;
+    }
+  `}</style>
+)
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -15,6 +45,7 @@ const NAV_LINKS = [
   { label: 'Models', href: '#models' },
   { label: 'Segments', href: '#segments' },
   { label: 'Impact', href: '#impact' },
+  { label: 'Analyzer', href: '#analyzer' },
   { label: 'Predictor', href: '#predictor' },
   { label: 'Sentiment', href: '#sentiment' },
   { label: 'Resume', href: '#resume' },
@@ -73,6 +104,7 @@ function Navbar() {
         backgroundColor: scrolled ? 'rgba(15,23,42,0.85)' : 'transparent',
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(51,65,85,0.5)' : 'none',
+        marginTop: '48px',
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
@@ -247,18 +279,17 @@ function Hero() {
           <span
             style={{
               display: 'inline-block',
-              padding: '0.4rem 1rem',
-              background: 'rgba(59,130,246,0.12)',
-              border: '1px solid rgba(59,130,246,0.3)',
-              borderRadius: '9999px',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              color: '#60a5fa',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
+              background: 'rgba(59,130,246,0.15)',
+              border: '1px solid rgba(59,130,246,0.4)',
+              color: '#3b82f6',
+              borderRadius: '20px',
+              padding: '4px 16px',
+              fontSize: '12px',
+              fontWeight: 500,
+              letterSpacing: '1px',
             }}
           >
-            Data Science Portfolio Project
+            📋 Case Study — E-Commerce Churn Analysis
           </span>
         </div>
 
@@ -646,29 +677,226 @@ function ProblemStatement() {
   )
 }
 
+// ─── ModeSwitcher ──────────────────────────────────────────────────────────────
+
+function ModeSwitcher({ mode, setMode }) {
+  const btnBase = {
+    borderRadius: '20px',
+    padding: '6px 20px',
+    fontSize: '13px',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  }
+  const activeBtn = { ...btnBase, background: '#3b82f6', color: 'white', fontWeight: 600 }
+  const inactiveBtn = { ...btnBase, background: 'transparent', color: 'rgba(255,255,255,0.5)' }
+
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0,
+      zIndex: 1000,
+      height: '48px',
+      background: 'rgba(15,15,26,0.95)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      borderBottom: '1px solid rgba(255,255,255,0.08)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '0 32px',
+    }}>
+      {/* LEFT — Logo */}
+      <span style={{ fontSize: '18px', fontWeight: 700, color: 'white', letterSpacing: '1px' }}>
+        ChurnIQ
+      </span>
+
+      {/* CENTER — Mode Toggle */}
+      <div style={{
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '24px',
+        padding: '4px',
+        display: 'flex',
+        gap: '2px',
+      }}>
+        <button
+          style={mode === 'casestudy' ? activeBtn : inactiveBtn}
+          onClick={() => setMode('casestudy')}
+        >
+          📊 Case Study
+        </button>
+        <button
+          style={mode === 'analyzer' ? activeBtn : inactiveBtn}
+          onClick={() => setMode('analyzer')}
+        >
+          🔬 Business Analyzer
+          {mode === 'analyzer' && <span className="analyzer-dot" />}
+        </button>
+      </div>
+
+      {/* RIGHT — GitHub */}
+      <a
+        href="https://github.com/aakashamy777/Churn-Data-analysis-"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          border: '1px solid rgba(255,255,255,0.2)',
+          color: 'rgba(255,255,255,0.6)',
+          borderRadius: '8px',
+          padding: '6px 16px',
+          fontSize: '12px',
+          background: 'transparent',
+          cursor: 'pointer',
+          textDecoration: 'none',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
+      >
+        ⭐ GitHub
+      </a>
+    </div>
+  )
+}
+
+// ─── CTABanner ────────────────────────────────────────────────────────────────
+
+function CTABanner({ setMode }) {
+  return (
+    <div style={{
+      maxWidth: '600px',
+      margin: '4rem auto',
+      background: 'rgba(255,255,255,0.05)',
+      backdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255,255,255,0.1)',
+      borderRadius: '16px',
+      padding: '32px 40px',
+      textAlign: 'center',
+    }}>
+      <h3 style={{ fontSize: '20px', color: 'white', marginBottom: '8px' }}>
+        Want insights on your own data?
+      </h3>
+      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginBottom: '24px' }}>
+        This case study was built on a fixed dataset. Try the Business Analyzer
+        to upload your own customer data and get AI-powered insights.
+      </p>
+      <button
+        onClick={() => setMode('analyzer')}
+        style={{
+          background: '#3b82f6',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          padding: '12px 28px',
+          fontSize: '14px',
+          fontWeight: 600,
+          cursor: 'pointer',
+          transition: 'all 0.2s',
+        }}
+        onMouseEnter={(e) => e.target.style.background = '#2563eb'}
+        onMouseLeave={(e) => e.target.style.background = '#3b82f6'}
+      >
+        Try Business Analyzer →
+      </button>
+    </div>
+  )
+}
+
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 export default function App() {
+  const [mode, setMode] = useState(
+    localStorage.getItem('churniq-mode') || 'casestudy'
+  )
+
+  const switchMode = (newMode) => {
+    setMode(newMode);
+    localStorage.setItem('churniq-mode', newMode);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  useEffect(() => {
+    document.title = mode === 'casestudy'
+      ? 'ChurnIQ — Churn Prediction Case Study'
+      : 'ChurnIQ — Business Data Analyzer';
+  }, [mode])
+
   return (
-    <div style={{ background: '#0f172a', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
-      <Navbar />
-      <Hero />
-      <SectionDivider />
-      <ProblemStatement />
-      <SectionDivider />
-      <EDAInsights />
-      <SectionDivider />
-      <ModelDashboard />
-      <SectionDivider />
-      <CustomerSegments />
-      <SectionDivider />
-      <BusinessImpact />
-      <SectionDivider />
-      <ChurnPredictor />
-      <SectionDivider />
-      <SentimentAnalysis />
-      <SectionDivider />
-      <ResumeFooter />
+    <div style={{ background: '#0f172a', minHeight: '100vh', fontFamily: 'Inter, sans-serif', paddingTop: '48px' }}>
+      <GlobalStyles />
+      <ModeSwitcher mode={mode} setMode={switchMode} />
+
+      {/* CASE STUDY MODE */}
+      {mode === 'casestudy' && (
+        <div id="casestudy-content" className="mode-content">
+          <Navbar />
+          <Hero />
+          <SectionDivider />
+          <ProblemStatement />
+          <SectionDivider />
+          <EDAInsights />
+          <SectionDivider />
+          <ModelDashboard />
+          <SectionDivider />
+          <CustomerSegments />
+          <SectionDivider />
+          <BusinessImpact />
+          <SectionDivider />
+          <ChurnPredictor />
+          <SectionDivider />
+          <SentimentAnalysis />
+          <SectionDivider />
+          <ResumeFooter />
+          <CTABanner setMode={switchMode} />
+        </div>
+      )}
+
+      {/* ANALYZER MODE */}
+      {mode === 'analyzer' && (
+        <div id="analyzer-content" className="mode-content" style={{ position: 'relative' }}>
+          {/* Back escape link */}
+          <button
+            onClick={() => switchMode('casestudy')}
+            style={{
+              position: 'fixed', top: '60px', right: '24px', zIndex: 999,
+              color: 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer',
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '8px', padding: '6px 14px', transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => { e.target.style.color = 'white'; e.target.style.background = 'rgba(255,255,255,0.1)' }}
+            onMouseLeave={(e) => { e.target.style.color = 'rgba(255,255,255,0.4)'; e.target.style.background = 'rgba(255,255,255,0.05)' }}
+          >
+            ← Back to Case Study
+          </button>
+
+          {/* Standalone Header */}
+          <div style={{ textAlign: 'center', padding: '60px 20px 20px 20px' }}>
+            <div style={{
+              display: 'inline-block', background: 'rgba(59,130,246,0.15)',
+              border: '1px solid rgba(59,130,246,0.4)', color: '#3b82f6',
+              borderRadius: '20px', padding: '4px 16px', fontSize: '12px',
+              marginBottom: '16px', letterSpacing: '1px'
+            }}>
+              🔬 AI-POWERED BUSINESS TOOL
+            </div>
+
+            <h1 style={{ fontSize: '36px', fontWeight: '700', color: 'white', margin: '0 0 12px 0' }}>
+              Business Data Analyzer
+            </h1>
+
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', maxWidth: '520px', margin: '0 auto 8px auto' }}>
+              Upload any customer CSV dataset and get instant AI-powered churn predictions,
+              sales insights, and actionable business recommendations.
+            </p>
+
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px' }}>
+              🔒 Your data never leaves your browser. Only 50 rows sent to AI for analysis.
+            </p>
+          </div>
+
+          <BusinessAnalyzer />
+        </div>
+      )}
     </div>
   )
 }

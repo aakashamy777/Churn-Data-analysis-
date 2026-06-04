@@ -37,11 +37,11 @@ const SEGMENTS = [
 ]
 
 // Bar chart data
-const CHURN_BAR_DATA = [
-    { segment: 'Seg 1 At-Risk', churnRate: 34, fill: '#ef4444' },
-    { segment: 'Seg 0 Mid-Value', churnRate: 17, fill: '#3b82f6' },
-    { segment: 'Seg 2 Active', churnRate: 16, fill: '#3b82f6' },
-    { segment: 'Seg 3 Loyal', churnRate: 9, fill: '#22c55e' }
+const segmentChurnData = [
+    { segment: 'At-Risk',   churnRate: 34, fill: '#ef4444' },
+    { segment: 'Mid-Value', churnRate: 17, fill: '#3b82f6' },
+    { segment: 'Active',    churnRate: 16, fill: '#3b82f6' },
+    { segment: 'Loyal',     churnRate: 9,  fill: '#22c55e' }
 ]
 
 // ─── Segment Card ─────────────────────────────────────────────────────────────
@@ -185,36 +185,38 @@ export default function CustomerSegments() {
 
             {/* Churn Rate Chart */}
             <div style={{ background: '#1e293b', borderRadius: '0.75rem', padding: '1.75rem', border: '1px solid #334155' }}>
-                <h3 style={{ margin: '0 0 1.5rem', fontSize: '1rem', fontWeight: 700, color: '#f1f5f9', textAlign: 'center' }}>
-                    Churn Rate by Customer Segment
-                </h3>
+                <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: 600, color: 'white', textAlign: 'center' }}>
+                    Churn Rate by Segment
+                </p>
                 <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={CHURN_BAR_DATA} margin={{ top: 10, right: 10, bottom: 20, left: 0 }}>
+                    <BarChart data={segmentChurnData} margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
-                        <XAxis 
-                            dataKey="segment" 
-                            axisLine={{ stroke: '#334155' }} 
-                            tickLine={false} 
-                            tick={{ fill: '#94a3b8', fontSize: 11 }} 
+                        <XAxis
+                            dataKey="segment"
+                            axisLine={{ stroke: '#334155' }}
+                            tickLine={false}
+                            tick={{ fill: '#94a3b8', fontSize: 11 }}
                         />
-                        <YAxis 
-                            axisLine={false} 
-                            tickLine={false} 
-                            tick={{ fill: '#94a3b8', fontSize: 11 }} 
-                            tickFormatter={(v) => `${v}%`} 
+                        <YAxis
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: '#94a3b8', fontSize: 11 }}
+                            tickFormatter={(v) => `${v}%`}
+                            label={{ value: 'Churn Rate (%)', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 11, dy: 50 }}
                         />
-                        <Tooltip 
+                        <Tooltip
                             contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '0.5rem', color: '#f1f5f9', fontSize: '0.8rem' }}
                             cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                            formatter={(value) => [`${value}%`, 'Churn Rate']}
                         />
-                        <ReferenceLine 
-                            y={16.8} 
-                            stroke="#ef4444" 
-                            strokeDasharray="4 4" 
-                            label={{ value: 'Dataset Avg 16.8%', position: 'insideBottomRight', fill: '#ef4444', fontSize: 10 }} 
+                        <ReferenceLine
+                            y={16.8}
+                            strokeDasharray="4 4"
+                            stroke="rgba(255,255,255,0.3)"
+                            label={{ value: 'Avg 16.8%', fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
                         />
                         <Bar dataKey="churnRate" radius={[4, 4, 0, 0]} barSize={40}>
-                            {CHURN_BAR_DATA.map((entry, index) => (
+                            {segmentChurnData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.fill} />
                             ))}
                         </Bar>
