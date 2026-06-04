@@ -115,7 +115,7 @@ export default function BusinessImpact() {
                         letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '1rem',
                     }}
                 >
-                    💰 ROI Estimator
+                    ROI Estimator
                 </span>
                 <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#f1f5f9', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
                     Business Impact Calculator

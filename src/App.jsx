@@ -289,7 +289,7 @@ function Hero() {
               letterSpacing: '1px',
             }}
           >
-            📋 Case Study — E-Commerce Churn Analysis
+            CASE STUDY — E-COMMERCE CHURN ANALYSIS
           </span>
         </div>
 
@@ -876,7 +876,7 @@ export default function App() {
               borderRadius: '20px', padding: '4px 16px', fontSize: '12px',
               marginBottom: '16px', letterSpacing: '1px'
             }}>
-              🔬 AI-POWERED BUSINESS TOOL
+              AI-POWERED BUSINESS TOOL
             </div>
 
             <h1 style={{ fontSize: '36px', fontWeight: '700', color: 'white', margin: '0 0 12px 0' }}>

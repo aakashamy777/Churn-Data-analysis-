@@ -552,7 +552,7 @@ export default function ChurnPredictor() {
                         marginBottom: '1rem',
                     }}
                 >
-                    Gemini AI Powered
+                    AI Powered
                 </span>
                 <h2
                     style={{
