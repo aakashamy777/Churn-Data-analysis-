@@ -132,7 +132,7 @@ export default function BusinessImpact() {
             >
                 {/* LEFT — Sliders */}
                 <div style={{ background: '#1e293b', borderRadius: '0.75rem', padding: '1.75rem', border: '1px solid #334155', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>⚙️ Adjust Parameters</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Adjust Parameters</p>
                     <Slider label="Total Customers" min={1000} max={50000} value={customers} onChange={setCustomers} format={fmtNum} />
                     <Slider label="Avg Monthly Revenue per Customer (₹)" min={500} max={10000} value={revenue} onChange={setRevenue} format={fmtINR} />
                     <Slider label="Churn Rate (%)" min={5} max={40} value={churnRate} onChange={setChurnRate} format={fmtPct} />
@@ -142,14 +142,14 @@ export default function BusinessImpact() {
 
                 {/* RIGHT — Outputs */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '0.06em' }}>📊 Projected Outcomes</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Projected Outcomes</p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                        <OutputCard label="Revenue at Risk" value={fmtINR(revenueAtRisk)} color="#ef4444" icon="⚠️" />
-                        <OutputCard label="Customers Retained" value={fmtNum(retained)} color="#22c55e" icon="✅" />
-                        <OutputCard label="Revenue Saved" value={fmtINR(revenueSaved)} color="#22c55e" icon="💚" />
-                        <OutputCard label="Campaign Cost" value={fmtINR(campaignCost)} color="#fbbf24" icon="💸" />
-                        <OutputCard label="Net Business Value" value={fmtINR(netValue)} color="#3b82f6" large icon="💎" />
-                        <OutputCard label="Return on Investment" value={`${Math.round(roi)}%`} color="#3b82f6" large icon="📈" />
+                        <OutputCard label="Revenue at Risk" value={fmtINR(revenueAtRisk)} color="#ef4444" />
+                        <OutputCard label="Customers Retained" value={fmtNum(retained)} color="#22c55e" />
+                        <OutputCard label="Revenue Saved" value={fmtINR(revenueSaved)} color="#22c55e" />
+                        <OutputCard label="Campaign Cost" value={fmtINR(campaignCost)} color="#fbbf24" />
+                        <OutputCard label="Net Business Value" value={fmtINR(netValue)} color="#3b82f6" large />
+                        <OutputCard label="Return on Investment" value={`${Math.round(roi)}%`} color="#3b82f6" large />
                     </div>
 
                     {/* Note */}

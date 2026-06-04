@@ -110,19 +110,18 @@ function Navbar() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
           {/* Logo */}
-          <a
-            href="#hero"
-            onClick={(e) => handleNavClick(e, '#hero')}
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 800,
-              color: '#3b82f6',
-              textDecoration: 'none',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            ChurnIQ
-          </a>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img 
+                src="/regainer-logo.jpg" 
+                alt="ReGainer"
+                style={{ 
+                  height: '50px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '6px'
+                }}
+              />
+            </div>
 
           {/* Desktop Links */}
           <div className="desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
@@ -507,7 +506,7 @@ function TechStack() {
           fontSize: '0.95rem',
         }}
       >
-        A complete data science stack from preprocessing to deployment
+        © 2024 ReGainer · Data Science Portfolio Project · Built with ❤️ using React + Gemini AI deployment
       </p>
       <div
         style={{
@@ -705,9 +704,18 @@ function ModeSwitcher({ mode, setMode }) {
       padding: '0 32px',
     }}>
       {/* LEFT — Logo */}
-      <span style={{ fontSize: '18px', fontWeight: 700, color: 'white', letterSpacing: '1px' }}>
-        ChurnIQ
-      </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img 
+            src="/regainer-logo.jpg" 
+            alt="ReGainer"
+            style={{ 
+              height: '44px',
+              width: 'auto',
+              objectFit: 'contain',
+              borderRadius: '6px'
+            }}
+          />
+        </div>
 
       {/* CENTER — Mode Toggle */}
       <div style={{
@@ -816,8 +824,8 @@ export default function App() {
 
   useEffect(() => {
     document.title = mode === 'casestudy'
-      ? 'ChurnIQ — Churn Prediction Case Study'
-      : 'ChurnIQ — Business Data Analyzer';
+      ? 'ReGainer — Churn Prediction Case Study'
+      : 'ReGainer — Business Data Analyzer';
   }, [mode])
 
   return (
@@ -879,6 +887,7 @@ export default function App() {
               AI-POWERED BUSINESS TOOL
             </div>
 
+            <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#3b82f6' }}>ReGainer</p>
             <h1 style={{ fontSize: '36px', fontWeight: '700', color: 'white', margin: '0 0 12px 0' }}>
               Business Data Analyzer
             </h1>
