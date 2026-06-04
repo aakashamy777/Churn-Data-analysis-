@@ -813,12 +813,12 @@ function CTABanner({ setMode }) {
 
 export default function App() {
   const [mode, setMode] = useState(
-    localStorage.getItem('churniq-mode') || 'casestudy'
+    localStorage.getItem('regainer-mode') || 'casestudy'
   )
 
   const switchMode = (newMode) => {
     setMode(newMode);
-    localStorage.setItem('churniq-mode', newMode);
+    localStorage.setItem('regainer-mode', newMode);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

@@ -199,7 +199,7 @@ export default function ResumeFooter() {
                 >
                     {/* Left */}
                     <div>
-                        <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#3b82f6' }}>ChurnIQ</p>
+                        <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#3b82f6' }}>ReGainer</p>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: '#475569' }}>E-Commerce Churn Prediction System</p>
                     </div>
 
@@ -250,7 +250,7 @@ export default function ResumeFooter() {
                 {/* Bottom line */}
                 <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #1a2744' }}>
                     <p style={{ margin: 0, fontSize: '0.75rem', color: '#334155' }}>
-                        © 2024 ChurnIQ · Data Science Portfolio Project · Built with ❤️ using React + Gemini AI
+                        © 2024 ReGainer · Data Science Portfolio Project · Built with ❤️ using React + Gemini AI
                     </p>
                 </div>
 
