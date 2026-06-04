@@ -1,5 +1,10 @@
 # ReGainer — E-Commerce Customer Churn Prediction & Retention Analytics
 
+> [!NOTE]
+> **Core Data Science Sandbox**: All of the exploratory data analysis, predictive modeling (SMOTE, Logistic Regression, Random Forest, XGBoost), customer clustering (K-Means), and NLP sentiment feature engineering were developed and validated in this **[Google Colab Notebook](https://colab.research.google.com/drive/1XjBqiq6-fVrTxc1O5qSTjIU-vf0w0x8e?usp=sharing)**.
+>
+> This web application serves as the interactive **presentation portfolio and insights dashboard** designed to showcase the results, parameters, segments, and business impact estimates derived directly from the Colab notebook.
+
 ReGainer is an end-to-end Machine Learning and AI-powered analytics platform designed to identify at-risk e-commerce customers and enable proactive retention strategies. By combining predictive modeling (Random Forest / XGBoost), unsupervised customer segmentation (K-Means Clustering), NLP sentiment engineering, and Large Language Models (LLMs via Gemini and Groq), ReGainer turns raw customer data into actionable revenue-saving strategies.
 
 ---
