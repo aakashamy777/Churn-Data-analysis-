@@ -31,7 +31,7 @@ export default function FileUpload({ onFileSelect }) {
 14,30,Female,5,3,900,1,Churned
 15,28,Male,12,7,3400,0,Active`;
         const blob = new Blob([demoCSV], { type: 'text/csv' });
-        const demoFile = new File([blob], 'demo-data.csv', { type: 'text/csv' });
+        const demoFile = new File([blob], 'demo-customers.csv', { type: 'text/csv' });
         setFileError(null);
         onFileSelect(demoFile);
     };
@@ -212,14 +212,21 @@ export default function FileUpload({ onFileSelect }) {
             {/* DEMO DATA LINK */}
             {!file && (
                 <div style={{ marginBottom: '16px' }}>
-                    <span
+                    <button
                         onClick={loadDemoData}
-                        style={{ color: '#3b82f6', cursor: 'pointer', fontSize: '13px' }}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#3b82f6',
+                            cursor: 'pointer',
+                            fontSize: '13px',
+                            padding: '0'
+                        }}
                         onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
                         onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
                     >
-                        Don't have a dataset? Try with sample data →
-                    </span>
+                        Don't have a dataset? Try Demo Data →
+                    </button>
                 </div>
             )}
 
