@@ -20,9 +20,9 @@ import {
 
 const sentimentData = {
     distribution: [
-        { label: 'Positive', count: 3127, churnRate: 8.2, color: '#22c55e' },
-        { label: 'Neutral', count: 1406, churnRate: 16.1, color: '#f59e0b' },
-        { label: 'Negative', count: 1097, churnRate: 31.4, color: '#ef4444' },
+        { label: 'Positive', count: 3127, churnRate: 8.2, color: 'var(--success)' },
+        { label: 'Neutral', count: 1406, churnRate: 16.1, color: 'var(--warning)' },
+        { label: 'Negative', count: 1097, churnRate: 31.4, color: 'var(--danger)' },
     ],
     avgScoreByChurn: [
         { group: 'Not Churned', score: 0.28 },
@@ -46,19 +46,19 @@ const PIPELINE_STEPS = [
         icon: '📝',
         title: 'Review Generation',
         body: 'Synthetic reviews generated from Complaint + SatisfactionScore columns using template mapping',
-        accentColor: '#3b82f6',
+        accentColor: 'var(--accent)',
     },
     {
         icon: '🔍',
         title: 'Sentiment Scoring',
         body: 'TextBlob polarity analysis assigns score −1.0 to +1.0 for each customer review',
-        accentColor: '#8b5cf6',
+        accentColor: 'var(--success)',
     },
     {
         icon: '📊',
         title: 'Churn Correlation',
         body: 'Sentiment score added as ML feature — negative sentiment customers churn 3.8× more',
-        accentColor: '#22c55e',
+        accentColor: 'var(--danger)',
     },
 ]
 
@@ -68,25 +68,28 @@ function PipelineCard({ step, index }) {
     return (
         <div
             style={{
-                background: '#1e293b',
-                borderRadius: '0.875rem',
-                padding: '1.75rem',
-                border: '1px solid #334155',
+                background: 'var(--bg-surface)',
+                borderRadius: 'var(--card-radius)',
+                padding: 'var(--card-padding)',
+                border: '1px solid var(--border)',
                 borderTop: `3px solid ${step.accentColor}`,
                 flex: '1 1 260px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                boxShadow: 'var(--shadow-sm)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease',
                 cursor: 'default',
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = `0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px ${step.accentColor}44`
+                e.currentTarget.style.boxShadow = 'var(--shadow-md)'
+                e.currentTarget.style.borderColor = 'var(--border-strong)'
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.boxShadow = 'var(--shadow-sm)'
+                e.currentTarget.style.borderColor = 'var(--border)'
             }}
         >
             {/* Step badge + icon */}
@@ -101,8 +104,8 @@ function PipelineCard({ step, index }) {
                         width: '2.6rem',
                         height: '2.6rem',
                         borderRadius: '0.6rem',
-                        background: `${step.accentColor}18`,
-                        border: `1px solid ${step.accentColor}44`,
+                        background: 'var(--bg-primary)',
+                        border: '1px solid var(--border)',
                     }}
                 >
                     {step.icon}
@@ -125,7 +128,7 @@ function PipelineCard({ step, index }) {
                 style={{
                     fontSize: '1rem',
                     fontWeight: 700,
-                    color: '#f1f5f9',
+                    color: 'var(--text-primary)',
                     margin: 0,
                     letterSpacing: '-0.01em',
                 }}
@@ -137,7 +140,7 @@ function PipelineCard({ step, index }) {
             <p
                 style={{
                     fontSize: '0.875rem',
-                    color: '#94a3b8',
+                    color: 'var(--text-secondary)',
                     lineHeight: 1.65,
                     margin: 0,
                 }}
@@ -154,75 +157,67 @@ export default function SentimentAnalysis() {
     return (
         <section
             id="sentiment"
-            style={{
-                padding: '5rem 1.5rem',
-                maxWidth: '1200px',
-                margin: '0 auto',
-            }}
+            style={{ background: 'var(--bg-surface-2)' }}
         >
-            {/* ── Section header ───────────────────────────────────────────────── */}
-            <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-                {/* Eyebrow badge */}
-                <span
-                    style={{
+            <div style={{ 
+              maxWidth: 'var(--max-width)', 
+              margin: '0 auto', 
+              padding: 'var(--section-padding)'
+            }}>
+                {/* ── Section header ───────────────────────────────────────────────── */}
+                <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+                    {/* Eyebrow badge */}
+                    <div style={{
                         display: 'inline-block',
-                        padding: '0.35rem 1rem',
-                        background: 'rgba(139,92,246,0.12)',
-                        border: '1px solid rgba(139,92,246,0.3)',
-                        borderRadius: '9999px',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        color: '#a78bfa',
-                        letterSpacing: '0.07em',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        letterSpacing: '1.5px',
                         textTransform: 'uppercase',
-                        marginBottom: '1.25rem',
-                    }}
-                >
-                    NLP Feature Engineering
-                </span>
-
-                <h2
-                    style={{
-                        fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-                        fontWeight: 800,
-                        color: '#f1f5f9',
-                        margin: '0 0 0.75rem',
+                        color: 'var(--accent)',
+                        marginBottom: '12px'
+                    }}>
+                        NLP Feature Engineering
+                    </div>
+                    
+                    <h2 style={{
+                        fontSize: '36px',
+                        fontWeight: '700',
                         letterSpacing: '-0.02em',
-                    }}
-                >
-                    Customer Sentiment Analysis
-                </h2>
-
-                <p
-                    style={{
-                        fontSize: '1rem',
-                        color: '#64748b',
+                        color: 'var(--text-primary)',
+                        marginBottom: '8px'
+                    }}>
+                        Customer Sentiment Analysis
+                    </h2>
+                    
+                    <p style={{
+                        fontSize: '16px',
+                        color: 'var(--text-secondary)',
                         maxWidth: '560px',
                         margin: '0 auto',
                         lineHeight: 1.65,
-                    }}
-                >
-                    Synthetic review generation + TextBlob polarity analysis on 5,630 customers
-                </p>
-            </div>
+                    }}>
+                        Synthetic review generation + TextBlob polarity analysis on 5,630 customers
+                    </p>
+                </div>
 
             {/* ── Key finding banner ───────────────────────────────────────────── */}
             <div
                 style={{
-                    background: 'linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(139,92,246,0.08) 100%)',
-                    border: '1px solid rgba(239,68,68,0.25)',
-                    borderRadius: '0.875rem',
-                    padding: '1rem 1.5rem',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--card-radius)',
+                    padding: 'var(--card-padding)',
                     marginBottom: '3rem',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.875rem',
                     flexWrap: 'wrap',
+                    boxShadow: 'var(--shadow-sm)',
                 }}
             >
                 <span style={{ fontSize: '1.25rem', flexShrink: 0 }}>🔑</span>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#fca5a5', fontWeight: 500, lineHeight: 1.55 }}>
-                    <strong style={{ color: '#f87171' }}>Key Finding: </strong>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 500, lineHeight: 1.55 }}>
+                    <strong style={{ color: 'var(--danger)' }}>Key Finding: </strong>
                     {sentimentData.keyFinding}
                 </p>
             </div>
@@ -233,7 +228,7 @@ export default function SentimentAnalysis() {
                     style={{
                         fontSize: '0.75rem',
                         fontWeight: 700,
-                        color: '#475569',
+                        color: 'var(--text-muted)',
                         textTransform: 'uppercase',
                         letterSpacing: '0.1em',
                         marginBottom: '1.25rem',
@@ -267,23 +262,24 @@ export default function SentimentAnalysis() {
                 {/* CHART 1: Sentiment Distribution */}
                 <div
                     style={{
-                        background: '#1e293b',
-                        borderRadius: '1rem',
-                        padding: '1.5rem',
-                        border: '1px solid #334155',
+                        background: 'var(--bg-surface)',
+                        borderRadius: 'var(--card-radius)',
+                        padding: 'var(--card-padding)',
+                        border: '1px solid var(--border)',
+                        boxShadow: 'var(--shadow-sm)',
                     }}
                 >
-                    <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
                         Sentiment Distribution
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
                         <BarChart data={sentimentData.distribution} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
-                            <XAxis dataKey="label" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                            <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
                             <YAxis hide />
                             <Tooltip
-                                contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', fontSize: '12px' }}
-                                itemStyle={{ color: '#f1f5f9' }}
+                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-primary)' }}
+                                itemStyle={{ color: 'var(--text-primary)' }}
                             />
                             <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={40}>
                                 {sentimentData.distribution.map((entry, index) => (
@@ -293,7 +289,7 @@ export default function SentimentAnalysis() {
                                     dataKey="churnRate"
                                     position="top"
                                     content={({ x, y, width, value }) => (
-                                        <text x={x + width / 2} y={y - 10} fill="#94a3b8" fontSize={11} fontWeight={600} textAnchor="middle">
+                                        <text x={x + width / 2} y={y - 10} fill="var(--text-muted)" fontSize={11} fontWeight={600} textAnchor="middle">
                                             Churn: {value}%
                                         </text>
                                     )}
@@ -306,25 +302,26 @@ export default function SentimentAnalysis() {
                 {/* CHART 2: Churn Rate by Sentiment */}
                 <div
                     style={{
-                        background: '#1e293b',
-                        borderRadius: '1rem',
-                        padding: '1.5rem',
-                        border: '1px solid #334155',
+                        background: 'var(--bg-surface)',
+                        borderRadius: 'var(--card-radius)',
+                        padding: 'var(--card-padding)',
+                        border: '1px solid var(--border)',
+                        boxShadow: 'var(--shadow-sm)',
                     }}
                 >
-                    <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
                         Churn Rate by Sentiment
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
                         <BarChart data={sentimentData.distribution} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
-                            <XAxis dataKey="label" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                            <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                            <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                            <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
                             <Tooltip
-                                contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', fontSize: '12px' }}
+                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-primary)' }}
                                 formatter={(val) => [`${val}%`, 'Churn Rate']}
                             />
-                            <ReferenceLine y={16.8} stroke="#94a3b8" strokeDasharray="4 4" label={{ value: 'Avg 16.8%', position: 'right', fill: '#94a3b8', fontSize: 10 }} />
+                            <ReferenceLine y={16.8} stroke="var(--text-muted)" strokeDasharray="4 4" label={{ value: 'Avg 16.8%', position: 'right', fill: 'var(--text-muted)', fontSize: 10 }} />
                             <Bar dataKey="churnRate" radius={[6, 6, 0, 0]} barSize={40}>
                                 {sentimentData.distribution.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.8} />
@@ -337,43 +334,44 @@ export default function SentimentAnalysis() {
                 {/* CHART 3: Sentiment vs Satisfaction */}
                 <div
                     style={{
-                        background: '#1e293b',
-                        borderRadius: '1rem',
-                        padding: '1.5rem',
-                        border: '1px solid #334155',
+                        background: 'var(--bg-surface)',
+                        borderRadius: 'var(--card-radius)',
+                        padding: 'var(--card-padding)',
+                        border: '1px solid var(--border)',
+                        boxShadow: 'var(--shadow-sm)',
                     }}
                 >
-                    <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
                         Sentiment vs Satisfaction Score
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
                         <LineChart data={sentimentData.avgScoreBySatisfaction} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                             <XAxis
                                 dataKey="score"
-                                label={{ value: 'Satisfaction Score 1-5', position: 'bottom', fill: '#64748b', fontSize: 10, offset: 10 }}
-                                stroke="#64748b"
+                                label={{ value: 'Satisfaction Score 1-5', position: 'bottom', fill: 'var(--text-muted)', fontSize: 10, offset: 10 }}
+                                stroke="var(--text-muted)"
                                 fontSize={12}
                                 tickLine={false}
                                 axisLine={false}
                             />
                             <YAxis
-                                label={{ value: 'Avg Polarity', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 10 }}
-                                stroke="#64748b"
+                                label={{ value: 'Avg Polarity', angle: -90, position: 'insideLeft', fill: 'var(--text-muted)', fontSize: 10 }}
+                                stroke="var(--text-muted)"
                                 fontSize={11}
                                 tickLine={false}
                                 axisLine={false}
                             />
                             <Tooltip
-                                contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', fontSize: '12px' }}
+                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-primary)' }}
                             />
-                            <ReferenceLine y={0} stroke="#94a3b8" strokeDasharray="4 4" />
+                            <ReferenceLine y={0} stroke="var(--text-muted)" strokeDasharray="4 4" />
                             <Line
                                 type="monotone"
                                 dataKey="sentiment"
-                                stroke="#3b82f6"
+                                stroke="var(--accent)"
                                 strokeWidth={3}
-                                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4, stroke: '#1e293b' }}
+                                dot={{ fill: 'var(--accent)', strokeWidth: 2, r: 4, stroke: 'var(--bg-surface)' }}
                                 activeDot={{ r: 6, strokeWidth: 0 }}
                             />
                         </LineChart>
@@ -385,18 +383,19 @@ export default function SentimentAnalysis() {
             <div
                 style={{
                     marginTop: '3rem',
-                    background: 'rgba(59, 130, 246, 0.1)',
-                    border: '1px solid rgba(59, 130, 246, 0.3)',
-                    borderRadius: '0.75rem',
-                    padding: '1.25rem 1.5rem',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--card-radius)',
+                    padding: 'var(--card-padding)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '1rem',
+                    boxShadow: 'var(--shadow-sm)',
                 }}
             >
                 <span style={{ fontSize: '1.5rem' }}>💡</span>
-                <p style={{ margin: 0, color: '#93c5fd', fontSize: '0.95rem', fontWeight: 500, lineHeight: 1.6 }}>
-                    <strong style={{ color: '#3b82f6' }}>Key Finding: </strong> {sentimentData.keyFinding}
+                <p style={{ margin: 0, color: 'var(--text-primary)', fontSize: '0.95rem', fontWeight: 500, lineHeight: 1.6 }}>
+                    <strong style={{ color: 'var(--accent)' }}>Key Finding: </strong> {sentimentData.keyFinding}
                 </p>
             </div>
 
@@ -418,11 +417,13 @@ export default function SentimentAnalysis() {
                     <div
                         key={text}
                         style={{
-                            background: '#334155',
+                            background: 'var(--bg-primary)',
                             padding: '0.6rem 1rem',
                             borderRadius: '0.5rem',
-                            borderLeft: '4px solid #3b82f6',
-                            color: '#f1f5f9',
+                            borderLeft: '4px solid var(--accent)',
+                            border: '1px solid var(--border)',
+                            borderLeftWidth: '4px',
+                            color: 'var(--text-primary)',
                             fontSize: '0.75rem',
                             fontWeight: 600,
                             letterSpacing: '0.02em',
@@ -439,19 +440,19 @@ export default function SentimentAnalysis() {
             <div
                 style={{
                     marginTop: '4rem',
-                    background: '#1e293b',
-                    borderRadius: '1.25rem',
-                    border: '1px solid #334155',
-                    borderTop: '5px solid #3b82f6',
-                    padding: '2.5rem',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                    background: 'var(--bg-surface)',
+                    borderRadius: 'var(--card-radius)',
+                    border: '1px solid var(--border)',
+                    borderTop: '5px solid var(--accent)',
+                    padding: 'var(--card-padding)',
+                    boxShadow: 'var(--shadow-sm)',
                 }}
             >
                 <h3
                     style={{
                         fontSize: '1.5rem',
                         fontWeight: 800,
-                        color: '#f1f5f9',
+                        color: 'var(--text-primary)',
                         marginBottom: '2rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -472,7 +473,7 @@ export default function SentimentAnalysis() {
                     <div>
                         <h4
                             style={{
-                                color: '#60a5fa',
+                                color: 'var(--accent)',
                                 fontSize: '0.9rem',
                                 fontWeight: 700,
                                 textTransform: 'uppercase',
@@ -504,12 +505,12 @@ export default function SentimentAnalysis() {
                                         display: 'flex',
                                         alignItems: 'flex-start',
                                         gap: '0.75rem',
-                                        color: '#94a3b8',
+                                        color: 'var(--text-secondary)',
                                         fontSize: '0.9rem',
                                         lineHeight: 1.5,
                                     }}
                                 >
-                                    <span style={{ color: '#3b82f6', marginTop: '2px' }}>✓</span>
+                                    <span style={{ color: 'var(--accent)', marginTop: '2px' }}>✓</span>
                                     {item}
                                 </li>
                             ))}
@@ -520,7 +521,7 @@ export default function SentimentAnalysis() {
                     <div>
                         <h4
                             style={{
-                                color: '#22c55e',
+                                color: 'var(--success)',
                                 fontSize: '0.9rem',
                                 fontWeight: 700,
                                 textTransform: 'uppercase',
@@ -552,12 +553,12 @@ export default function SentimentAnalysis() {
                                         display: 'flex',
                                         alignItems: 'flex-start',
                                         gap: '0.75rem',
-                                        color: '#94a3b8',
+                                        color: 'var(--text-secondary)',
                                         fontSize: '0.9rem',
                                         lineHeight: 1.5,
                                     }}
                                 >
-                                    <span style={{ color: '#22c55e', marginTop: '2px' }}>⚡</span>
+                                    <span style={{ color: 'var(--success)', marginTop: '2px' }}>⚡</span>
                                     {item}
                                 </li>
                             ))}

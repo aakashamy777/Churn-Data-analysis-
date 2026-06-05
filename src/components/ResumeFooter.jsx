@@ -58,24 +58,31 @@ function BulletCard({ bullet }) {
     return (
         <div
             style={{
-                background: '#1e293b',
-                borderRadius: '0.75rem',
-                padding: '1.5rem',
-                border: '1px solid #334155',
+                background: 'var(--bg-surface)',
+                borderRadius: 'var(--card-radius)',
+                padding: 'var(--card-padding)',
+                border: '1px solid var(--border)',
                 display: 'flex',
                 gap: '1rem',
                 alignItems: 'flex-start',
                 position: 'relative',
-                transition: 'border-color 0.2s',
+                boxShadow: 'var(--shadow-sm)',
+                transition: 'box-shadow 0.15s ease, border-color 0.15s ease',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#3b82f6')}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#334155')}
+            onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border-strong)'
+                e.currentTarget.style.boxShadow = 'var(--shadow-md)'
+            }}
+            onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border)'
+                e.currentTarget.style.boxShadow = 'var(--shadow-sm)'
+            }}
         >
             {/* Number */}
             <div
                 style={{
                     width: '36px', height: '36px', borderRadius: '50%',
-                    background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)',
+                    background: 'var(--bg-primary)', border: '1px solid var(--border)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0, fontSize: '1rem',
                 }}
@@ -88,14 +95,14 @@ function BulletCard({ bullet }) {
                 <span
                     style={{
                         display: 'inline-block', padding: '0.15rem 0.6rem',
-                        background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
-                        borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 600, color: '#60a5fa',
+                        background: 'var(--bg-primary)', border: '1px solid var(--border)',
+                        borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 600, color: 'var(--accent)',
                         textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.6rem',
                     }}
                 >
                     {bullet.tag}
                 </span>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#cbd5e1', lineHeight: 1.7 }}>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                     {bullet.text}
                 </p>
             </div>
@@ -106,14 +113,14 @@ function BulletCard({ bullet }) {
                 title="Copy to clipboard"
                 style={{
                     flexShrink: 0,
-                    background: copied ? 'rgba(34,197,94,0.15)' : 'rgba(59,130,246,0.1)',
-                    border: `1px solid ${copied ? 'rgba(34,197,94,0.3)' : 'rgba(59,130,246,0.25)'}`,
+                    background: copied ? 'var(--bg-surface-2)' : 'var(--bg-primary)',
+                    border: `1px solid ${copied ? 'var(--success)' : 'var(--border)'}`,
                     borderRadius: '0.5rem',
                     padding: '0.4rem 0.7rem',
                     cursor: 'pointer',
                     fontSize: '0.75rem',
                     fontWeight: 600,
-                    color: copied ? '#22c55e' : '#60a5fa',
+                    color: copied ? 'var(--success)' : 'var(--text-primary)',
                     transition: 'all 0.2s',
                     display: 'flex',
                     alignItems: 'center',
@@ -146,43 +153,54 @@ export default function ResumeFooter() {
                 id="resume"
                 ref={sectionRef}
                 style={{
-                    padding: '5rem 1.5rem',
-                    maxWidth: '900px',
-                    margin: '0 auto',
+                    background: 'var(--bg-primary)',
                     opacity: visible ? 1 : 0,
                     transform: visible ? 'translateY(0)' : 'translateY(30px)',
                     transition: 'opacity 0.7s ease, transform 0.7s ease',
                 }}
             >
-                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                    <span
-                        style={{
-                            display: 'inline-block', padding: '0.35rem 1rem',
-                            background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)',
-                            borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, color: '#22c55e',
-                            letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '1rem',
-                        }}
-                    >
-                        📄 For Your Resume
-                    </span>
-                    <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#f1f5f9', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
-                        Project Highlights
-                    </h2>
-                    <p style={{ color: '#94a3b8', fontSize: '1rem', margin: 0 }}>
-                        Click any card to copy the resume bullet point
-                    </p>
-                </div>
+                <div style={{ 
+                    maxWidth: '900px', 
+                    margin: '0 auto', 
+                    padding: 'var(--section-padding)'
+                }}>
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <div style={{
+                            display: 'inline-block',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            color: 'var(--accent)',
+                            marginBottom: '12px'
+                        }}>
+                            📄 For Your Resume
+                        </div>
+                        <h2 style={{
+                            fontSize: '36px',
+                            fontWeight: '700',
+                            letterSpacing: '-0.02em',
+                            color: 'var(--text-primary)',
+                            marginBottom: '8px'
+                        }}>
+                            Project Highlights
+                        </h2>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '16px', margin: 0 }}>
+                            Click any card to copy the resume bullet point
+                        </p>
+                    </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {BULLETS.map((b) => <BulletCard key={b.id} bullet={b} />)}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {BULLETS.map((b) => <BulletCard key={b.id} bullet={b} />)}
+                    </div>
                 </div>
             </section>
 
             {/* ── Footer ── */}
             <footer
                 style={{
-                    background: '#080f1e',
-                    borderTop: '1px solid #1e293b',
+                    background: 'var(--bg-surface-2)',
+                    borderTop: '1px solid var(--border)',
                     padding: '2.5rem 1.5rem',
                 }}
             >
@@ -199,8 +217,8 @@ export default function ResumeFooter() {
                 >
                     {/* Left */}
                     <div>
-                        <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#3b82f6' }}>ReGainer</p>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#475569' }}>E-Commerce Churn Prediction System</p>
+                        <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>ReGainer</p>
+                        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>E-Commerce Churn Prediction System</p>
                     </div>
 
                     {/* Center — tech badges */}
@@ -210,12 +228,12 @@ export default function ResumeFooter() {
                                 key={b.label}
                                 style={{
                                     padding: '0.2rem 0.6rem',
-                                    background: b.bg,
-                                    border: `1px solid ${b.border}`,
+                                    background: 'var(--bg-surface)',
+                                    border: `1px solid var(--border)`,
                                     borderRadius: '9999px',
                                     fontSize: '0.7rem',
                                     fontWeight: 600,
-                                    color: b.color,
+                                    color: 'var(--text-secondary)',
                                 }}
                             >
                                 {b.label}
@@ -232,24 +250,24 @@ export default function ResumeFooter() {
                             style={{
                                 display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
                                 padding: '0.45rem 1rem',
-                                background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
-                                borderRadius: '0.5rem', fontSize: '0.8rem', fontWeight: 600, color: '#60a5fa',
+                                background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                                borderRadius: '0.5rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)',
                                 textDecoration: 'none', transition: 'all 0.2s',
                             }}
-                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(59,130,246,0.2)' }}
-                            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(59,130,246,0.1)' }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-surface-2)' }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface)' }}
                         >
                             ⭐ GitHub
                         </a>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#475569' }}>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                             Built with Python & React
                         </p>
                     </div>
                 </div>
 
                 {/* Bottom line */}
-                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #1a2744' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#334155' }}>
+                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border)' }}>
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                         © 2024 ReGainer · Data Science Portfolio Project · Built with ❤️ using React + Gemini AI
                     </p>
                 </div>

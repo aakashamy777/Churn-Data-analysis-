@@ -7,15 +7,15 @@ function Slider({ label, min, max, value, onChange, format }) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>{label}</span>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#f1f5f9' }}>{format(value)}</span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>{label}</span>
+                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-primary)' }}>{format(value)}</span>
             </div>
             <div style={{ position: 'relative', height: '6px' }}>
-                <div style={{ position: 'absolute', inset: 0, background: '#334155', borderRadius: '9999px' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'var(--bg-surface-2)', borderRadius: '9999px', border: '1px solid var(--border)' }} />
                 <div
                     style={{
                         position: 'absolute', top: 0, left: 0, height: '100%',
-                        width: `${pct}%`, background: '#3b82f6', borderRadius: '9999px',
+                        width: `${pct}%`, background: 'var(--accent)', borderRadius: '9999px',
                     }}
                 />
                 <input
@@ -28,8 +28,8 @@ function Slider({ label, min, max, value, onChange, format }) {
                 />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.7rem', color: '#475569' }}>{format(min)}</span>
-                <span style={{ fontSize: '0.7rem', color: '#475569' }}>{format(max)}</span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{format(min)}</span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{format(max)}</span>
             </div>
         </div>
     )
@@ -41,17 +41,24 @@ function OutputCard({ label, value, color, large, icon }) {
     return (
         <div
             style={{
-                background: '#0f172a',
-                borderRadius: '0.75rem',
+                background: 'var(--bg-surface)',
+                borderRadius: 'var(--card-radius)',
                 padding: large ? '1.25rem 1rem' : '1rem',
-                border: `1px solid ${color}33`,
+                border: '1px solid var(--border)',
                 textAlign: 'center',
-                transition: 'box-shadow 0.2s',
+                boxShadow: 'var(--shadow-sm)',
+                transition: 'box-shadow 0.15s ease, border-color 0.15s ease',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.boxShadow = `0 0 20px ${color}22`)}
-            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
+            onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = 'var(--shadow-md)'
+                e.currentTarget.style.borderColor = 'var(--border-strong)'
+            }}
+            onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'var(--shadow-sm)'
+                e.currentTarget.style.borderColor = 'var(--border)'
+            }}
         >
-            <div style={{ fontSize: large ? '0.7rem' : '0.65rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem', fontWeight: 600 }}>
+            <div style={{ fontSize: large ? '0.7rem' : '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem', fontWeight: 600 }}>
                 {label}
             </div>
             <div style={{ fontSize: large ? 'clamp(1.3rem, 2.5vw, 1.7rem)' : 'clamp(1rem, 2vw, 1.3rem)', fontWeight: 800, color, letterSpacing: '-0.02em' }}>
@@ -97,33 +104,47 @@ export default function BusinessImpact() {
             id="impact"
             ref={sectionRef}
             style={{
-                padding: '5rem 1.5rem',
-                maxWidth: '1200px',
-                margin: '0 auto',
+                background: 'var(--bg-primary)',
                 opacity: visible ? 1 : 0,
                 transform: visible ? 'translateY(0)' : 'translateY(30px)',
                 transition: 'opacity 0.7s ease, transform 0.7s ease',
             }}
         >
-            {/* Heading */}
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <span
-                    style={{
-                        display: 'inline-block', padding: '0.35rem 1rem',
-                        background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.25)',
-                        borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, color: '#fbbf24',
-                        letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '1rem',
-                    }}
-                >
+            <div style={{ 
+              maxWidth: 'var(--max-width)', 
+              margin: '0 auto', 
+              padding: 'var(--section-padding)'
+            }}>
+                <div style={{
+                    display: 'inline-block',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    letterSpacing: '1.5px',
+                    textTransform: 'uppercase',
+                    color: 'var(--accent)',
+                    marginBottom: '12px'
+                }}>
                     ROI Estimator
-                </span>
-                <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#f1f5f9', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
+                </div>
+                
+                <h2 style={{
+                    fontSize: '36px',
+                    fontWeight: '700',
+                    letterSpacing: '-0.02em',
+                    color: 'var(--text-primary)',
+                    marginBottom: '8px'
+                }}>
                     Business Impact Calculator
                 </h2>
-                <p style={{ color: '#94a3b8', fontSize: '1rem', margin: 0 }}>
+                
+                <p style={{
+                    fontSize: '16px',
+                    color: 'var(--text-secondary)',
+                    maxWidth: '480px',
+                    marginBottom: '48px'
+                }}>
                     Estimate the ROI of deploying this churn prediction system
                 </p>
-            </div>
 
             {/* Calculator Grid */}
             <div
@@ -131,8 +152,8 @@ export default function BusinessImpact() {
                 style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start' }}
             >
                 {/* LEFT — Sliders */}
-                <div style={{ background: '#1e293b', borderRadius: '0.75rem', padding: '1.75rem', border: '1px solid #334155', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Adjust Parameters</p>
+                <div style={{ background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
+                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Adjust Parameters</p>
                     <Slider label="Total Customers" min={1000} max={50000} value={customers} onChange={setCustomers} format={fmtNum} />
                     <Slider label="Avg Monthly Revenue per Customer (₹)" min={500} max={10000} value={revenue} onChange={setRevenue} format={fmtINR} />
                     <Slider label="Churn Rate (%)" min={5} max={40} value={churnRate} onChange={setChurnRate} format={fmtPct} />
@@ -142,31 +163,32 @@ export default function BusinessImpact() {
 
                 {/* RIGHT — Outputs */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Projected Outcomes</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Projected Outcomes</p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                        <OutputCard label="Revenue at Risk" value={fmtINR(revenueAtRisk)} color="#ef4444" />
-                        <OutputCard label="Customers Retained" value={fmtNum(retained)} color="#22c55e" />
-                        <OutputCard label="Revenue Saved" value={fmtINR(revenueSaved)} color="#22c55e" />
-                        <OutputCard label="Campaign Cost" value={fmtINR(campaignCost)} color="#fbbf24" />
-                        <OutputCard label="Net Business Value" value={fmtINR(netValue)} color="#3b82f6" large />
-                        <OutputCard label="Return on Investment" value={`${Math.round(roi)}%`} color="#3b82f6" large />
+                        <OutputCard label="Revenue at Risk" value={fmtINR(revenueAtRisk)} color="var(--danger)" />
+                        <OutputCard label="Customers Retained" value={fmtNum(retained)} color="var(--success)" />
+                        <OutputCard label="Revenue Saved" value={fmtINR(revenueSaved)} color="var(--success)" />
+                        <OutputCard label="Campaign Cost" value={fmtINR(campaignCost)} color="var(--warning)" />
+                        <OutputCard label="Net Business Value" value={fmtINR(netValue)} color="var(--accent)" large />
+                        <OutputCard label="Return on Investment" value={`${Math.round(roi)}%`} color="var(--accent)" large />
                     </div>
 
                     {/* Note */}
                     <div
                         style={{
-                            background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.2)',
+                            background: 'var(--bg-surface-2)', border: '1px solid var(--border)',
                             borderRadius: '0.6rem', padding: '0.875rem 1rem',
                             display: 'flex', gap: '0.6rem', alignItems: 'flex-start',
                         }}
                     >
                         <span style={{ flexShrink: 0 }}>📌</span>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8', lineHeight: 1.5 }}>
-                            Based on real project results: <strong style={{ color: '#f1f5f9' }}>₹1,60,800 net value</strong> generated on test set of <strong style={{ color: '#f1f5f9' }}>1,126 customers</strong>
+                        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                            Based on real project results: <strong style={{ color: 'var(--text-primary)' }}>₹1,60,800 net value</strong> generated on test set of <strong style={{ color: 'var(--text-primary)' }}>1,126 customers</strong>
                         </p>
                     </div>
                 </div>
             </div>
+        </div>
 
             <style>{`
         @media (max-width: 768px) { .calc-grid { grid-template-columns: 1fr !important; } }

@@ -18,21 +18,23 @@ function MetricCard({ card }) {
     return (
         <div
             style={{
-                background: '#1e293b',
-                borderRadius: '0.75rem',
-                padding: '1.5rem',
-                border: `1px solid ${card.color}33`,
-                boxShadow: `0 0 20px ${card.glow}`,
+                background: 'var(--bg-surface)',
+                borderRadius: 'var(--card-radius)',
+                padding: 'var(--card-padding)',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow-sm)',
                 textAlign: 'center',
-                transition: 'all 0.2s',
+                transition: 'box-shadow 0.15s ease, border-color 0.15s ease',
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)'
-                e.currentTarget.style.boxShadow = `0 0 30px ${card.glow}`
+                e.currentTarget.style.boxShadow = 'var(--shadow-md)'
+                e.currentTarget.style.borderColor = 'var(--border-strong)'
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = `0 0 20px ${card.glow}`
+                e.currentTarget.style.boxShadow = 'var(--shadow-sm)'
+                e.currentTarget.style.borderColor = 'var(--border)'
             }}
         >
             <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{card.icon}</div>
@@ -40,14 +42,14 @@ function MetricCard({ card }) {
                 style={{
                     fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)',
                     fontWeight: 800,
-                    color: card.color,
+                    color: 'var(--text-primary)',
                     letterSpacing: '-0.02em',
                     marginBottom: '0.25rem',
                 }}
             >
                 {card.value}
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 {card.label}
             </div>
         </div>
@@ -58,57 +60,54 @@ export default function ModelDashboard() {
     return (
         <section
             id="models"
-            style={{
-                padding: '5rem 1.5rem',
-                maxWidth: '1200px',
-                margin: '0 auto',
-            }}
+            style={{ background: 'var(--bg-primary)' }}
         >
-            {/* Heading */}
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <span
-                    style={{
-                        display: 'inline-block',
-                        padding: '0.35rem 1rem',
-                        background: 'rgba(34,197,94,0.1)',
-                        border: '1px solid rgba(34,197,94,0.25)',
-                        borderRadius: '9999px',
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        color: '#22c55e',
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                        marginBottom: '1rem',
-                    }}
-                >
+            <div style={{ 
+              maxWidth: 'var(--max-width)', 
+              margin: '0 auto', 
+              padding: 'var(--section-padding)'
+            }}>
+                <div style={{
+                    display: 'inline-block',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    letterSpacing: '1.5px',
+                    textTransform: 'uppercase',
+                    color: 'var(--accent)',
+                    marginBottom: '12px'
+                }}>
                     Evaluation Results
-                </span>
-                <h2
-                    style={{
-                        fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
-                        fontWeight: 800,
-                        color: '#f1f5f9',
-                        margin: '0 0 0.75rem',
-                        letterSpacing: '-0.02em',
-                    }}
-                >
+                </div>
+                
+                <h2 style={{
+                    fontSize: '36px',
+                    fontWeight: '700',
+                    letterSpacing: '-0.02em',
+                    color: 'var(--text-primary)',
+                    marginBottom: '8px'
+                }}>
                     Model Performance
                 </h2>
-                <p style={{ color: '#94a3b8', fontSize: '1rem', margin: 0 }}>
+                
+                <p style={{
+                    fontSize: '16px',
+                    color: 'var(--text-secondary)',
+                    maxWidth: '480px',
+                    marginBottom: '48px'
+                }}>
                     Rigorous evaluation across multiple metrics
                 </p>
-            </div>
 
-            {/* 2-column layout */}
-            <div
-                className="models-layout"
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1.6fr',
-                    gap: '1.5rem',
-                    alignItems: 'start',
-                }}
-            >
+                {/* 2-column layout */}
+                <div
+                    className="models-layout"
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1.6fr',
+                        gap: '1.5rem',
+                        alignItems: 'start',
+                    }}
+                >
                 {/* LEFT — Metric Cards 2x2 */}
                 <div
                     style={{
@@ -127,27 +126,28 @@ export default function ModelDashboard() {
                     {/* Table */}
                     <div
                         style={{
-                            background: '#1e293b',
-                            borderRadius: '0.75rem',
-                            overflow: 'hidden',
-                            border: '1px solid rgba(51,65,85,0.6)',
+                            background: 'var(--bg-surface)',
+                            borderRadius: 'var(--card-radius)',
+                            padding: '1.5rem',
+                            border: '1px solid var(--border)',
+                            boxShadow: 'var(--shadow-sm)',
                         }}
                     >
                         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                             <thead>
-                                <tr style={{ background: '#0f172a' }}>
+                                <tr style={{ background: 'transparent' }}>
                                     {['Model', 'AUC', 'F1 Score', 'Accuracy'].map((h) => (
                                         <th
                                             key={h}
                                             style={{
                                                 padding: '0.875rem 1rem',
                                                 textAlign: h === 'Model' ? 'left' : 'center',
-                                                color: '#94a3b8',
+                                                color: 'var(--text-muted)',
                                                 fontWeight: 600,
                                                 fontSize: '0.75rem',
                                                 textTransform: 'uppercase',
                                                 letterSpacing: '0.05em',
-                                                borderBottom: '1px solid #334155',
+                                                borderBottom: '1px solid var(--border)',
                                             }}
                                         >
                                             {h}
@@ -160,18 +160,18 @@ export default function ModelDashboard() {
                                     <tr
                                         key={row.model}
                                         style={{
-                                            background: row.best ? 'rgba(59,130,246,0.1)' : 'transparent',
-                                            borderBottom: i < MODEL_TABLE.length - 1 ? '1px solid #1e293b' : 'none',
+                                            background: row.best ? 'var(--bg-surface-2)' : 'transparent',
+                                            borderBottom: i < MODEL_TABLE.length - 1 ? '1px solid var(--border)' : 'none',
                                             transition: 'background 0.15s',
                                         }}
-                                        onMouseEnter={(e) => { if (!row.best) e.currentTarget.style.background = 'rgba(255,255,255,0.03)' }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.background = row.best ? 'rgba(59,130,246,0.1)' : 'transparent' }}
+                                        onMouseEnter={(e) => { if (!row.best) e.currentTarget.style.background = 'var(--bg-primary)' }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.background = row.best ? 'var(--bg-surface-2)' : 'transparent' }}
                                     >
                                         <td
                                             style={{
                                                 padding: '0.875rem 1rem',
-                                                color: row.best ? '#60a5fa' : '#f1f5f9',
-                                                fontWeight: row.best ? 700 : 400,
+                                                color: row.best ? 'var(--accent)' : 'var(--text-primary)',
+                                                fontWeight: row.best ? 700 : 500,
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 gap: '0.4rem',
@@ -184,20 +184,20 @@ export default function ModelDashboard() {
                                                         width: '6px',
                                                         height: '6px',
                                                         borderRadius: '50%',
-                                                        background: '#3b82f6',
+                                                        background: 'var(--accent)',
                                                         flexShrink: 0,
                                                     }}
                                                 />
                                             )}
                                             {row.model}
                                         </td>
-                                        <td style={{ padding: '0.875rem 1rem', textAlign: 'center', color: row.best ? '#22c55e' : '#94a3b8', fontWeight: row.best ? 700 : 400 }}>
+                                        <td style={{ padding: '0.875rem 1rem', textAlign: 'center', color: row.best ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: row.best ? 700 : 400 }}>
                                             {row.auc}
                                         </td>
-                                        <td style={{ padding: '0.875rem 1rem', textAlign: 'center', color: row.best ? '#22c55e' : '#94a3b8', fontWeight: row.best ? 700 : 400 }}>
+                                        <td style={{ padding: '0.875rem 1rem', textAlign: 'center', color: row.best ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: row.best ? 700 : 400 }}>
                                             {row.f1}
                                         </td>
-                                        <td style={{ padding: '0.875rem 1rem', textAlign: 'center', color: row.best ? '#22c55e' : '#94a3b8', fontWeight: row.best ? 700 : 400 }}>
+                                        <td style={{ padding: '0.875rem 1rem', textAlign: 'center', color: row.best ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: row.best ? 700 : 400 }}>
                                             {row.accuracy}
                                         </td>
                                     </tr>
@@ -209,13 +209,14 @@ export default function ModelDashboard() {
                     {/* Why RF Won callout */}
                     <div
                         style={{
-                            background: 'rgba(59,130,246,0.08)',
-                            border: '1px solid rgba(59,130,246,0.3)',
-                            borderRadius: '0.75rem',
-                            padding: '1.25rem 1.5rem',
+                            background: 'var(--bg-surface)',
+                            border: '1px solid var(--border)',
+                            borderRadius: 'var(--card-radius)',
+                            padding: 'var(--card-padding)',
                             display: 'flex',
                             gap: '0.75rem',
                             alignItems: 'flex-start',
+                            boxShadow: 'var(--shadow-sm)',
                         }}
                     >
                         <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>🏆</span>
@@ -225,22 +226,23 @@ export default function ModelDashboard() {
                                     margin: '0 0 0.4rem',
                                     fontSize: '0.85rem',
                                     fontWeight: 700,
-                                    color: '#60a5fa',
+                                    color: 'var(--accent)',
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.05em',
                                 }}
                             >
                                 Why Random Forest Won
                             </p>
-                            <p style={{ margin: 0, fontSize: '0.875rem', color: '#cbd5e1', lineHeight: 1.6 }}>
-                                Achieved highest AUC of <strong style={{ color: '#f1f5f9' }}>99.63%</strong> with excellent cross-validation
-                                stability (<strong style={{ color: '#f1f5f9' }}>σ &lt; 0.002</strong>), making it the most reliable model for
+                            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                                Achieved highest AUC of <strong style={{ color: 'var(--text-primary)' }}>99.63%</strong> with excellent cross-validation
+                                stability (<strong style={{ color: 'var(--text-primary)' }}>σ &lt; 0.002</strong>), making it the most reliable model for
                                 production deployment.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
             <style>{`
         @media (max-width: 768px) {
