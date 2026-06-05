@@ -113,17 +113,17 @@ const REQUIRED_FIELDS = [
 ]
 
 function getRiskColor(prediction) {
-    if (!prediction) return '#3b82f6'
+    if (!prediction) return 'var(--accent)'
     const p = prediction.toLowerCase()
-    if (p.includes('high')) return '#ef4444'
-    if (p.includes('medium')) return '#f59e0b'
-    return '#22c55e'
+    if (p.includes('high')) return 'var(--danger)'
+    if (p.includes('medium')) return 'var(--warning)'
+    return 'var(--success)'
 }
 
 function getProbabilityColor(prob) {
-    if (prob > 60) return '#ef4444'
-    if (prob >= 30) return '#f59e0b'
-    return '#22c55e'
+    if (prob > 60) return 'var(--danger)'
+    if (prob >= 30) return 'var(--warning)'
+    return 'var(--success)'
 }
 
 function getRiskEmoji(prediction) {
@@ -138,7 +138,7 @@ function getRiskEmoji(prediction) {
 function FormGroup({ label, children }) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <label style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>{label}</label>
+            <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{label}</label>
             {children}
         </div>
     )
@@ -147,10 +147,10 @@ function FormGroup({ label, children }) {
 const inputStyle = (hasError) => ({
     width: '100%',
     padding: '0.6rem 0.85rem',
-    background: '#0f172a',
-    border: `1px solid ${hasError ? '#ef4444' : '#334155'}`,
+    background: 'var(--bg-surface-2)',
+    border: `1px solid ${hasError ? 'var(--danger)' : 'var(--border)'}`,
     borderRadius: '0.5rem',
-    color: '#f1f5f9',
+    color: 'var(--text-primary)',
     fontSize: '0.875rem',
     outline: 'none',
     boxSizing: 'border-box',
@@ -168,8 +168,8 @@ function NumberInput({ value, onChange, min, max, placeholder, hasError }) {
             max={max}
             placeholder={placeholder}
             style={inputStyle(hasError)}
-            onFocus={(e) => (e.target.style.borderColor = '#3b82f6')}
-            onBlur={(e) => (e.target.style.borderColor = hasError ? '#ef4444' : '#334155')}
+            onFocus={(e) => (e.target.style.borderColor = 'var(--accent)')}
+            onBlur={(e) => (e.target.style.borderColor = hasError ? 'var(--danger)' : 'var(--border)')}
         />
     )
 }
@@ -182,7 +182,7 @@ function SelectInput({ value, onChange, options }) {
             style={{ ...inputStyle(false), cursor: 'pointer' }}
         >
             {options.map((o) => (
-                <option key={o} value={o} style={{ background: '#0f172a' }}>{o}</option>
+                <option key={o} value={o} style={{ background: 'var(--bg-surface-2)' }}>{o}</option>
             ))}
         </select>
     )
@@ -211,7 +211,7 @@ function StarRating({ value, onChange }) {
                     ⭐
                 </button>
             ))}
-            <span style={{ color: '#94a3b8', fontSize: '0.8rem', marginLeft: '0.25rem' }}>{value}/5</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginLeft: '0.25rem' }}>{value}/5</span>
         </div>
     )
 }
@@ -227,7 +227,7 @@ function ToggleSwitch({ value, onChange, label }) {
                     height: '24px',
                     borderRadius: '9999px',
                     border: 'none',
-                    background: value ? '#ef4444' : '#334155',
+                    background: value ? 'var(--danger)' : 'var(--border)',
                     position: 'relative',
                     cursor: 'pointer',
                     transition: 'background 0.25s',
@@ -242,13 +242,13 @@ function ToggleSwitch({ value, onChange, label }) {
                         width: '18px',
                         height: '18px',
                         borderRadius: '50%',
-                        background: '#fff',
+                        background: 'var(--text-primary)',
                         transition: 'left 0.25s',
                         display: 'block',
                     }}
                 />
             </button>
-            <span style={{ color: value ? '#ef4444' : '#94a3b8', fontSize: '0.875rem', fontWeight: 500 }}>
+            <span style={{ color: value ? 'var(--danger)' : 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: 500 }}>
                 {value ? 'Yes — Complaint Raised' : 'No Complaint'}
             </span>
         </div>
@@ -261,11 +261,11 @@ function SectionLabel({ children }) {
             style={{
                 fontSize: '0.72rem',
                 fontWeight: 700,
-                color: '#60a5fa',
+                color: 'var(--accent)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
                 paddingBottom: '0.5rem',
-                borderBottom: '1px solid #1e293b',
+                borderBottom: '1px solid var(--bg-surface)',
                 marginBottom: '0.25rem',
             }}
         >
@@ -280,7 +280,7 @@ function DefaultPanel() {
     return (
         <div
             style={{
-                border: '2px dashed #334155',
+                border: '2px dashed var(--border)',
                 borderRadius: '0.75rem',
                 padding: '3rem 2rem',
                 textAlign: 'center',
@@ -294,8 +294,8 @@ function DefaultPanel() {
             }}
         >
             <div style={{ fontSize: '3rem' }}>🔮</div>
-            <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: 0, lineHeight: 1.6 }}>
-                Enter customer details and click <strong style={{ color: '#f1f5f9' }}>Analyze</strong> to get an instant churn risk assessment powered by Gemini AI
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: 0, lineHeight: 1.6 }}>
+                Enter customer details and click <strong style={{ color: 'var(--text-primary)' }}>Analyze</strong> to get an instant churn risk assessment powered by Gemini AI
             </p>
         </div>
     )
@@ -307,7 +307,7 @@ function LoadingPanel() {
     return (
         <div
             style={{
-                border: '1px solid #334155',
+                border: '1px solid var(--border)',
                 borderRadius: '0.75rem',
                 padding: '3rem 2rem',
                 textAlign: 'center',
@@ -317,7 +317,7 @@ function LoadingPanel() {
                 gap: '1.25rem',
                 minHeight: '300px',
                 justifyContent: 'center',
-                background: '#1e293b',
+                background: 'var(--bg-surface)',
             }}
         >
             <div
@@ -325,12 +325,12 @@ function LoadingPanel() {
                     width: '48px',
                     height: '48px',
                     borderRadius: '50%',
-                    border: '3px solid #334155',
-                    borderTop: '3px solid #3b82f6',
+                    border: '3px solid var(--border)',
+                    borderTop: '3px solid var(--accent)',
                     animation: 'spin 0.8s linear infinite',
                 }}
             />
-            <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.95rem' }}>Analyzing customer profile...</p>
+            <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.95rem' }}>Analyzing customer profile...</p>
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
     )
@@ -346,7 +346,7 @@ function ResultPanel({ result }) {
     return (
         <div
             style={{
-                background: '#1e293b',
+                background: 'var(--bg-surface)',
                 borderRadius: '0.75rem',
                 padding: '1.75rem',
                 display: 'flex',
@@ -382,10 +382,10 @@ function ResultPanel({ result }) {
             {/* Probability Bar */}
             <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>Churn Probability</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Churn Probability</span>
                     <span style={{ fontSize: '1rem', fontWeight: 800, color: probColor }}>{result.churn_probability}%</span>
                 </div>
-                <div style={{ height: '10px', background: '#0f172a', borderRadius: '9999px', overflow: 'hidden' }}>
+                <div style={{ height: '10px', background: 'var(--bg-surface-2)', borderRadius: '9999px', overflow: 'hidden' }}>
                     <div
                         style={{
                             height: '100%',
@@ -401,16 +401,16 @@ function ResultPanel({ result }) {
 
             {/* Confidence */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Confidence:</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Confidence:</span>
                 <span
                     style={{
                         padding: '0.2rem 0.7rem',
-                        background: 'rgba(59,130,246,0.12)',
-                        border: '1px solid rgba(59,130,246,0.3)',
+                        background: 'var(--bg-accent-light)',
+                        border: '1px solid var(--accent)',
                         borderRadius: '9999px',
                         fontSize: '0.78rem',
                         fontWeight: 600,
-                        color: '#60a5fa',
+                        color: 'var(--accent)',
                     }}
                 >
                     {result.confidence} Confidence
@@ -420,28 +420,28 @@ function ResultPanel({ result }) {
             {/* Recommended Action */}
             <div
                 style={{
-                    background: 'rgba(59,130,246,0.07)',
-                    border: '1px solid rgba(59,130,246,0.25)',
+                    background: 'var(--bg-accent-light)',
+                    border: '1px solid var(--accent)',
                     borderRadius: '0.6rem',
                     padding: '1rem',
                 }}
             >
-                <p style={{ margin: '0 0 0.35rem', fontSize: '0.72rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <p style={{ margin: '0 0 0.35rem', fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     🎯 Recommended Action
                 </p>
-                <p style={{ margin: 0, fontSize: '0.875rem', color: '#cbd5e1', lineHeight: 1.5 }}>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                     {result.recommended_action}
                 </p>
             </div>
 
             {/* Key Risk Factors */}
             <div>
-                <p style={{ margin: '0 0 0.6rem', fontSize: '0.72rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <p style={{ margin: '0 0 0.6rem', fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     ⚠️ Key Risk Factors
                 </p>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                     {(result.key_risk_factors || []).map((factor, i) => (
-                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: '#cbd5e1' }}>
+                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                             <span style={{ color: riskColor, flexShrink: 0, marginTop: '1px' }}>•</span>
                             {factor}
                         </li>
@@ -452,17 +452,17 @@ function ResultPanel({ result }) {
             {/* Segment Card */}
             <div
                 style={{
-                    background: '#0f172a',
+                    background: 'var(--bg-surface-2)',
                     borderRadius: '0.6rem',
                     padding: '0.875rem 1rem',
-                    border: '1px solid #334155',
+                    border: '1px solid var(--border)',
                 }}
             >
-                <p style={{ margin: '0 0 0.25rem', fontSize: '0.72rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <p style={{ margin: '0 0 0.25rem', fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     👥 Customer Segment
                 </p>
-                <p style={{ margin: '0 0 0.25rem', fontSize: '0.9rem', fontWeight: 700, color: '#f1f5f9' }}>{result.segment}</p>
-                <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>{result.segment_description}</p>
+                <p style={{ margin: '0 0 0.25rem', fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }}>{result.segment}</p>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{result.segment_description}</p>
             </div>
         </div>
     )
@@ -482,6 +482,7 @@ export default function ChurnPredictor() {
     const [result, setResult] = useState(null)
     const [error, setError] = useState(null)
     const [touched, setTouched] = useState({})
+    const [formStep, setFormStep] = useState(0)
 
     const setField = (key) => (e) => {
         setFormData((p) => ({ ...p, [key]: e.target.value }))
@@ -489,6 +490,19 @@ export default function ChurnPredictor() {
     }
 
     const isFieldError = (key) => touched[key] && (formData[key] === '' || formData[key] === null || formData[key] === undefined)
+
+    const hasTabError = (stepIndex) => {
+        if (stepIndex === 0) {
+            return isFieldError('tenure')
+        }
+        if (stepIndex === 1) {
+            return ['orderCount', 'daysSinceLastOrder', 'hourSpendOnApp', 'cashbackAmount', 'couponUsed'].some(isFieldError)
+        }
+        if (stepIndex === 2) {
+            return ['numberOfDevices', 'warehouseToHome'].some(isFieldError)
+        }
+        return false
+    }
 
     const handleAnalyze = async () => {
         const missing = REQUIRED_FIELDS.filter(
@@ -498,6 +512,15 @@ export default function ChurnPredictor() {
         if (missing.length > 0) {
             setTouched(REQUIRED_FIELDS.reduce((acc, k) => ({ ...acc, [k]: true }), {}))
             setError('Please fill all fields before analyzing')
+            // Auto navigate to the first step with error
+            const firstMissing = missing[0]
+            if (firstMissing === 'tenure') {
+                setFormStep(0)
+            } else if (['orderCount', 'daysSinceLastOrder', 'hourSpendOnApp', 'cashbackAmount', 'couponUsed'].includes(firstMissing)) {
+                setFormStep(1)
+            } else {
+                setFormStep(2)
+            }
             return
         }
 
@@ -538,15 +561,16 @@ export default function ChurnPredictor() {
             {/* Section heading */}
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <span
+                    className="animate-ready animate-label"
                     style={{
                         display: 'inline-block',
                         padding: '0.35rem 1rem',
-                        background: 'rgba(239,68,68,0.1)',
-                        border: '1px solid rgba(239,68,68,0.25)',
+                        background: 'var(--danger-bg)',
+                        border: '1px solid var(--danger)',
                         borderRadius: '9999px',
                         fontSize: '0.75rem',
                         fontWeight: 600,
-                        color: '#f87171',
+                        color: 'var(--danger)',
                         letterSpacing: '0.06em',
                         textTransform: 'uppercase',
                         marginBottom: '1rem',
@@ -555,17 +579,18 @@ export default function ChurnPredictor() {
                     AI Powered
                 </span>
                 <h2
+                    className="animate-ready animate-heading"
                     style={{
                         fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
                         fontWeight: 800,
-                        color: '#f1f5f9',
+                        color: 'var(--text-primary)',
                         margin: '0 0 0.75rem',
                         letterSpacing: '-0.02em',
                     }}
                 >
                     Try The Live Predictor
                 </h2>
-                <p style={{ color: '#94a3b8', fontSize: '1rem', margin: 0 }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', margin: 0 }}>
                     Enter customer details to get an instant churn risk assessment
                 </p>
             </div>
@@ -577,80 +602,207 @@ export default function ChurnPredictor() {
             >
                 {/* ── LEFT: Form ── */}
                 <div
+                    className="animate-ready animate-card"
                     style={{
-                        background: '#1e293b',
+                        background: 'var(--bg-surface)',
                         borderRadius: '0.75rem',
                         padding: '1.75rem',
-                        border: '1px solid #334155',
+                        border: '1px solid var(--border)',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1.5rem',
                     }}
                 >
-                    {/* Group 1 */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                        <SectionLabel>Customer Profile</SectionLabel>
-                        <FormGroup label="Months with company">
-                            <NumberInput value={formData.tenure} onChange={setField('tenure')} min={0} max={60} placeholder="e.g. 12" hasError={isFieldError('tenure')} />
-                        </FormGroup>
-                        <FormGroup label="Gender">
-                            <SelectInput value={formData.gender} onChange={setField('gender')} options={['Male', 'Female']} />
-                        </FormGroup>
-                        <FormGroup label="Marital Status">
-                            <SelectInput value={formData.maritalStatus} onChange={setField('maritalStatus')} options={['Married', 'Single', 'Divorced']} />
-                        </FormGroup>
-                        <FormGroup label="City Tier">
-                            <SelectInput value={formData.cityTier} onChange={setField('cityTier')} options={['1', '2', '3']} />
-                        </FormGroup>
+                    {/* Horizontal Steps Stepper */}
+                    <div style={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center', 
+                        gap: '0.5rem', 
+                        background: 'var(--bg-surface-2)',
+                        padding: '0.35rem',
+                        borderRadius: '0.5rem',
+                        border: '1px solid var(--border)'
+                    }}>
+                        {[
+                            { label: 'Profile', icon: '👤', id: 0 },
+                            { label: 'Behavior', icon: '🛍️', id: 1 },
+                            { label: 'Satisfaction', icon: '⭐', id: 2 }
+                        ].map((tab) => {
+                            const isActive = formStep === tab.id;
+                            const hasError = hasTabError(tab.id);
+                            return (
+                                <button
+                                    key={tab.id}
+                                    type="button"
+                                    className={`stepper-tab ${isActive ? 'active' : ''}`}
+                                    onClick={() => setFormStep(tab.id)}
+                                    style={{
+                                        flex: 1,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.4rem',
+                                        padding: '0.55rem 0.75rem',
+                                        background: isActive ? 'var(--bg-surface)' : 'transparent',
+                                        color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                                        border: isActive ? '1px solid var(--border)' : '1px solid transparent',
+                                        borderRadius: '0.375rem',
+                                        fontSize: '0.82rem',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                        boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
+                                        position: 'relative'
+                                    }}
+                                >
+                                    <span>{tab.icon}</span>
+                                    <span className="tab-label">{tab.label}</span>
+                                    {hasError && (
+                                        <span style={{
+                                            width: '6px',
+                                            height: '6px',
+                                            borderRadius: '50%',
+                                            background: 'var(--danger)',
+                                            position: 'absolute',
+                                            top: '4px',
+                                            right: '4px'
+                                        }} />
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
 
-                    {/* Group 2 */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                        <SectionLabel>Shopping Behavior</SectionLabel>
-                        <FormGroup label="Orders last month">
-                            <NumberInput value={formData.orderCount} onChange={setField('orderCount')} min={0} max={20} placeholder="e.g. 3" hasError={isFieldError('orderCount')} />
-                        </FormGroup>
-                        <FormGroup label="Days since last order">
-                            <NumberInput value={formData.daysSinceLastOrder} onChange={setField('daysSinceLastOrder')} min={0} max={60} placeholder="e.g. 7" hasError={isFieldError('daysSinceLastOrder')} />
-                        </FormGroup>
-                        <FormGroup label="Daily hours on app">
-                            <NumberInput value={formData.hourSpendOnApp} onChange={setField('hourSpendOnApp')} min={0} max={10} placeholder="e.g. 2" hasError={isFieldError('hourSpendOnApp')} />
-                        </FormGroup>
-                        <FormGroup label="Avg cashback received (₹)">
-                            <NumberInput value={formData.cashbackAmount} onChange={setField('cashbackAmount')} min={0} max={500} placeholder="e.g. 180" hasError={isFieldError('cashbackAmount')} />
-                        </FormGroup>
-                        <FormGroup label="Coupons used last month">
-                            <NumberInput value={formData.couponUsed} onChange={setField('couponUsed')} min={0} max={20} placeholder="e.g. 2" hasError={isFieldError('couponUsed')} />
-                        </FormGroup>
-                    </div>
+                    {/* Step 0: Profile */}
+                    {formStep === 0 && (
+                        <div className="form-subgrid" style={{ animation: 'fadeIn 0.25s ease' }}>
+                            <div style={{ gridColumn: '1 / -1' }}>
+                                <SectionLabel>Customer Profile</SectionLabel>
+                            </div>
+                            <FormGroup label="Months with company">
+                                <NumberInput value={formData.tenure} onChange={setField('tenure')} min={0} max={60} placeholder="e.g. 12" hasError={isFieldError('tenure')} />
+                            </FormGroup>
+                            <FormGroup label="Gender">
+                                <SelectInput value={formData.gender} onChange={setField('gender')} options={['Male', 'Female']} />
+                            </FormGroup>
+                            <FormGroup label="Marital Status">
+                                <SelectInput value={formData.maritalStatus} onChange={setField('maritalStatus')} options={['Married', 'Single', 'Divorced']} />
+                            </FormGroup>
+                            <FormGroup label="City Tier">
+                                <SelectInput value={formData.cityTier} onChange={setField('cityTier')} options={['1', '2', '3']} />
+                            </FormGroup>
+                        </div>
+                    )}
 
-                    {/* Group 3 */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                        <SectionLabel>Satisfaction & Issues</SectionLabel>
-                        <FormGroup label="Satisfaction Score">
-                            <StarRating value={formData.satisfactionScore} onChange={(v) => setFormData((p) => ({ ...p, satisfactionScore: v }))} />
-                        </FormGroup>
-                        <FormGroup label="Raised a complaint?">
-                            <ToggleSwitch value={formData.complain} onChange={(v) => setFormData((p) => ({ ...p, complain: v }))} />
-                        </FormGroup>
-                        <FormGroup label="Number of devices registered">
-                            <NumberInput value={formData.numberOfDevices} onChange={setField('numberOfDevices')} min={1} max={6} placeholder="e.g. 2" hasError={isFieldError('numberOfDevices')} />
-                        </FormGroup>
-                        <FormGroup label="Distance from warehouse (km)">
-                            <NumberInput value={formData.warehouseToHome} onChange={setField('warehouseToHome')} min={1} max={100} placeholder="e.g. 15" hasError={isFieldError('warehouseToHome')} />
-                        </FormGroup>
+                    {/* Step 1: Behavior */}
+                    {formStep === 1 && (
+                        <div className="form-subgrid" style={{ animation: 'fadeIn 0.25s ease' }}>
+                            <div style={{ gridColumn: '1 / -1' }}>
+                                <SectionLabel>Shopping Behavior</SectionLabel>
+                            </div>
+                            <FormGroup label="Orders last month">
+                                <NumberInput value={formData.orderCount} onChange={setField('orderCount')} min={0} max={20} placeholder="e.g. 3" hasError={isFieldError('orderCount')} />
+                            </FormGroup>
+                            <FormGroup label="Days since last order">
+                                <NumberInput value={formData.daysSinceLastOrder} onChange={setField('daysSinceLastOrder')} min={0} max={60} placeholder="e.g. 7" hasError={isFieldError('daysSinceLastOrder')} />
+                            </FormGroup>
+                            <FormGroup label="Daily hours on app">
+                                <NumberInput value={formData.hourSpendOnApp} onChange={setField('hourSpendOnApp')} min={0} max={10} placeholder="e.g. 2" hasError={isFieldError('hourSpendOnApp')} />
+                            </FormGroup>
+                            <FormGroup label="Avg cashback received (₹)">
+                                <NumberInput value={formData.cashbackAmount} onChange={setField('cashbackAmount')} min={0} max={500} placeholder="e.g. 180" hasError={isFieldError('cashbackAmount')} />
+                            </FormGroup>
+                            <div style={{ gridColumn: '1 / -1' }}>
+                                <FormGroup label="Coupons used last month">
+                                    <NumberInput value={formData.couponUsed} onChange={setField('couponUsed')} min={0} max={20} placeholder="e.g. 2" hasError={isFieldError('couponUsed')} />
+                                </FormGroup>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 2: Satisfaction */}
+                    {formStep === 2 && (
+                        <div className="form-subgrid" style={{ animation: 'fadeIn 0.25s ease' }}>
+                            <div style={{ gridColumn: '1 / -1' }}>
+                                <SectionLabel>Satisfaction & Issues</SectionLabel>
+                            </div>
+                            <FormGroup label="Satisfaction Score">
+                                <StarRating value={formData.satisfactionScore} onChange={(v) => setFormData((p) => ({ ...p, satisfactionScore: v }))} />
+                            </FormGroup>
+                            <FormGroup label="Raised a complaint?">
+                                <ToggleSwitch value={formData.complain} onChange={(v) => setFormData((p) => ({ ...p, complain: v }))} />
+                            </FormGroup>
+                            <FormGroup label="Number of devices registered">
+                                <NumberInput value={formData.numberOfDevices} onChange={setField('numberOfDevices')} min={1} max={6} placeholder="e.g. 2" hasError={isFieldError('numberOfDevices')} />
+                            </FormGroup>
+                            <FormGroup label="Distance from warehouse (km)">
+                                <NumberInput value={formData.warehouseToHome} onChange={setField('warehouseToHome')} min={1} max={100} placeholder="e.g. 15" hasError={isFieldError('warehouseToHome')} />
+                            </FormGroup>
+                        </div>
+                    )}
+
+                    {/* Stepper Navigation Buttons */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginTop: '0.5rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                        <button
+                            type="button"
+                            disabled={formStep === 0}
+                            onClick={() => setFormStep((p) => p - 1)}
+                            style={{
+                                padding: '0.6rem 1.2rem',
+                                background: 'transparent',
+                                border: '1px solid var(--border)',
+                                borderRadius: '0.5rem',
+                                color: formStep === 0 ? 'var(--text-muted)' : 'var(--text-secondary)',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                cursor: formStep === 0 ? 'not-allowed' : 'pointer',
+                                transition: 'all 0.2s',
+                                opacity: formStep === 0 ? 0.4 : 1,
+                            }}
+                            onMouseEnter={(e) => { if (formStep !== 0) e.currentTarget.style.background = 'var(--bg-surface-2)' }}
+                            onMouseLeave={(e) => { if (formStep !== 0) e.currentTarget.style.background = 'transparent' }}
+                        >
+                            ← Back
+                        </button>
+                        
+                        {formStep < 2 ? (
+                            <button
+                                type="button"
+                                onClick={() => setFormStep((p) => p + 1)}
+                                style={{
+                                    padding: '0.6rem 1.2rem',
+                                    background: 'var(--bg-surface-2)',
+                                    border: '1px solid var(--border)',
+                                    borderRadius: '0.5rem',
+                                    color: 'var(--text-primary)',
+                                    fontSize: '0.875rem',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s',
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent)'}
+                                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
+                            >
+                                Next Step →
+                            </button>
+                        ) : (
+                            <span style={{ fontSize: '0.82rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
+                                Ready to analyze! ✨
+                            </span>
+                        )}
                     </div>
 
                     {/* Error message */}
                     {error && (
                         <div
                             style={{
-                                background: 'rgba(239,68,68,0.1)',
-                                border: '1px solid rgba(239,68,68,0.3)',
+                                background: 'var(--danger-bg)',
+                                border: '1px solid var(--danger)',
                                 borderRadius: '0.5rem',
                                 padding: '0.75rem 1rem',
                                 fontSize: '0.85rem',
-                                color: '#f87171',
+                                color: 'var(--danger)',
                             }}
                         >
                             ⚠️ {error}
@@ -664,8 +816,8 @@ export default function ChurnPredictor() {
                         style={{
                             width: '100%',
                             padding: '0.9rem',
-                            background: loading ? '#1e3a5f' : '#3b82f6',
-                            color: '#fff',
+                            background: loading ? 'var(--bg-surface-2)' : 'var(--accent)',
+                            color: 'var(--text-primary)',
                             border: 'none',
                             borderRadius: '0.75rem',
                             fontSize: '1rem',
@@ -676,18 +828,18 @@ export default function ChurnPredictor() {
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '0.6rem',
-                            boxShadow: loading ? 'none' : '0 0 20px rgba(59,130,246,0.3)',
+                            boxShadow: loading ? 'none' : 'var(--shadow-md)',
                             fontFamily: 'inherit',
                         }}
-                        onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#2563eb' }}
-                        onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#3b82f6' }}
+                        onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = 'var(--accent-hover)' }}
+                        onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = 'var(--accent)' }}
                     >
                         {loading ? (
                             <>
                                 <span
                                     style={{
                                         width: '16px', height: '16px', borderRadius: '50%',
-                                        border: '2px solid #3b82f688', borderTop: '2px solid #fff',
+                                        border: '2px solid var(--bg-surface-2)', borderTop: '2px solid var(--text-primary)',
                                         animation: 'spin 0.7s linear infinite', display: 'inline-block',
                                     }}
                                 />
@@ -700,7 +852,7 @@ export default function ChurnPredictor() {
                 </div>
 
                 {/* ── RIGHT: Result Panel ── */}
-                <div>
+                <div className="animate-ready animate-card">
                     {loading && <LoadingPanel />}
                     {!loading && !result && <DefaultPanel />}
                     {!loading && result && <ResultPanel result={result} />}
@@ -711,7 +863,36 @@ export default function ChurnPredictor() {
         @media (max-width: 768px) {
           .predictor-grid { grid-template-columns: 1fr !important; }
         }
+        .form-subgrid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.85rem;
+        }
+        @media (max-width: 560px) {
+          .form-subgrid {
+            grid-template-columns: 1fr;
+          }
+        }
+        @media (max-width: 480px) {
+          .tab-label {
+            display: none;
+          }
+        }
+        .stepper-tab {
+          transition: all 0.2s;
+        }
+        .stepper-tab:not(.active):hover {
+          color: var(--text-primary) !important;
+          background: rgba(0, 0, 0, 0.04) !important;
+        }
+        [data-theme="dark"] .stepper-tab:not(.active):hover {
+          background: rgba(255, 255, 255, 0.04) !important;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
       `}</style>
         </section>
     )

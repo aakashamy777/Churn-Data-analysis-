@@ -10,7 +10,7 @@ function StepIndicator({ currentStep }) {
     const active = stepIndex[currentStep] ?? 0;
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0', marginBottom: '40px' }}>
+        <div className="animate-ready animate-card" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0', marginBottom: '40px' }}>
             {STEPS.map((label, i) => {
                 const isCompleted = i < active;
                 const isActive = i === active;

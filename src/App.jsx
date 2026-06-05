@@ -27,11 +27,11 @@ const GlobalStyles = () => (
       display: inline-block;
       width: 6px;
       height: 6px;
-      background: #22c55e;
+      background: var(--success);
       border-radius: 50%;
       margin-left: 8px;
       vertical-align: middle;
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+      box-shadow: 0 0 8px var(--success);
       animation: pulse 2s infinite ease-in-out;
     }
   `}</style>
@@ -227,6 +227,7 @@ function Hero() {
         {/* Context Badge */}
         <div style={{ marginBottom: '24px' }}>
           <span
+            className="animate-ready animate-label"
             style={{
               display: 'inline-block',
               background: 'var(--bg-accent-light)',
@@ -246,6 +247,7 @@ function Hero() {
 
         {/* Main Heading */}
         <h1
+          className="animate-ready animate-heading"
           style={{
             fontSize: '56px',
             fontWeight: 700,
@@ -261,6 +263,7 @@ function Hero() {
 
         {/* Subheading */}
         <h2
+          className="animate-ready animate-heading"
           style={{
             fontSize: '56px',
             fontWeight: 700,
@@ -358,6 +361,7 @@ function Hero() {
           {STATS.map((stat, i) => (
             <div
               key={i}
+              className="animate-ready animate-card"
               style={{
                 textAlign: 'center',
                 padding: '0 32px',
@@ -365,6 +369,7 @@ function Hero() {
               }}
             >
               <div
+                className="animate-ready animate-stat"
                 style={{
                   fontSize: '22px',
                   fontWeight: 600,
@@ -406,6 +411,7 @@ function TechStack() {
       }}
     >
       <h2
+        className="animate-ready animate-heading"
         style={{
           textAlign: 'center',
           fontSize: '1.8rem',
@@ -437,6 +443,7 @@ function TechStack() {
         {TECH_BADGES.map((badge) => (
           <span
             key={badge.label}
+            className="animate-ready animate-card"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -477,9 +484,11 @@ function TechStack() {
 
 function SectionDivider() {
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
-      <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, var(--border), transparent)' }} />
-    </div>
+    <hr style={{
+      border: 'none',
+      borderTop: '1px solid var(--border)',
+      margin: '0'
+    }} />
   )
 }
 
@@ -527,6 +536,7 @@ function ProblemStatement() {
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <span style={{ fontSize: '2.5rem' }}>🎯</span>
           <h2
+            className="animate-ready animate-heading"
             style={{
               fontSize: '1.75rem',
               fontWeight: 800,
@@ -549,7 +559,7 @@ function ProblemStatement() {
           }}
         >
           {columns.map((col) => (
-            <div key={col.title}>
+            <div key={col.title} className="animate-ready animate-card">
               <h3
                 style={{
                   fontSize: '0.95rem',
@@ -800,6 +810,133 @@ export default function App() {
       : 'ReGainer — Business Data Analyzer';
   }, [mode])
 
+  useEffect(() => {
+    // Helper to format numbers dynamically
+    const formatNumber = (value, originalStr) => {
+      const hasCommas = originalStr.includes(',');
+      const isDecimal = originalStr.includes('.');
+      const hasRupee = originalStr.includes('₹');
+      const hasPercent = originalStr.includes('%');
+      
+      let formatted = '';
+      if (isDecimal) {
+        formatted = value.toFixed(1);
+      } else {
+        formatted = Math.round(value).toString();
+      }
+      
+      if (hasCommas) {
+        const parts = formatted.split('.');
+        if (originalStr.includes('1,60,800')) {
+          let lastThree = parts[0].substring(parts[0].length - 3);
+          const otherBits = parts[0].substring(0, parts[0].length - 3);
+          if (otherBits !== '') {
+            lastThree = ',' + lastThree;
+          }
+          const res = otherBits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+          formatted = res + (parts[1] ? '.' + parts[1] : '');
+        } else {
+          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          formatted = parts.join('.');
+        }
+      }
+      
+      if (hasRupee) formatted = '₹' + formatted;
+      if (hasPercent) formatted = formatted + '%';
+      return formatted;
+    }
+
+    // Helper to run counter animation
+    const animateCounter = (el) => {
+      const originalText = el.getAttribute('data-original-text') || el.innerText;
+      if (!el.getAttribute('data-original-text')) {
+        el.setAttribute('data-original-text', originalText);
+      }
+      
+      const cleanNum = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+      if (isNaN(cleanNum)) return;
+      
+      const duration = 1200; // 1.2s
+      const startTime = performance.now();
+      
+      const update = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const progress = 1 - Math.pow(1 - t, 4); // easeOutQuart
+        
+        const currentValue = progress * cleanNum;
+        el.innerText = formatNumber(currentValue, originalText);
+        
+        if (t < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = originalText;
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+
+    // Single IntersectionObserver with threshold: 0.15
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          el.classList.add('animate-in');
+          
+          if (el.classList.contains('animate-card')) {
+            const parent = el.parentNode;
+            if (parent) {
+              const cards = Array.from(parent.querySelectorAll('.animate-card'));
+              const idx = cards.indexOf(el);
+              if (idx !== -1) {
+                el.style.transitionDelay = `${idx * 0.1}s`;
+              }
+            }
+          }
+          
+          if (el.classList.contains('animate-stat')) {
+            animateCounter(el);
+          }
+          
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    const observedElements = new Set();
+    const observeNewTargets = () => {
+      const targets = document.querySelectorAll('.animate-ready');
+      targets.forEach((target) => {
+        if (!observedElements.has(target) && !target.classList.contains('animate-in')) {
+          observedElements.add(target);
+          observer.observe(target);
+        }
+      });
+    };
+
+    // Initial check
+    observeNewTargets();
+
+    // Set a short timeout to ensure components are mounted
+    const timer = setTimeout(observeNewTargets, 150);
+
+    // MutationObserver to capture dynamically rendered step cards and wizard steps
+    const mutationObserver = new MutationObserver(() => {
+      observeNewTargets();
+    });
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+      mutationObserver.disconnect();
+    }
+  }, [mode]);
+
   return (
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', fontFamily: 'var(--font-sans)', paddingTop: '52px' }}>
       <GlobalStyles />
@@ -838,38 +975,44 @@ export default function App() {
             onClick={() => switchMode('casestudy')}
             style={{
               position: 'fixed', top: '60px', right: '24px', zIndex: 999,
-              color: 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer',
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              color: 'var(--text-secondary)', fontSize: '12px', cursor: 'pointer',
+              background: 'var(--bg-surface)', border: '1px solid var(--border)',
               borderRadius: '8px', padding: '6px 14px', transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => { e.target.style.color = 'white'; e.target.style.background = 'rgba(255,255,255,0.1)' }}
-            onMouseLeave={(e) => { e.target.style.color = 'rgba(255,255,255,0.4)'; e.target.style.background = 'rgba(255,255,255,0.05)' }}
+            onMouseEnter={(e) => { e.target.style.color = 'var(--text-primary)'; e.target.style.background = 'var(--bg-surface-2)' }}
+            onMouseLeave={(e) => { e.target.style.color = 'var(--text-secondary)'; e.target.style.background = 'var(--bg-surface)' }}
           >
             ← Back to Case Study
           </button>
 
           {/* Standalone Header */}
           <div style={{ textAlign: 'center', padding: '60px 20px 20px 20px' }}>
-            <div style={{
-              display: 'inline-block', background: 'rgba(59,130,246,0.15)',
-              border: '1px solid rgba(59,130,246,0.4)', color: '#3b82f6',
-              borderRadius: '20px', padding: '4px 16px', fontSize: '12px',
-              marginBottom: '16px', letterSpacing: '1px'
-            }}>
+            <div
+              className="animate-ready animate-label"
+              style={{
+                display: 'inline-block', background: 'var(--bg-accent-light)',
+                border: '1px solid rgba(var(--accent-rgb), 0.2)', color: 'var(--accent)',
+                borderRadius: '20px', padding: '4px 16px', fontSize: '12px',
+                marginBottom: '16px', letterSpacing: '1px'
+              }}
+            >
               AI-POWERED BUSINESS TOOL
             </div>
 
-            <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#3b82f6' }}>ReGainer</p>
-            <h1 style={{ fontSize: '36px', fontWeight: '700', color: 'white', margin: '0 0 12px 0' }}>
+            <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: 'var(--accent)' }}>ReGainer</p>
+            <h1
+              className="animate-ready animate-heading"
+              style={{ fontSize: '36px', fontWeight: '700', color: 'var(--text-primary)', margin: '0 0 12px 0' }}
+            >
               Business Data Analyzer
             </h1>
 
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', maxWidth: '520px', margin: '0 auto 8px auto' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '16px', maxWidth: '520px', margin: '0 auto 8px auto' }}>
               Upload any customer CSV dataset and get instant AI-powered churn predictions,
               sales insights, and actionable business recommendations.
             </p>
 
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
               🔒 Your data never leaves your browser. Only 50 rows sent to AI for analysis.
             </p>
           </div>

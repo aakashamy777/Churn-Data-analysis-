@@ -129,7 +129,7 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
             borderRadius: 'var(--card-radius)', padding: '40px', maxWidth: '700px', margin: '0 auto'
         }}>
             {/* 1. SUCCESS BAR */}
-            <div style={{
+            <div className="animate-ready animate-card" style={{
                 background: 'var(--success-bg)', border: '1px solid var(--success)',
                 borderRadius: '8px', padding: '12px 20px', color: 'var(--success)', fontWeight: '600', marginBottom: '24px', fontSize: '15px'
             }}>
@@ -138,8 +138,8 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
 
             {/* 2. COLUMN PILLS */}
             <div style={{ marginBottom: '24px' }}>
-                <div style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Detected Columns:</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', margin: '-4px' }}>
+                <div className="animate-ready animate-heading" style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Detected Columns:</div>
+                <div className="animate-ready animate-card" style={{ display: 'flex', flexWrap: 'wrap', margin: '-4px' }}>
                     {allColumns.map(col => (
                         <span key={col} style={getPillStyle(col)}>{col}</span>
                     ))}
@@ -148,8 +148,8 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
 
             {/* 3. PREVIEW TABLE */}
             <div style={{ marginBottom: '24px' }}>
-                <div style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Data Preview (first 5 rows):</div>
-                <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                <div className="animate-ready animate-heading" style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Data Preview (first 5 rows):</div>
+                <div className="animate-ready animate-card" style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid var(--border)' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', whiteSpace: 'nowrap' }}>
                         <thead>
                             <tr style={{ background: 'var(--bg-surface-2)' }}>
@@ -174,7 +174,7 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
             </div>
 
             {/* 4. DETECTION NOTICE */}
-            <div style={{
+            <div className="animate-ready animate-card" style={{
                 background: 'var(--bg-surface)', border: '1px solid var(--border)',
                 borderRadius: '8px', padding: '16px', marginBottom: '32px'
             }}>
@@ -185,14 +185,14 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
 
             {/* 5. TWO BUTTONS */}
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
-                <button onClick={onBack} style={{
+                <button className="animate-ready animate-card" onClick={onBack} style={{
                     background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border)',
                     borderRadius: 'var(--card-radius)', padding: '12px 24px', cursor: 'pointer', fontSize: '15px', flex: '0 1 auto',
                     transition: 'background 0.2s ease', fontWeight: 500
                 }} onMouseEnter={(e) => e.target.style.background = 'var(--bg-surface-2)'} onMouseLeave={(e) => e.target.style.background = 'transparent'}>
                     ← Back
                 </button>
-                <button onClick={onAnalyze} style={{
+                <button className="animate-ready animate-card" onClick={onAnalyze} style={{
                     background: 'var(--accent)', color: 'white', border: 'none',
                     borderRadius: 'var(--card-radius)', padding: '12px 32px', cursor: 'pointer', fontSize: '15px', flex: '0 1 auto',
                     fontWeight: '600', transition: 'background 0.2s ease'

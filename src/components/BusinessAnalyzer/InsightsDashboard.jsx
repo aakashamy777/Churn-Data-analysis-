@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, PieChart, Pie, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
+import { BarChart, Bar, PieChart, Pie, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend, AreaChart, Area } from 'recharts';
 
 const GROQ_KEY = import.meta.env.VITE_GROQ_KEY;
 
@@ -175,7 +175,7 @@ REQUIRED JSON STRUCTURE — fill every field:
       "data": [
         {"name": "<category>", "value": <number>, "color": "#22c55e"},
         {"name": "<category>", "value": <number>, "color": "#ef4444"},
-        {"name": "<category>", "value": <number>, "color": "#3b82f6"},
+        {"name": "<category>", "value": <number>, "color": "var(--accent)"},
         {"name": "<category>", "value": <number>, "color": "#f59e0b"}
       ]
     },
@@ -283,35 +283,35 @@ Same structure every time regardless of dataset.`
 
         const getTrendStyle = (trend) => {
             const t = String(trend).toLowerCase();
-            if (t.includes('positive')) return { color: '#22c55e', symbol: '↑' };
-            if (t.includes('negative')) return { color: '#ef4444', symbol: '↓' };
-            return { color: '#f59e0b', symbol: '→' };
+            if (t.includes('positive')) return { color: 'var(--success)', symbol: '↑' };
+            if (t.includes('negative')) return { color: 'var(--danger)', symbol: '↓' };
+            return { color: 'var(--warning)', symbol: '→' };
         };
 
         const getPriorityStyle = (priority) => {
             const p = String(priority).toLowerCase();
-            if (p.includes('high')) return { bg: 'rgba(239,68,68,0.2)', color: '#ef4444' };
-            if (p.includes('medium')) return { bg: 'rgba(245,158,11,0.2)', color: '#f59e0b' };
-            return { bg: 'rgba(59,130,246,0.2)', color: '#3b82f6' };
+            if (p.includes('high')) return { bg: 'var(--danger-bg)', color: 'var(--danger)' };
+            if (p.includes('medium')) return { bg: 'var(--warning-bg)', color: 'var(--warning)' };
+            return { bg: 'var(--bg-accent-light)', color: 'var(--accent)' };
         };
 
         const getRiskStyle = (level) => {
             const l = String(level).toLowerCase();
-            if (l.includes('high')) return { bg: '#ef4444', color: 'white' };
-            if (l.includes('medium')) return { bg: '#f59e0b', color: 'white' };
-            return { bg: '#22c55e', color: 'white' };
+            if (l.includes('high')) return { bg: 'var(--danger)', color: 'var(--bg-primary)' };
+            if (l.includes('medium')) return { bg: 'var(--warning)', color: 'var(--bg-primary)' };
+            return { bg: 'var(--success)', color: 'var(--bg-primary)' };
         };
 
         return (
             <div style={{ maxWidth: '1000px', margin: '0 auto', color: 'var(--text-primary)' }}>
                 {/* SECTION 1 — Summary Banner */}
-                <div style={{
+                <div className="animate-ready animate-card" style={{
                     background: 'var(--bg-surface)', border: '1px solid var(--border)',
                     borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', marginBottom: '24px',
                     boxShadow: 'var(--shadow-sm)'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
-                        <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--text-primary)' }}>{result.datasetType}</div>
+                        <div className="animate-ready animate-heading" style={{ fontSize: '20px', fontWeight: '700', color: 'var(--text-primary)' }}>{result.datasetType}</div>
                         <div style={{ fontSize: '14px', color: 'var(--text-secondary)', maxWidth: '500px', textAlign: 'right' }}>
                             {result.plainEnglishSummary}
                         </div>
@@ -329,13 +329,13 @@ Same structure every time regardless of dataset.`
                     {result.keyMetrics?.map((metric, i) => {
                         const trend = getTrendStyle(metric.trend);
                         return (
-                            <div key={i} style={{
+                            <div key={i} className="animate-ready animate-card" style={{
                                 minWidth: '200px', flex: '1', background: 'var(--bg-surface)',
                                 border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
                                 borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)'
                             }}>
                                 <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 600, textTransform: 'uppercase' }}>{metric.label}</div>
-                                <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                                <div className="animate-ready animate-stat" style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                                     {metric.value}
                                     <span style={{ fontSize: '20px', color: trend.color }}>{trend.symbol}</span>
                                 </div>
@@ -347,27 +347,39 @@ Same structure every time regardless of dataset.`
 
                 {/* SECTION 3 — Two charts side by side */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', marginBottom: '32px' }}>
-                    <div style={{
+                    <div className="animate-ready animate-card" style={{
                         flex: '1', minWidth: '300px', background: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)',
                         border: '1px solid var(--border)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)'
                     }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'var(--text-primary)' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
                             {result.chartData?.barChart?.title}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
                             <BarChart data={result.chartData?.barChart?.data || []}>
+                                <defs>
+                                    <linearGradient id="analyzerBarGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.65} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                                 <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
                                 <YAxis stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-                                <Tooltip cursor={{fill: 'var(--bg-surface-2)'}} contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)' }} />
-                                <Bar dataKey="value" fill="var(--accent)" radius={[4, 4, 0, 0]} />
+                                <Tooltip
+                                    cursor={{ fill: 'var(--bg-surface-2)' }}
+                                    contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                                    labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                                    itemStyle={{ color: 'var(--text-secondary)' }}
+                                />
+                                <Bar dataKey="value" fill="url(#analyzerBarGrad)" radius={[6, 6, 0, 0]} activeBar={{ fillOpacity: 0.8 }} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                    <div style={{
+                    <div className="animate-ready animate-card" style={{
                         flex: '1', minWidth: '300px', background: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)',
                         border: '1px solid var(--border)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)'
                     }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'var(--text-primary)' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
                             {result.chartData?.pieChart?.title}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
@@ -377,51 +389,63 @@ Same structure every time regardless of dataset.`
                                     dataKey="value" 
                                     nameKey="name" 
                                     cx="50%" cy="50%" 
-                                    outerRadius={80}
+                                    innerRadius={55}
+                                    outerRadius={75}
+                                    paddingAngle={3}
                                 >
                                     {(result.chartData?.pieChart?.data || []).map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color || 'var(--accent)'} />
+                                        <Cell key={`cell-${index}`} fill={entry.color || 'var(--accent)'} style={{ outline: 'none', cursor: 'pointer' }} />
                                     ))}
                                 </Pie>
-                                <Tooltip contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)' }} />
-                                <Legend wrapperStyle={{ fontSize: '12px', color: 'var(--text-secondary)' }} />
+                                <Tooltip
+                                    contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                                    labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                                    itemStyle={{ color: 'var(--text-secondary)' }}
+                                />
+                                <Legend wrapperStyle={{ fontSize: '12px' }} formatter={(v) => <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>{v}</span>} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
                 
                 {result.chartData?.secondBarChart && (
-                  <div style={{
+                  <div className="animate-ready animate-card" style={{
                     background: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)',
                     border: '1px solid var(--border)',
                     borderRadius: 'var(--card-radius)',
                     padding: 'var(--card-padding)',
                     marginBottom: '32px'
                   }}>
-                    <p style={{
+                    <h3 className="animate-ready animate-heading" style={{
                       color: 'var(--text-primary)',
-                      fontSize: '14px',
+                      fontSize: '15px',
                       fontWeight: '600',
-                      marginBottom: '12px',
-                      textAlign: 'center'
+                      marginBottom: '16px',
+                      textAlign: 'center',
+                      letterSpacing: '0.01em'
                     }}>
                       {result.chartData.secondBarChart.title}
-                    </p>
+                    </h3>
                     <ResponsiveContainer width="100%" height={220}>
-                      <BarChart data={result.chartData.secondBarChart.data}>
+                      <AreaChart data={result.chartData.secondBarChart.data} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
+                        <defs>
+                          <linearGradient id="analyzerSecondAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.25} />
+                            <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.01} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                         <XAxis dataKey="label" 
                           tick={{ fill: 'var(--text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
                         <YAxis 
                           tick={{ fill: 'var(--text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
                         <Tooltip
-                          contentStyle={{
-                            background: 'var(--bg-surface)',
-                            border: '1px solid var(--border)',
-                            borderRadius: '8px',
-                            color: 'var(--text-primary)'
-                          }} />
-                        <Bar dataKey="value" fill="#f59e0b" radius={[4,4,0,0]} />
-                      </BarChart>
+                          contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                          labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                          itemStyle={{ color: 'var(--text-secondary)' }}
+                        />
+                        <Area type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2.5} fillOpacity={1} fill="url(#analyzerSecondAreaGrad)" dot={{ fill: 'var(--accent)', r: 4, strokeWidth: 1, stroke: 'var(--bg-surface)' }} activeDot={{ r: 6 }} name="Value" />
+                      </AreaChart>
                     </ResponsiveContainer>
                   </div>
                 )}
@@ -432,8 +456,8 @@ Same structure every time regardless of dataset.`
                         <button
                             onClick={() => setActiveTab('churn')}
                             style={{
-                                background: activeTab === 'churn' ? 'var(--accent)' : 'transparent',
-                                color: activeTab === 'churn' ? 'white' : 'var(--text-secondary)',
+                                background: activeTab === 'churn' ? 'var(--bg-surface-2)' : 'transparent',
+                                color: activeTab === 'churn' ? 'var(--text-primary)' : 'var(--text-secondary)',
                                 border: 'none',
                                 borderBottom: activeTab === 'churn' ? 'none' : '2px solid transparent',
                                 borderRadius: activeTab === 'churn' ? '4px' : '0',
@@ -448,8 +472,8 @@ Same structure every time regardless of dataset.`
                         <button
                             onClick={() => setActiveTab('sales')}
                             style={{
-                                background: activeTab === 'sales' ? 'var(--accent)' : 'transparent',
-                                color: activeTab === 'sales' ? 'white' : 'var(--text-secondary)',
+                                background: activeTab === 'sales' ? 'var(--bg-surface-2)' : 'transparent',
+                                color: activeTab === 'sales' ? 'var(--text-primary)' : 'var(--text-secondary)',
                                 border: 'none',
                                 borderBottom: activeTab === 'sales' ? 'none' : '2px solid transparent',
                                 borderRadius: activeTab === 'sales' ? '4px' : '0',
@@ -464,8 +488,8 @@ Same structure every time regardless of dataset.`
                         <button
                             onClick={() => setActiveTab('explorer')}
                             style={{
-                                background: activeTab === 'explorer' ? 'var(--accent)' : 'transparent',
-                                color: activeTab === 'explorer' ? 'white' : 'var(--text-secondary)',
+                                background: activeTab === 'explorer' ? 'var(--bg-surface-2)' : 'transparent',
+                                color: activeTab === 'explorer' ? 'var(--text-primary)' : 'var(--text-secondary)',
                                 border: 'none',
                                 borderBottom: activeTab === 'explorer' ? 'none' : '2px solid transparent',
                                 borderRadius: activeTab === 'explorer' ? '4px' : '0',
@@ -480,7 +504,7 @@ Same structure every time regardless of dataset.`
                     </div>
 
                     {activeTab === 'explorer' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', background: 'var(--bg-surface)', border: '1px solid var(--border)', padding: '16px', borderRadius: '12px' }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>X-Axis (Category)</label>
@@ -507,13 +531,21 @@ Same structure every time regardless of dataset.`
                             <div style={{ height: '300px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={dataObject.sample.slice(0, 15)}>
+                                        <defs>
+                                            <linearGradient id="explorerBarGrad" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
+                                                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.65} />
+                                            </linearGradient>
+                                        </defs>
                                         <XAxis dataKey={explorerX} stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
                                         <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
                                         <Tooltip 
-                                            contentStyle={{ background: 'var(--bg-surface-2)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)' }}
+                                            contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                                            labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                                            itemStyle={{ color: 'var(--text-secondary)' }}
                                             cursor={{ fill: 'var(--bg-surface-2)' }}
                                         />
-                                        <Bar dataKey={explorerY} fill="var(--accent)" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey={explorerY} fill="url(#explorerBarGrad)" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8 }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                                 <p style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '10px' }}>
@@ -524,7 +556,7 @@ Same structure every time regardless of dataset.`
                     )}
 
                     {activeTab === 'churn' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <span style={{ fontSize: '15px', color: 'var(--text-primary)' }}>Estimated churn: {result.churnInsights?.estimatedChurnRate}</span>
                                 <span style={{
@@ -537,9 +569,9 @@ Same structure every time regardless of dataset.`
                             </div>
                             
                             <div>
-                                <div style={{ fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: 'var(--text-primary)' }}>Top Risk Factors:</div>
+                                <div className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: 'var(--text-primary)' }}>Top Risk Factors:</div>
                                 {result.churnInsights?.topRiskFactors?.map((factor, i) => (
-                                    <div key={i} style={{ padding: '8px 12px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '6px', margin: '4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                                    <div key={i} className="animate-ready animate-card" style={{ padding: '8px 12px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '6px', margin: '4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
                                         {i + 1}. {factor}
                                     </div>
                                 ))}
@@ -553,7 +585,7 @@ Same structure every time regardless of dataset.`
                     )}
 
                     {activeTab === 'sales' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div style={{ background: 'var(--success-bg)', borderLeft: '4px solid var(--success)', padding: '16px', borderRadius: '8px' }}>
                                 <strong style={{ color: 'var(--success)', display: 'block', marginBottom: '4px' }}>Top Performing Segment:</strong>
                                 <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{result.salesInsights?.topPerformingSegment}</span>
@@ -577,13 +609,13 @@ Same structure every time regardless of dataset.`
                 {/* SECTION 5 — Recommendations two columns */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
                     <div style={{ flex: '1', minWidth: '300px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                             🛡️ Reduce Churn
                         </h3>
                         {result.churnRecommendations?.map((rec, i) => {
                             const pStyle = getPriorityStyle(rec.priority);
                             return (
-                                <div key={i} style={{
+                                <div key={i} className="animate-ready animate-card" style={{
                                     background: 'var(--bg-surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
                                     borderRadius: 'var(--card-radius)', padding: '20px', marginBottom: '12px', position: 'relative'
                                 }}>
@@ -605,13 +637,13 @@ Same structure every time regardless of dataset.`
                         })}
                     </div>
                     <div style={{ flex: '1', minWidth: '300px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                             📈 Boost Sales
                         </h3>
                         {result.salesRecommendations?.map((rec, i) => {
                             const pStyle = getPriorityStyle(rec.priority);
                             return (
-                                <div key={i} style={{
+                                <div key={i} className="animate-ready animate-card" style={{
                                     background: 'var(--bg-surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
                                     borderRadius: 'var(--card-radius)', padding: '20px', marginBottom: '12px', position: 'relative'
                                 }}>
@@ -637,6 +669,7 @@ Same structure every time regardless of dataset.`
                 {/* SECTION 6 — Download button */}
                 <div style={{ textAlign: 'center', marginTop: '32px' }}>
                     <button
+                        className="animate-ready animate-card"
                         onClick={handleDownload}
                         style={{
                             background: 'transparent', color: 'var(--accent)', border: '1px solid var(--accent)',
@@ -667,13 +700,13 @@ Same structure every time regardless of dataset.`
     const Spinner = () => (
         <div style={{
             width: '16px', height: '16px', borderRadius: '50%',
-            border: '2px solid rgba(255,255,255,0.2)', borderTop: '2px solid #3b82f6',
+            border: '2px solid var(--border)', borderTop: '2px solid var(--accent)',
             animation: 'spin 1s linear infinite'
         }} />
     );
 
     return (
-        <div style={{
+        <div className="animate-ready animate-card" style={{
             background: 'var(--bg-surface)', border: '1px solid var(--border)',
             borderRadius: 'var(--card-radius)', padding: '40px', maxWidth: '700px', margin: '0 auto'
         }}>
@@ -684,7 +717,7 @@ Same structure every time regardless of dataset.`
                 }
             `}</style>
             
-            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '700', marginBottom: '32px', textAlign: 'center' }}>
+            <h2 className="animate-ready animate-heading" style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '700', marginBottom: '32px', textAlign: 'center' }}>
                 AI Analysis in Progress
             </h2>
 
@@ -729,7 +762,7 @@ Same structure every time regardless of dataset.`
                     </div>
 
                     {/* Steps */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {stepLabels.map((label, index) => {
                             const isCurrent = index === stepsCompleted;
                             const isDone = index < stepsCompleted;

@@ -106,7 +106,7 @@ export default function FileUpload({ onFileSelect }) {
         }}>
             {/* TOP BADGE */}
             <div style={{ marginBottom: '16px' }}>
-                <span style={{
+                <span className="animate-ready animate-label" style={{
                     background: 'var(--bg-accent-light)',
                     border: '1px solid var(--border)',
                     color: 'var(--accent)',
@@ -121,7 +121,7 @@ export default function FileUpload({ onFileSelect }) {
             </div>
 
             {/* HEADING */}
-            <h2 style={{
+            <h2 className="animate-ready animate-heading" style={{
                 fontSize: '28px',
                 color: 'var(--text-primary)',
                 fontWeight: '700',
@@ -131,7 +131,7 @@ export default function FileUpload({ onFileSelect }) {
             </h2>
 
             {/* SUBHEADING */}
-            <p style={{
+            <p className="animate-ready animate-heading" style={{
                 color: 'var(--text-secondary)',
                 fontSize: '14px',
                 margin: '0 auto 32px auto',
@@ -142,6 +142,7 @@ export default function FileUpload({ onFileSelect }) {
 
             {/* UPLOAD ZONE */}
             <div
+                className="animate-ready animate-card"
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -206,6 +207,7 @@ export default function FileUpload({ onFileSelect }) {
             {!file && (
                 <div style={{ marginBottom: '16px' }}>
                     <button
+                        className="animate-ready animate-card"
                         onClick={loadDemoData}
                         style={{
                             background: 'none',
@@ -227,6 +229,7 @@ export default function FileUpload({ onFileSelect }) {
             {/* AFTER FILE SELECTED */}
             {file && (
                 <button
+                    className="animate-ready animate-card"
                     onClick={handleAnalyze}
                     style={{
                         background: 'var(--accent)',
@@ -257,8 +260,8 @@ export default function FileUpload({ onFileSelect }) {
                 gap: '8px',
                 marginTop: file ? '0' : '24px'
             }}>
-                <div>✅ CSV  ✅ Excel (.xlsx)  ⚠️ PDF (limited)</div>
-                <div>🔒 Only 50 rows sent to AI. Data stays in browser.</div>
+                <div className="animate-ready animate-card">✅ CSV  ✅ Excel (.xlsx)  ⚠️ PDF (limited)</div>
+                <div className="animate-ready animate-card">🔒 Only 50 rows sent to AI. Data stays in browser.</div>
             </div>
         </div>
     );

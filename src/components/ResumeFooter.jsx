@@ -24,12 +24,12 @@ const BULLETS = [
 ]
 
 const TECH_BADGES = [
-    { label: 'Python', bg: '#fbbf2415', color: '#fbbf24', border: 'rgba(251,191,36,0.25)' },
-    { label: 'Scikit-learn', bg: '#f9731615', color: '#fb923c', border: 'rgba(249,115,22,0.25)' },
-    { label: 'XGBoost', bg: '#ef444415', color: '#f87171', border: 'rgba(239,68,68,0.25)' },
-    { label: 'Pandas', bg: '#3b82f615', color: '#60a5fa', border: 'rgba(59,130,246,0.25)' },
-    { label: 'React', bg: '#22d3ee15', color: '#22d3ee', border: 'rgba(34,211,238,0.25)' },
-    { label: 'Recharts', bg: '#8b5cf615', color: '#a78bfa', border: 'rgba(139,92,246,0.25)' },
+    { label: 'Python' },
+    { label: 'Scikit-learn' },
+    { label: 'XGBoost' },
+    { label: 'Pandas' },
+    { label: 'React' },
+    { label: 'Recharts' },
 ]
 
 // ─── BulletCard ───────────────────────────────────────────────────────────────
@@ -201,81 +201,97 @@ export default function ResumeFooter() {
                 style={{
                     background: 'var(--bg-surface-2)',
                     borderTop: '1px solid var(--border)',
-                    padding: '2.5rem 1.5rem',
                 }}
             >
-                <div
-                    className="footer-grid"
-                    style={{
-                        maxWidth: '1200px',
-                        margin: '0 auto',
-                        display: 'grid',
-                        gridTemplateColumns: '1fr auto 1fr',
-                        alignItems: 'center',
-                        gap: '1.5rem',
-                    }}
-                >
-                    {/* Left */}
-                    <div>
-                        <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>ReGainer</p>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>E-Commerce Churn Prediction System</p>
-                    </div>
+                <div style={{
+                    padding: '48px 40px',
+                    maxWidth: 'var(--max-width)',
+                    margin: '0 auto'
+                }}>
+                    <div
+                        className="footer-grid"
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr auto 1fr',
+                            alignItems: 'center',
+                            gap: '24px',
+                        }}
+                    >
+                        {/* Left */}
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                                <img
+                                    src="/regainer-logo.jpg"
+                                    alt="ReGainer"
+                                    style={{ height: '20px', width: 'auto', objectFit: 'contain' }}
+                                />
+                                <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>ReGainer</span>
+                            </div>
+                            <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted)' }}>Customer Retention Analytics</p>
+                        </div>
 
-                    {/* Center — tech badges */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.4rem' }}>
-                        {TECH_BADGES.map((b) => (
-                            <span
-                                key={b.label}
+                        {/* Center — tech badges */}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}>
+                            {TECH_BADGES.map((b) => (
+                                <span
+                                    key={b.label}
+                                    style={{
+                                        border: '1px solid var(--border)',
+                                        background: 'var(--bg-surface)',
+                                        color: 'var(--text-secondary)',
+                                        fontSize: '11px',
+                                        padding: '4px 10px',
+                                        borderRadius: '4px',
+                                        fontWeight: 500
+                                    }}
+                                >
+                                    {b.label}
+                                </span>
+                            ))}
+                        </div>
+
+                        {/* Right */}
+                        <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+                            <a
+                                href="https://github.com/aakashamy777/Churn-Data-analysis-"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 style={{
-                                    padding: '0.2rem 0.6rem',
-                                    background: 'var(--bg-surface)',
-                                    border: `1px solid var(--border)`,
-                                    borderRadius: '9999px',
-                                    fontSize: '0.7rem',
-                                    fontWeight: 600,
-                                    color: 'var(--text-secondary)',
+                                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                    padding: '6px 12px',
+                                    background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                                    borderRadius: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)',
+                                    textDecoration: 'none', transition: 'all 0.2s',
                                 }}
+                                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-surface-2)' }}
+                                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface)' }}
                             >
-                                {b.label}
-                            </span>
-                        ))}
+                                GitHub
+                            </a>
+                            <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted)' }}>
+                                Built by Aakash Mehta
+                            </p>
+                        </div>
                     </div>
 
-                    {/* Right */}
-                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
-                        <a
-                            href="https://github.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                                padding: '0.45rem 1rem',
-                                background: 'var(--bg-surface)', border: '1px solid var(--border)',
-                                borderRadius: '0.5rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)',
-                                textDecoration: 'none', transition: 'all 0.2s',
-                            }}
-                            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-surface-2)' }}
-                            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface)' }}
-                        >
-                            ⭐ GitHub
-                        </a>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                            Built with Python & React
-                        </p>
+                    {/* Bottom bar */}
+                    <div style={{ 
+                        textAlign: 'center', 
+                        marginTop: '32px', 
+                        paddingTop: '20px', 
+                        borderTop: '1px solid var(--border)',
+                        fontSize: '12px',
+                        color: 'var(--text-muted)'
+                    }}>
+                        ReGainer — E-Commerce Churn Prediction System
                     </div>
-                </div>
-
-                {/* Bottom line */}
-                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border)' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                        © 2024 ReGainer · Data Science Portfolio Project · Built with ❤️ using React + Gemini AI
-                    </p>
                 </div>
 
                 <style>{`
           @media (max-width: 768px) {
             .footer-grid { grid-template-columns: 1fr !important; text-align: center !important; }
-            .footer-grid > div:last-child { align-items: center !important; }
+            .footer-grid > div { align-items: center !important; justify-content: center !important; }
+            .footer-grid > div > div { justify-content: center !important; }
           }
         `}</style>
             </footer>

@@ -1,10 +1,10 @@
 // ─── Model Performance Dashboard ─────────────────────────────────────────────
 
 const METRIC_CARDS = [
-    { value: '99.63%', label: 'ROC-AUC', color: '#3b82f6', glow: 'rgba(59,130,246,0.2)', icon: '📈' },
-    { value: '91.22%', label: 'F1 Score', color: '#22c55e', glow: 'rgba(34,197,94,0.2)', icon: '🎯' },
-    { value: '96.80%', label: 'Accuracy', color: '#3b82f6', glow: 'rgba(59,130,246,0.2)', icon: '✅' },
-    { value: '0.40', label: 'Optimal Threshold', color: '#fbbf24', glow: 'rgba(251,191,36,0.2)', icon: '⚖️' },
+    { value: '99.63%', label: 'ROC-AUC', color: 'var(--accent)', glow: 'var(--shadow-md)', icon: '📈' },
+    { value: '91.22%', label: 'F1 Score', color: 'var(--success)', glow: 'var(--shadow-md)', icon: '🎯' },
+    { value: '96.80%', label: 'Accuracy', color: 'var(--accent)', glow: 'var(--shadow-md)', icon: '✅' },
+    { value: '0.40', label: 'Optimal Threshold', color: 'var(--warning)', glow: 'var(--shadow-md)', icon: '⚖️' },
 ]
 
 const MODEL_TABLE = [
@@ -17,6 +17,7 @@ const MODEL_TABLE = [
 function MetricCard({ card }) {
     return (
         <div
+            className="animate-ready animate-card"
             style={{
                 background: 'var(--bg-surface)',
                 borderRadius: 'var(--card-radius)',
@@ -39,6 +40,7 @@ function MetricCard({ card }) {
         >
             <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{card.icon}</div>
             <div
+                className="animate-ready animate-stat"
                 style={{
                     fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)',
                     fontWeight: 800,
@@ -67,25 +69,31 @@ export default function ModelDashboard() {
               margin: '0 auto', 
               padding: 'var(--section-padding)'
             }}>
-                <div style={{
-                    display: 'inline-block',
-                    fontSize: '11px',
-                    fontWeight: '600',
-                    letterSpacing: '1.5px',
-                    textTransform: 'uppercase',
-                    color: 'var(--accent)',
-                    marginBottom: '12px'
-                }}>
+                <div
+                    className="animate-ready animate-label"
+                    style={{
+                        display: 'inline-block',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        letterSpacing: '1.5px',
+                        textTransform: 'uppercase',
+                        color: 'var(--accent)',
+                        marginBottom: '12px'
+                    }}
+                >
                     Evaluation Results
                 </div>
                 
-                <h2 style={{
-                    fontSize: '36px',
-                    fontWeight: '700',
-                    letterSpacing: '-0.02em',
-                    color: 'var(--text-primary)',
-                    marginBottom: '8px'
-                }}>
+                <h2
+                    className="animate-ready animate-heading"
+                    style={{
+                        fontSize: '36px',
+                        fontWeight: '700',
+                        letterSpacing: '-0.02em',
+                        color: 'var(--text-primary)',
+                        marginBottom: '8px'
+                    }}
+                >
                     Model Performance
                 </h2>
                 
@@ -125,6 +133,7 @@ export default function ModelDashboard() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {/* Table */}
                     <div
+                        className="animate-ready animate-card"
                         style={{
                             background: 'var(--bg-surface)',
                             borderRadius: 'var(--card-radius)',
@@ -208,6 +217,7 @@ export default function ModelDashboard() {
 
                     {/* Why RF Won callout */}
                     <div
+                        className="animate-ready animate-card"
                         style={{
                             background: 'var(--bg-surface)',
                             border: '1px solid var(--border)',

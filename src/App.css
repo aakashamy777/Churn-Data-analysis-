@@ -1,32 +1,48 @@
 :root {
-  /* Backgrounds */
-  --bg-primary: #FAF8F5;
-  --bg-surface: #FFFFFF;
-  --bg-surface-2: #F5F0EA;
-  --bg-accent-light: #F5E6D3;
-  
-  /* Borders */
-  --border: #E8E0D5;
-  --border-strong: #D4C4B4;
-  
-  /* Text */
-  --text-primary: #1A1410;
-  --text-secondary: #6B5E52;
-  --text-muted: #A8998C;
-  
-  /* Accent — Caramel */
-  --accent: #C17F3E;
-  --accent-hover: #A86A2E;
-  --accent-rgb: 193, 127, 62;
-  
-  /* Status */
-  --success: #2D7D52;
-  --success-bg: #EAF5EE;
-  --danger: #B84040;
-  --danger-bg: #FAECEC;
-  --warning: #C17F3E;
-  --warning-bg: #F5E6D3;
-  
+  /* ─── THEME TOKENS ─────────────────────────── */
+  --accent:        #4DB880; /* Sage Green */
+  --accent-hot:    #E8C060; /* Amber Gold */
+  --accent-muted:  rgba(77, 184, 128, 0.12);
+  --accent-border: rgba(77, 184, 128, 0.25);
+
+  --success:       #4DB880; /* Sage Green */
+  --danger:        #E05050;
+  --warning:       #E8C060;
+
+  --bg-page:       #F4FAF6; /* Sage Light Page background */
+  --bg-surface:    #FFFFFF;
+  --bg-sunken:     #E6EFEA; /* Soft sunken sage tint */
+
+  --border:        rgba(0, 0, 0, 0.08);
+  --border-hover:  rgba(77, 184, 128, 0.35);
+
+  --text-primary:  #111A15; /* Forest Dark */
+  --text-secondary:#4A5850;
+  --text-muted:    #82948A;
+
+  /* chart palette — reference these in every chart config */
+  --chart-1: #4DB880;
+  --chart-2: #E8C060;
+  --chart-3: #3B82F6;
+  --chart-4: #E05050;
+  --chart-5: #64748B;
+  --chart-grid: rgba(0, 0, 0, 0.05);
+  --chart-axis: rgba(0, 0, 0, 0.35);
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-border: rgba(77, 184, 128, 0.3);
+
+  /* Legacy & Helper Theme Compatibility Mappings */
+  --bg-primary: var(--bg-page);
+  --bg-surface-2: var(--bg-sunken);
+  --bg-accent-light: var(--accent-muted);
+  --border-strong: var(--border-hover);
+  --accent-hover: var(--accent-hot);
+  --accent-rgb: 77, 184, 128;
+
+  --success-bg: rgba(77, 184, 128, 0.12);
+  --danger-bg: rgba(224, 80, 80, 0.12);
+  --warning-bg: rgba(232, 192, 96, 0.12);
+
   /* Typography */
   --font-sans: 'Inter', -apple-system, sans-serif;
   --font-heading: 'Inter', sans-serif;
@@ -34,36 +50,58 @@
   /* Spacing */
   --section-padding: 96px 24px;
   --card-padding: 28px;
-  --card-radius: 8px;
+  --card-radius: 12px;
   --max-width: 1100px;
   
-  /* Shadows — subtle, warm */
-  --shadow-sm: 0 1px 3px rgba(26,20,16,0.06), 
-               0 1px 2px rgba(26,20,16,0.04);
-  --shadow-md: 0 4px 12px rgba(26,20,16,0.08), 
-               0 2px 4px rgba(26,20,16,0.04);
-  --shadow-lg: 0 12px 32px rgba(26,20,16,0.10);
+  /* Shadows — crisp, clean */
+  --shadow-sm: 0 1px 3px rgba(15,23,42,0.05), 
+               0 1px 2px rgba(15,23,42,0.03);
+  --shadow-md: 0 4px 12px rgba(15,23,42,0.05), 
+               0 2px 4px rgba(15,23,42,0.03);
+  --shadow-lg: 0 12px 32px rgba(15,23,42,0.08);
 }
 
 [data-theme="dark"] {
-  --bg-primary: #141210;
-  --bg-surface: #1E1A17;
-  --bg-surface-2: #261F1A;
-  --bg-accent-light: #3D2A18;
-  --border: #3D3028;
-  --border-strong: #4D3C2E;
-  --text-primary: #F5EDE3;
-  --text-secondary: #A89080;
-  --text-muted: #6B5548;
-  --accent: #D4924A;
-  --accent-hover: #E0A05A;
-  --success: #4CAF7D;
-  --success-bg: #1A3028;
-  --danger: #E06060;
-  --danger-bg: #2E1A1A;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+  --accent:        #4DB880; /* Sage Green */
+  --accent-hot:    #E8C060; /* Gold */
+  --accent-muted:  rgba(77, 184, 128, 0.12);
+  --accent-border: rgba(77, 184, 128, 0.25);
+
+  --success:       #4DB880;
+  --danger:        #E05050;
+  --warning:       #E8C060;
+
+  --bg-page:       #0A0E0C; /* Sage Dark Page background */
+  --bg-surface:    #111815;
+  --bg-sunken:     #17221E;
+
+  --border:        rgba(255, 255, 255, 0.08);
+  --border-hover:  rgba(77, 184, 128, 0.35);
+
+  --text-primary:  #E6EFEA;
+  --text-secondary:#A2B4AB;
+  --text-muted:    #687C73;
+
+  --chart-grid: rgba(255, 255, 255, 0.05);
+  --chart-axis: rgba(255, 255, 255, 0.35);
+  --chart-tooltip-bg: #111815;
+  --chart-tooltip-border: rgba(77, 184, 128, 0.3);
+
+  /* Dark Theme Compatibility Mappings */
+  --bg-primary: var(--bg-page);
+  --bg-surface-2: var(--bg-sunken);
+  --bg-accent-light: var(--accent-muted);
+  --border-strong: var(--border-hover);
+  --accent-hover: var(--accent-hot);
+  --accent-rgb: 77, 184, 128;
+
+  --success-bg: rgba(77, 184, 128, 0.15);
+  --danger-bg: rgba(224, 80, 80, 0.15);
+  --warning-bg: rgba(232, 192, 96, 0.15);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
 }
 
 .counter {
@@ -249,4 +287,54 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+
+/* ─── SCROLL TRIGGERED ENTRANCE ANIMATIONS ─── */
+.animate-ready {
+  opacity: 0;
+  will-change: opacity, transform, clip-path;
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              clip-path 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 1. Section headings: slides up 30px & fades in, 0.7s, ease-out */
+.animate-ready.animate-heading {
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.animate-ready.animate-heading.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 2. Cards: fades in & translates up 20px, 0.5s (staggered delay set via JS index) */
+.animate-ready.animate-card {
+  transform: translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.animate-ready.animate-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 3. Section labels: left-to-right clip-path reveal, 0.6s */
+.animate-ready.animate-label {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.6s ease-out, opacity 0.6s ease-out;
+}
+.animate-ready.animate-label.animate-in {
+  opacity: 1;
+  clip-path: inset(0 0% 0 0);
+}
+
+/* 4. Stat/Metric numbers: starts invisible before counting starts */
+.animate-ready.animate-stat {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.animate-ready.animate-stat.animate-in {
+  opacity: 1;
+  transform: translateY(0);
 }

@@ -10,7 +10,9 @@ import {
     ReferenceLine,
     LineChart,
     Line,
-    LabelList
+    LabelList,
+    AreaChart,
+    Area
 } from 'recharts'
 
 // ─── SentimentAnalysis ────────────────────────────────────────────────────────
@@ -67,6 +69,7 @@ const PIPELINE_STEPS = [
 function PipelineCard({ step, index }) {
     return (
         <div
+            className="animate-ready animate-card"
             style={{
                 background: 'var(--bg-surface)',
                 borderRadius: 'var(--card-radius)',
@@ -167,25 +170,31 @@ export default function SentimentAnalysis() {
                 {/* ── Section header ───────────────────────────────────────────────── */}
                 <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
                     {/* Eyebrow badge */}
-                    <div style={{
-                        display: 'inline-block',
-                        fontSize: '11px',
-                        fontWeight: '600',
-                        letterSpacing: '1.5px',
-                        textTransform: 'uppercase',
-                        color: 'var(--accent)',
-                        marginBottom: '12px'
-                    }}>
+                    <div
+                        className="animate-ready animate-label"
+                        style={{
+                            display: 'inline-block',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            color: 'var(--accent)',
+                            marginBottom: '12px'
+                        }}
+                    >
                         NLP Feature Engineering
                     </div>
                     
-                    <h2 style={{
-                        fontSize: '36px',
-                        fontWeight: '700',
-                        letterSpacing: '-0.02em',
-                        color: 'var(--text-primary)',
-                        marginBottom: '8px'
-                    }}>
+                    <h2
+                        className="animate-ready animate-heading"
+                        style={{
+                            fontSize: '36px',
+                            fontWeight: '700',
+                            letterSpacing: '-0.02em',
+                            color: 'var(--text-primary)',
+                            marginBottom: '8px'
+                        }}
+                    >
                         Customer Sentiment Analysis
                     </h2>
                     
@@ -261,6 +270,7 @@ export default function SentimentAnalysis() {
             >
                 {/* CHART 1: Sentiment Distribution */}
                 <div
+                    className="animate-ready animate-card"
                     style={{
                         background: 'var(--bg-surface)',
                         borderRadius: 'var(--card-radius)',
@@ -269,31 +279,24 @@ export default function SentimentAnalysis() {
                         boxShadow: 'var(--shadow-sm)',
                     }}
                 >
-                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Sentiment Distribution
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
-                        <BarChart data={sentimentData.distribution} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                        <BarChart layout="vertical" data={sentimentData.distribution} margin={{ top: 10, right: 30, left: 10, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                            <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-                            <YAxis hide />
+                            <XAxis type="number" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                            <YAxis type="category" dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} width={70} />
                             <Tooltip
-                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-primary)' }}
-                                itemStyle={{ color: 'var(--text-primary)' }}
+                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                                labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                                itemStyle={{ color: 'var(--text-secondary)' }}
+                                formatter={(val) => [val.toLocaleString(), 'Customers']}
                             />
-                            <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={40}>
+                            <Bar dataKey="count" radius={[0, 6, 6, 0]} barSize={24} activeBar={{ fillOpacity: 0.8 }}>
                                 {sentimentData.distribution.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.8} />
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
-                                <LabelList
-                                    dataKey="churnRate"
-                                    position="top"
-                                    content={({ x, y, width, value }) => (
-                                        <text x={x + width / 2} y={y - 10} fill="var(--text-muted)" fontSize={11} fontWeight={600} textAnchor="middle">
-                                            Churn: {value}%
-                                        </text>
-                                    )}
-                                />
                             </Bar>
                         </BarChart>
                     </ResponsiveContainer>
@@ -301,6 +304,7 @@ export default function SentimentAnalysis() {
 
                 {/* CHART 2: Churn Rate by Sentiment */}
                 <div
+                    className="animate-ready animate-card"
                     style={{
                         background: 'var(--bg-surface)',
                         borderRadius: 'var(--card-radius)',
@@ -309,22 +313,24 @@ export default function SentimentAnalysis() {
                         boxShadow: 'var(--shadow-sm)',
                     }}
                 >
-                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Churn Rate by Sentiment
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
-                        <BarChart data={sentimentData.distribution} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                        <BarChart data={sentimentData.distribution} margin={{ top: 15, right: 30, left: 0, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                             <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
                             <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
                             <Tooltip
-                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-primary)' }}
+                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                                labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                                itemStyle={{ color: 'var(--text-secondary)' }}
                                 formatter={(val) => [`${val}%`, 'Churn Rate']}
                             />
-                            <ReferenceLine y={16.8} stroke="var(--text-muted)" strokeDasharray="4 4" label={{ value: 'Avg 16.8%', position: 'right', fill: 'var(--text-muted)', fontSize: 10 }} />
-                            <Bar dataKey="churnRate" radius={[6, 6, 0, 0]} barSize={40}>
+                            <ReferenceLine y={16.8} stroke="var(--text-muted)" strokeDasharray="4 4" label={{ value: 'Avg 16.8%', position: 'top', fill: 'var(--text-secondary)', fontSize: 10, fontWeight: 600 }} />
+                            <Bar dataKey="churnRate" radius={[6, 6, 0, 0]} barSize={40} activeBar={{ fillOpacity: 0.8 }}>
                                 {sentimentData.distribution.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.8} />
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                             </Bar>
                         </BarChart>
@@ -333,6 +339,7 @@ export default function SentimentAnalysis() {
 
                 {/* CHART 3: Sentiment vs Satisfaction */}
                 <div
+                    className="animate-ready animate-card"
                     style={{
                         background: 'var(--bg-surface)',
                         borderRadius: 'var(--card-radius)',
@@ -341,15 +348,21 @@ export default function SentimentAnalysis() {
                         boxShadow: 'var(--shadow-sm)',
                     }}
                 >
-                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase' }}>
-                        Sentiment vs Satisfaction Score
+                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Sentiment vs Satisfaction
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
-                        <LineChart data={sentimentData.avgScoreBySatisfaction} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
+                        <AreaChart data={sentimentData.avgScoreBySatisfaction} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
+                            <defs>
+                                <linearGradient id="sentimentSatGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.25} />
+                                    <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.01} />
+                                </linearGradient>
+                            </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                             <XAxis
                                 dataKey="score"
-                                label={{ value: 'Satisfaction Score 1-5', position: 'bottom', fill: 'var(--text-muted)', fontSize: 10, offset: 10 }}
+                                label={{ value: 'Satisfaction Score (1-5)', position: 'bottom', fill: 'var(--text-muted)', fontSize: 10, offset: 10 }}
                                 stroke="var(--text-muted)"
                                 fontSize={12}
                                 tickLine={false}
@@ -363,18 +376,23 @@ export default function SentimentAnalysis() {
                                 axisLine={false}
                             />
                             <Tooltip
-                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-primary)' }}
+                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
+                                labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
+                                itemStyle={{ color: 'var(--text-secondary)' }}
                             />
                             <ReferenceLine y={0} stroke="var(--text-muted)" strokeDasharray="4 4" />
-                            <Line
+                            <Area
                                 type="monotone"
                                 dataKey="sentiment"
                                 stroke="var(--accent)"
                                 strokeWidth={3}
+                                fillOpacity={1}
+                                fill="url(#sentimentSatGrad)"
                                 dot={{ fill: 'var(--accent)', strokeWidth: 2, r: 4, stroke: 'var(--bg-surface)' }}
-                                activeDot={{ r: 6, strokeWidth: 0 }}
+                                activeDot={{ r: 6 }}
+                                name="Average Polarity"
                             />
-                        </LineChart>
+                        </AreaChart>
                     </ResponsiveContainer>
                 </div>
             </div>
@@ -438,6 +456,7 @@ export default function SentimentAnalysis() {
 
             {/* ── THING 2: Real World Extension Card ─────────────────────────── */}
             <div
+                className="animate-ready animate-card"
                 style={{
                     marginTop: '4rem',
                     background: 'var(--bg-surface)',

@@ -40,6 +40,7 @@ function Slider({ label, min, max, value, onChange, format }) {
 function OutputCard({ label, value, color, large, icon }) {
     return (
         <div
+            className="animate-ready animate-card"
             style={{
                 background: 'var(--bg-surface)',
                 borderRadius: 'var(--card-radius)',
@@ -91,23 +92,11 @@ export default function BusinessImpact() {
     const netValue = revenueSaved - campaignCost
     const roi = campaignCost > 0 ? (netValue / campaignCost) * 100 : 0
 
-    const sectionRef = useRef(null)
-    const [visible, setVisible] = useState(false)
-    useEffect(() => {
-        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true) }, { threshold: 0.1 })
-        if (sectionRef.current) obs.observe(sectionRef.current)
-        return () => obs.disconnect()
-    }, [])
-
     return (
         <section
             id="impact"
-            ref={sectionRef}
             style={{
                 background: 'var(--bg-primary)',
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'opacity 0.7s ease, transform 0.7s ease',
             }}
         >
             <div style={{ 
@@ -115,25 +104,31 @@ export default function BusinessImpact() {
               margin: '0 auto', 
               padding: 'var(--section-padding)'
             }}>
-                <div style={{
-                    display: 'inline-block',
-                    fontSize: '11px',
-                    fontWeight: '600',
-                    letterSpacing: '1.5px',
-                    textTransform: 'uppercase',
-                    color: 'var(--accent)',
-                    marginBottom: '12px'
-                }}>
+                <div
+                    className="animate-ready animate-label"
+                    style={{
+                        display: 'inline-block',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        letterSpacing: '1.5px',
+                        textTransform: 'uppercase',
+                        color: 'var(--accent)',
+                        marginBottom: '12px'
+                    }}
+                >
                     ROI Estimator
                 </div>
                 
-                <h2 style={{
-                    fontSize: '36px',
-                    fontWeight: '700',
-                    letterSpacing: '-0.02em',
-                    color: 'var(--text-primary)',
-                    marginBottom: '8px'
-                }}>
+                <h2
+                    className="animate-ready animate-heading"
+                    style={{
+                        fontSize: '36px',
+                        fontWeight: '700',
+                        letterSpacing: '-0.02em',
+                        color: 'var(--text-primary)',
+                        marginBottom: '8px'
+                    }}
+                >
                     Business Impact Calculator
                 </h2>
                 
@@ -152,7 +147,10 @@ export default function BusinessImpact() {
                 style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start' }}
             >
                 {/* LEFT — Sliders */}
-                <div style={{ background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
+                <div
+                    className="animate-ready animate-card"
+                    style={{ background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: 'var(--shadow-sm)' }}
+                >
                     <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Adjust Parameters</p>
                     <Slider label="Total Customers" min={1000} max={50000} value={customers} onChange={setCustomers} format={fmtNum} />
                     <Slider label="Avg Monthly Revenue per Customer (₹)" min={500} max={10000} value={revenue} onChange={setRevenue} format={fmtINR} />
@@ -175,6 +173,7 @@ export default function BusinessImpact() {
 
                     {/* Note */}
                     <div
+                        className="animate-ready animate-card"
                         style={{
                             background: 'var(--bg-surface-2)', border: '1px solid var(--border)',
                             borderRadius: '0.6rem', padding: '0.875rem 1rem',
