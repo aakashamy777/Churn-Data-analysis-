@@ -597,11 +597,11 @@ function ProblemStatement() {
 
 function ModeSwitcher({ mode, setMode }) {
   const [isDark, setIsDark] = useState(
-    () => (localStorage.getItem('theme') || 'light') === 'dark'
+    () => (localStorage.getItem('regainer-theme') || 'light') === 'dark'
   )
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'light'
+    const saved = localStorage.getItem('regainer-theme') || 'light'
     document.documentElement.setAttribute('data-theme', saved)
     setIsDark(saved === 'dark')
   }, [])
@@ -611,7 +611,7 @@ function ModeSwitcher({ mode, setMode }) {
     const current = html.getAttribute('data-theme')
     const next = current === 'dark' ? 'light' : 'dark'
     html.setAttribute('data-theme', next)
-    localStorage.setItem('theme', next)
+    localStorage.setItem('regainer-theme', next)
     setIsDark(next === 'dark')
   }, [])
 

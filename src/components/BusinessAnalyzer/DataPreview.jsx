@@ -71,9 +71,8 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
     if (isParsing) {
         return (
             <div style={{
-                background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '16px', padding: '40px', maxWidth: '700px', margin: '0 auto', textAlign: 'center', color: 'white'
+                background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                borderRadius: 'var(--card-radius)', padding: '40px', maxWidth: '700px', margin: '0 auto', textAlign: 'center', color: 'var(--text-primary)'
             }}>
                 Parsing file...
             </div>
@@ -83,13 +82,12 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
     if (error) {
         return (
             <div style={{
-                background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '16px', padding: '40px', maxWidth: '700px', margin: '0 auto', textAlign: 'center'
+                background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                borderRadius: 'var(--card-radius)', padding: '40px', maxWidth: '700px', margin: '0 auto', textAlign: 'center'
             }}>
                 <div style={{
-                    background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-                    borderRadius: '8px', padding: '20px', color: '#f87171', marginBottom: '20px'
+                    background: 'var(--danger-bg)', border: '1px solid var(--danger)',
+                    borderRadius: '8px', padding: '20px', color: 'var(--danger)', marginBottom: '20px'
                 }}>
                     <div style={{ fontSize: '24px', marginBottom: '10px' }}>❌ Could not read this file</div>
                     {error !== 'NO_ROWS' && (
@@ -103,7 +101,7 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
                     </ul>
                 </div>
                 <button onClick={onBack} style={{
-                    background: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)',
+                    background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border)',
                     borderRadius: '8px', padding: '10px 24px', cursor: 'pointer', fontSize: '14px'
                 }}>
                     Try Another File
@@ -117,31 +115,30 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
     const { possibleTarget, possibleRevenue, possibleDate, possibleNumeric, allColumns, rawSample, totalRows } = parsedData;
 
     const getPillStyle = (colName) => {
-        const baseStyle = { borderRadius: '20px', padding: '4px 12px', fontSize: '12px', margin: '4px', display: 'inline-block' };
-        if (possibleRevenue.includes(colName)) return { ...baseStyle, background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)' };
-        if (possibleTarget.includes(colName)) return { ...baseStyle, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' };
-        if (possibleDate.includes(colName)) return { ...baseStyle, background: 'rgba(168,85,247,0.15)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.3)' };
-        if (possibleNumeric.includes(colName)) return { ...baseStyle, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)' };
-        return { ...baseStyle, background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.1)' };
+        const baseStyle = { borderRadius: '4px', padding: '3px 10px', fontSize: '11px', margin: '4px', display: 'inline-block', fontWeight: 500, border: '1px solid transparent' };
+        if (possibleRevenue.includes(colName)) return { ...baseStyle, background: 'var(--warning-bg)', color: 'var(--warning)' };
+        if (possibleTarget.includes(colName)) return { ...baseStyle, background: 'var(--danger-bg)', color: 'var(--danger)' };
+        if (possibleDate.includes(colName)) return { ...baseStyle, background: '#EEE8F5', color: '#7C5CBF' };
+        if (possibleNumeric.includes(colName)) return { ...baseStyle, background: 'var(--bg-surface-2)', color: 'var(--text-secondary)', border: '1px solid var(--border)' };
+        return { ...baseStyle, background: 'var(--bg-surface-2)', color: 'var(--text-secondary)', border: '1px solid var(--border)' };
     };
 
     return (
         <div style={{
-            background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: '16px', padding: '40px', maxWidth: '700px', margin: '0 auto'
+            background: 'var(--bg-primary)', border: '1px solid var(--border)',
+            borderRadius: 'var(--card-radius)', padding: '40px', maxWidth: '700px', margin: '0 auto'
         }}>
             {/* 1. SUCCESS BAR */}
             <div style={{
-                background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)',
-                borderRadius: '8px', padding: '12px 20px', color: '#22c55e', fontWeight: '600', marginBottom: '24px', fontSize: '15px'
+                background: 'var(--success-bg)', border: '1px solid var(--success)',
+                borderRadius: '8px', padding: '12px 20px', color: 'var(--success)', fontWeight: '600', marginBottom: '24px', fontSize: '15px'
             }}>
                 ✅ {totalRows} rows × {allColumns.length} columns detected (showing preview)
             </div>
 
             {/* 2. COLUMN PILLS */}
             <div style={{ marginBottom: '24px' }}>
-                <div style={{ color: 'white', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Detected Columns:</div>
+                <div style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Detected Columns:</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', margin: '-4px' }}>
                     {allColumns.map(col => (
                         <span key={col} style={getPillStyle(col)}>{col}</span>
@@ -151,21 +148,21 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
 
             {/* 3. PREVIEW TABLE */}
             <div style={{ marginBottom: '24px' }}>
-                <div style={{ color: 'white', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Data Preview (first 5 rows):</div>
-                <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Data Preview (first 5 rows):</div>
+                <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid var(--border)' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', whiteSpace: 'nowrap' }}>
                         <thead>
-                            <tr style={{ background: 'rgba(59,130,246,0.2)' }}>
+                            <tr style={{ background: 'var(--bg-surface-2)' }}>
                                 {allColumns.map(col => (
-                                    <th key={col} style={{ color: 'white', padding: '10px', fontSize: '13px', textAlign: 'left', fontWeight: '600' }}>{col}</th>
+                                    <th key={col} style={{ color: 'var(--text-primary)', padding: '10px', fontSize: '12px', textAlign: 'left', fontWeight: '600', letterSpacing: '0.5px', textTransform: 'uppercase', borderBottom: '1px solid var(--border)' }}>{col}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {rawSample.slice(0, 5).map((row, i) => (
-                                <tr key={i} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.05)' }}>
+                                <tr key={i} style={{ background: i % 2 !== 0 ? 'var(--bg-surface)' : 'var(--bg-surface-2)', borderBottom: '1px solid var(--border)' }}>
                                     {allColumns.map(col => (
-                                        <td key={`${i}-${col}`} style={{ padding: '8px 12px', fontSize: '12px', color: 'rgba(255,255,255,0.7)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <td key={`${i}-${col}`} style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--text-secondary)' }}>
                                             {row[col] !== null && row[col] !== undefined ? String(row[col]) : ''}
                                         </td>
                                     ))}
@@ -178,28 +175,28 @@ export default function DataPreview({ file, onDataReady, onAnalyze, onBack }) {
 
             {/* 4. DETECTION NOTICE */}
             <div style={{
-                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)',
+                background: 'var(--bg-surface)', border: '1px solid var(--border)',
                 borderRadius: '8px', padding: '16px', marginBottom: '32px'
             }}>
-                <div style={{ color: 'white', fontSize: '14px', margin: '4px 0' }}>🎯 <span style={{ color: 'rgba(255,255,255,0.6)' }}>Dataset Type:</span> Customer behavioral data</div>
-                <div style={{ color: 'white', fontSize: '14px', margin: '4px 0' }}>📊 <span style={{ color: 'rgba(255,255,255,0.6)' }}>Target column found:</span> {possibleTarget.length > 0 ? possibleTarget.join(', ') : 'not detected'}</div>
-                <div style={{ color: 'white', fontSize: '14px', margin: '4px 0' }}>💰 <span style={{ color: 'rgba(255,255,255,0.6)' }}>Revenue columns:</span> {possibleRevenue.length > 0 ? possibleRevenue.join(', ') : 'not found'}</div>
+                <div style={{ color: 'var(--text-primary)', fontSize: '14px', margin: '4px 0' }}>🎯 <span style={{ color: 'var(--text-secondary)' }}>Dataset Type:</span> Customer behavioral data</div>
+                <div style={{ color: 'var(--text-primary)', fontSize: '14px', margin: '4px 0' }}>📊 <span style={{ color: 'var(--text-secondary)' }}>Target column found:</span> {possibleTarget.length > 0 ? possibleTarget.join(', ') : 'not detected'}</div>
+                <div style={{ color: 'var(--text-primary)', fontSize: '14px', margin: '4px 0' }}>💰 <span style={{ color: 'var(--text-secondary)' }}>Revenue columns:</span> {possibleRevenue.length > 0 ? possibleRevenue.join(', ') : 'not found'}</div>
             </div>
 
             {/* 5. TWO BUTTONS */}
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
                 <button onClick={onBack} style={{
-                    background: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px', padding: '12px 24px', cursor: 'pointer', fontSize: '15px', flex: '0 1 auto',
-                    transition: 'background 0.2s ease'
-                }} onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.target.style.background = 'transparent'}>
+                    background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border)',
+                    borderRadius: 'var(--card-radius)', padding: '12px 24px', cursor: 'pointer', fontSize: '15px', flex: '0 1 auto',
+                    transition: 'background 0.2s ease', fontWeight: 500
+                }} onMouseEnter={(e) => e.target.style.background = 'var(--bg-surface-2)'} onMouseLeave={(e) => e.target.style.background = 'transparent'}>
                     ← Back
                 </button>
                 <button onClick={onAnalyze} style={{
-                    background: '#3b82f6', color: 'white', border: 'none',
-                    borderRadius: '8px', padding: '12px 32px', cursor: 'pointer', fontSize: '15px', flex: '0 1 auto',
+                    background: 'var(--accent)', color: 'white', border: 'none',
+                    borderRadius: 'var(--card-radius)', padding: '12px 32px', cursor: 'pointer', fontSize: '15px', flex: '0 1 auto',
                     fontWeight: '600', transition: 'background 0.2s ease'
-                }} onMouseEnter={(e) => e.target.style.background = '#2563eb'} onMouseLeave={(e) => e.target.style.background = '#3b82f6'}>
+                }} onMouseEnter={(e) => e.target.style.background = 'var(--accent-hover)'} onMouseLeave={(e) => e.target.style.background = 'var(--accent)'}>
                     Generate AI Insights →
                 </button>
             </div>

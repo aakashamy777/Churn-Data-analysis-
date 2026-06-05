@@ -19,14 +19,16 @@ function StepIndicator({ currentStep }) {
                     width: '32px', height: '32px', borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '13px', fontWeight: '700', flexShrink: 0,
-                    background: isCompleted ? '#22c55e' : isActive ? '#3b82f6' : 'rgba(255,255,255,0.1)',
-                    color: isCompleted || isActive ? 'white' : 'rgba(255,255,255,0.3)',
-                    transition: 'all 0.3s ease'
+                    background: isCompleted ? 'var(--success)' : isActive ? 'var(--accent)' : 'var(--bg-surface-2)',
+                    border: isCompleted || isActive ? 'none' : '1px solid var(--border)',
+                    color: isCompleted || isActive ? 'white' : 'var(--text-muted)',
+                    transition: 'all 0.3s ease',
+                    boxSizing: 'border-box'
                 };
 
                 const connectorStyle = {
                     width: '60px', height: '2px', flexShrink: 0,
-                    background: isCompleted ? '#22c55e' : 'rgba(255,255,255,0.1)',
+                    background: isCompleted ? 'var(--success)' : 'var(--border)',
                     transition: 'background 0.3s ease'
                 };
 
@@ -34,7 +36,7 @@ function StepIndicator({ currentStep }) {
                     <React.Fragment key={label}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                             <div style={circleStyle}>{isCompleted ? '✓' : i + 1}</div>
-                            <span style={{ fontSize: '11px', color: isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap' }}>
+                            <span style={{ fontSize: '11px', color: isActive ? 'var(--text-primary)' : 'var(--text-muted)', whiteSpace: 'nowrap', fontWeight: isActive ? 600 : 500 }}>
                                 {label}
                             </span>
                         </div>
@@ -70,18 +72,19 @@ export default function BusinessAnalyzer() {
                         onClick={handleStartOver}
                         style={{
                             position: 'absolute', top: '0', right: '0',
-                            background: 'transparent', color: 'rgba(255,255,255,0.7)',
-                            border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px',
+                            background: 'transparent', color: 'var(--text-secondary)',
+                            border: '1px solid var(--border)', borderRadius: '8px',
                             padding: '8px 16px', cursor: 'pointer', fontSize: '14px',
-                            transition: 'all 0.2s ease'
+                            transition: 'all 0.2s ease',
+                            fontWeight: 500
                         }}
                         onMouseEnter={(e) => {
-                            e.target.style.background = 'rgba(255,255,255,0.05)';
-                            e.target.style.color = 'white';
+                            e.target.style.background = 'var(--bg-surface-2)';
+                            e.target.style.color = 'var(--text-primary)';
                         }}
                         onMouseLeave={(e) => {
                             e.target.style.background = 'transparent';
-                            e.target.style.color = 'rgba(255,255,255,0.7)';
+                            e.target.style.color = 'var(--text-secondary)';
                         }}
                     >
                         ← Start Over
