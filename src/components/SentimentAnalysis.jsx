@@ -566,6 +566,7 @@ export default function SentimentAnalysis() {
                     </div>
                 </div>
             </div>
+            </div>
         </section>
     )
 }
