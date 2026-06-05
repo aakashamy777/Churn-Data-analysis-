@@ -327,7 +327,6 @@
   opacity: 1;
   clip-path: inset(0 0% 0 0);
 }
-
 /* 4. Stat/Metric numbers: starts invisible before counting starts */
 .animate-ready.animate-stat {
   opacity: 0;
@@ -337,4 +336,103 @@
 .animate-ready.animate-stat.animate-in {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Hero Page-Load Animations */
+@keyframes heroEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-heading {
+  opacity: 0;
+  animation: heroEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-hero-subtitle {
+  opacity: 0;
+  animation: heroEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation-delay: 0.15s;
+}
+
+.animate-hero-buttons {
+  opacity: 0;
+  animation: heroEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+.animate-hero-stat-card {
+  opacity: 0;
+  animation: heroEntrance 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Hero Button Custom Styles */
+.hero-btn-primary {
+  background: #6C63FF !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px;
+  padding: 11px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease !important;
+}
+.hero-btn-primary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 24px rgba(108, 99, 255, 0.4);
+}
+
+.hero-btn-ghost {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  padding: 11px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease !important;
+  display: inline-block;
+}
+[data-theme="dark"] .hero-btn-ghost {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.hero-btn-ghost:hover {
+  border-color: #6C63FF !important;
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+/* Hero Stat Cards */
+.hero-stat-card {
+  background: #16161F !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  padding: 1.5rem 2rem !important;
+  border-radius: 12px !important;
+  text-align: center;
+  transition: border-color 0.2s ease, transform 0.2s ease !important;
+}
+.hero-stat-card:hover {
+  border-color: rgba(108, 99, 255, 0.4) !important;
+}
+
+.hero-stat-number {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: white !important;
+}
+
+.hero-stat-label {
+  font-size: 0.7rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  margin-top: 4px;
 }

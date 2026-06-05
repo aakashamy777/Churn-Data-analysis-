@@ -72,6 +72,71 @@ const TECH_BADGES = [
   { emoji: '☁️', label: 'Google Colab' },
   { emoji: '🏆', label: 'Kaggle' },
 ]
+// Helper to format numbers dynamically
+const formatNumber = (value, originalStr) => {
+  const hasCommas = originalStr.includes(',');
+  const isDecimal = originalStr.includes('.');
+  const hasRupee = originalStr.includes('₹');
+  const hasPercent = originalStr.includes('%');
+  
+  let formatted = '';
+  if (isDecimal) {
+    formatted = value.toFixed(1);
+  } else {
+    formatted = Math.round(value).toString();
+  }
+  
+  if (hasCommas) {
+    const parts = formatted.split('.');
+    if (originalStr.includes('1,60,800')) {
+      let lastThree = parts[0].substring(parts[0].length - 3);
+      const otherBits = parts[0].substring(0, parts[0].length - 3);
+      if (otherBits !== '') {
+        lastThree = ',' + lastThree;
+      }
+      const res = otherBits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+      formatted = res + (parts[1] ? '.' + parts[1] : '');
+    } else {
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      formatted = parts.join('.');
+    }
+  }
+  
+  if (hasRupee) formatted = '₹' + formatted;
+  if (hasPercent) formatted = formatted + '%';
+  return formatted;
+}
+
+// Helper to run counter animation
+const animateCounter = (el) => {
+  const originalText = el.getAttribute('data-original-text') || el.innerText;
+  if (!el.getAttribute('data-original-text')) {
+    el.setAttribute('data-original-text', originalText);
+  }
+  
+  const cleanNum = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+  if (isNaN(cleanNum)) return;
+  
+  const duration = 1200; // 1.2s
+  const startTime = performance.now();
+  
+  const update = (currentTime) => {
+    const elapsed = currentTime - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    const progress = 1 - Math.pow(1 - t, 4); // easeOutQuart
+    
+    const currentValue = progress * cleanNum;
+    el.innerText = formatNumber(currentValue, originalText);
+    
+    if (t < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.innerText = originalText;
+    }
+  }
+  
+  requestAnimationFrame(update);
+}
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 
@@ -213,21 +278,36 @@ function Hero() {
     if (target) target.scrollIntoView({ behavior: 'smooth' })
   }
 
+  useEffect(() => {
+    // Run count-up for hero stat numbers on load
+    const timers = [];
+    const elements = document.querySelectorAll('.hero-stat-number');
+    elements.forEach((el, i) => {
+      const delay = (0.4 + i * 0.15) * 1000; // 0.4s delay + 0.15s stagger
+      const t = setTimeout(() => {
+        animateCounter(el);
+      }, delay);
+      timers.push(t);
+    });
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <section
       id="hero"
       style={{
-        background: 'var(--bg-primary)',
+        background: 'radial-gradient(circle at 50% 40%, rgba(108, 99, 255, 0.15), transparent 60%), var(--bg-primary)',
         paddingTop: '120px',
         paddingBottom: '80px',
         textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
         {/* Context Badge */}
-        <div style={{ marginBottom: '24px' }}>
+        <div style={{ marginBottom: '24px' }} className="animate-hero-heading">
           <span
-            className="animate-ready animate-label"
             style={{
               display: 'inline-block',
               background: 'var(--bg-accent-light)',
@@ -247,9 +327,9 @@ function Hero() {
 
         {/* Main Heading */}
         <h1
-          className="animate-ready animate-heading"
+          className="animate-hero-heading"
           style={{
-            fontSize: '56px',
+            fontSize: 'clamp(3rem, 6vw, 5rem)',
             fontWeight: 700,
             color: 'var(--text-primary)',
             lineHeight: 1.1,
@@ -258,14 +338,21 @@ function Hero() {
           }}
         >
           Predicting Customer{' '}
-          <span style={{ color: 'var(--accent)' }}>Churn</span>
+          <span style={{
+            background: 'linear-gradient(to right, #6C63FF, #A78BFA)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline-block'
+          }}>
+            Churn
+          </span>
         </h1>
 
         {/* Subheading */}
         <h2
-          className="animate-ready animate-heading"
+          className="animate-hero-heading"
           style={{
-            fontSize: '56px',
+            fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
             fontWeight: 700,
             color: 'var(--text-secondary)',
             marginBottom: '24px',
@@ -276,14 +363,17 @@ function Hero() {
           Before They Leave
         </h2>
 
-        {/* Description */}
+        {/* Description / Subtitle */}
         <p
+          className="animate-hero-subtitle"
           style={{
-            fontSize: '17px',
+            fontSize: '1.1rem',
             color: 'var(--text-secondary)',
+            opacity: 0.6,
             lineHeight: 1.7,
             maxWidth: '520px',
             margin: '0 auto 36px auto',
+            textAlign: 'center'
           }}
         >
           An end-to-end ML system that identifies at-risk e-commerce customers
@@ -292,6 +382,7 @@ function Hero() {
 
         {/* Buttons Row */}
         <div
+          className="animate-hero-buttons"
           style={{
             display: 'flex',
             gap: '12px',
@@ -301,23 +392,7 @@ function Hero() {
         >
           <button
             onClick={() => handleScroll('#predictor')}
-            style={{
-              background: 'var(--accent)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '11px 24px',
-              fontSize: '14px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              transition: 'background 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--accent-hover)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--accent)'
-            }}
+            className="hero-btn-primary"
           >
             Try Live Predictor
           </button>
@@ -325,24 +400,7 @@ function Hero() {
             href="https://github.com/aakashamy777/Churn-Data-analysis-"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              background: 'var(--bg-surface)',
-              color: 'var(--text-primary)',
-              border: '1px solid var(--border)',
-              borderRadius: '6px',
-              padding: '11px 24px',
-              fontSize: '14px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              textDecoration: 'none',
-              transition: 'background 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--bg-surface-2)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--bg-surface)'
-            }}
+            className="hero-btn-ghost"
           >
             View on GitHub
           </a>
@@ -354,39 +412,26 @@ function Hero() {
             borderTop: '1px solid var(--border)',
             paddingTop: '32px',
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: '16px',
             width: '100%',
           }}
         >
           {STATS.map((stat, i) => (
             <div
               key={i}
-              className="animate-ready animate-card"
+              className="animate-hero-stat-card hero-stat-card"
               style={{
-                textAlign: 'center',
-                padding: '0 32px',
-                borderRight: i < STATS.length - 1 ? '1px solid var(--border)' : 'none',
+                animationDelay: `${0.4 + i * 0.15}s`
               }}
             >
               <div
-                className="animate-ready animate-stat"
-                style={{
-                  fontSize: '22px',
-                  fontWeight: 600,
-                  color: 'var(--text-primary)',
-                }}
+                className="hero-stat-number"
               >
                 {stat.value}
               </div>
               <div
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  letterSpacing: '1px',
-                  textTransform: 'uppercase',
-                  color: 'var(--text-muted)',
-                  marginTop: '4px',
-                }}
+                className="hero-stat-label"
               >
                 {stat.label}
               </div>
@@ -811,72 +856,6 @@ export default function App() {
   }, [mode])
 
   useEffect(() => {
-    // Helper to format numbers dynamically
-    const formatNumber = (value, originalStr) => {
-      const hasCommas = originalStr.includes(',');
-      const isDecimal = originalStr.includes('.');
-      const hasRupee = originalStr.includes('₹');
-      const hasPercent = originalStr.includes('%');
-      
-      let formatted = '';
-      if (isDecimal) {
-        formatted = value.toFixed(1);
-      } else {
-        formatted = Math.round(value).toString();
-      }
-      
-      if (hasCommas) {
-        const parts = formatted.split('.');
-        if (originalStr.includes('1,60,800')) {
-          let lastThree = parts[0].substring(parts[0].length - 3);
-          const otherBits = parts[0].substring(0, parts[0].length - 3);
-          if (otherBits !== '') {
-            lastThree = ',' + lastThree;
-          }
-          const res = otherBits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-          formatted = res + (parts[1] ? '.' + parts[1] : '');
-        } else {
-          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          formatted = parts.join('.');
-        }
-      }
-      
-      if (hasRupee) formatted = '₹' + formatted;
-      if (hasPercent) formatted = formatted + '%';
-      return formatted;
-    }
-
-    // Helper to run counter animation
-    const animateCounter = (el) => {
-      const originalText = el.getAttribute('data-original-text') || el.innerText;
-      if (!el.getAttribute('data-original-text')) {
-        el.setAttribute('data-original-text', originalText);
-      }
-      
-      const cleanNum = parseFloat(originalText.replace(/[^0-9.]/g, ''));
-      if (isNaN(cleanNum)) return;
-      
-      const duration = 1200; // 1.2s
-      const startTime = performance.now();
-      
-      const update = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const t = Math.min(elapsed / duration, 1);
-        const progress = 1 - Math.pow(1 - t, 4); // easeOutQuart
-        
-        const currentValue = progress * cleanNum;
-        el.innerText = formatNumber(currentValue, originalText);
-        
-        if (t < 1) {
-          requestAnimationFrame(update);
-        } else {
-          el.innerText = originalText;
-        }
-      }
-      
-      requestAnimationFrame(update);
-    }
-
     // Single IntersectionObserver with threshold: 0.15
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
