@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import {
     PieChart, Pie, Cell, Tooltip,
     BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer,
@@ -53,50 +54,42 @@ const cvFoldData = [
     { fold: 'Fold 5', auc: 0.998 },
 ]
 
-const segmentColors = { 'Seg 0': 'var(--warning)', 'Seg 1': 'var(--danger)', 'Seg 2': 'var(--success)', 'Seg 3': 'var(--accent)' }
+// ─── Reusable InView Hook ────────────────────────────────────────────────────
+
+function useInView() {
+    const [inView, setInView] = useState(false)
+    const ref = useRef(null)
+    
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                setInView(true)
+                observer.disconnect()
+            }
+        }, { threshold: 0.15 })
+        
+        if (ref.current) {
+            observer.observe(ref.current)
+        }
+        return () => observer.disconnect()
+    }, [])
+    
+    return [ref, inView]
+}
 
 // ─── Shared Card Shell ────────────────────────────────────────────────────────
 
-function InsightCard({ emoji, title, takeaway, children }) {
+function InsightCard({ title, takeaway, children, cardRef }) {
     return (
         <div
-            className="animate-ready animate-card"
-            style={{
-                background: 'var(--bg-surface)',
-                borderRadius: 'var(--card-radius)',
-                padding: 'var(--card-padding)',
-                boxShadow: 'var(--shadow-sm)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.75rem',
-                border: '1px solid var(--border)',
-                transition: 'box-shadow 0.15s ease, border-color 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = 'var(--shadow-md)'
-                e.currentTarget.style.borderColor = 'var(--border-strong)'
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = 'var(--shadow-sm)'
-                e.currentTarget.style.borderColor = 'var(--border)'
-            }}
+            ref={cardRef}
+            className="animate-ready animate-card eda-chart-card"
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{title}</h3>
+                <h3 className="eda-chart-title">{title}</h3>
             </div>
             <div style={{ height: '200px', width: '100%' }}>{children}</div>
-            <p
-                style={{
-                    margin: 0,
-                    fontSize: '0.78rem',
-                    color: 'var(--text-secondary)',
-                    background: 'var(--bg-surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '0.5rem',
-                    padding: '0.5rem 0.75rem',
-                    lineHeight: 1.5,
-                }}
-            >
+            <p className="eda-chart-takeaway">
                 💡 {takeaway}
             </p>
         </div>
@@ -106,16 +99,58 @@ function InsightCard({ emoji, title, takeaway, children }) {
 // ─── Card 1: Churn Distribution ───────────────────────────────────────────────
 
 function ChurnDistCard() {
-    const COLORS = ['var(--accent)', 'var(--danger)']
+    const [ref, inView] = useInView()
+    const [percent, setPercent] = useState(0)
+    
+    useEffect(() => {
+        if (inView) {
+            let start = 0
+            const end = 16.8
+            const duration = 1200
+            const startTime = performance.now()
+            
+            const animate = (currentTime) => {
+                const elapsed = currentTime - startTime
+                const progress = Math.min(elapsed / duration, 1)
+                const easeProgress = 1 - Math.pow(1 - progress, 4) // easeOutQuart
+                setPercent(easeProgress * end)
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate)
+                } else {
+                    setPercent(end)
+                }
+            }
+            requestAnimationFrame(animate)
+        }
+    }, [inView])
+
+    const COLORS = ['rgba(255, 255, 255, 0.15)', '#6C63FF']
+
     return (
-        <InsightCard emoji="🥧" title="Churn Distribution" takeaway="Only 16.8% churned — severe class imbalance handled with SMOTE">
+        <InsightCard cardRef={ref} title="Churn Distribution" takeaway="Only 16.8% churned — severe class imbalance handled with SMOTE">
             <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{ position: 'absolute', textAlign: 'center', pointerEvents: 'none', zIndex: 1 }}>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.1 }}>16.8%</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em' }}>Churned</div>
+                <div style={{ position: 'absolute', textAlign: 'center', pointerEvents: 'none', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 800, color: 'white', lineHeight: 1.1 }}>{percent.toFixed(1)}%</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.08em', marginTop: '2px' }}>CHURNED</div>
                 </div>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
+                        <defs>
+                            <clipPath id="donutClip">
+                                <circle 
+                                    cx="50%" 
+                                    cy="50%" 
+                                    r={65} 
+                                    stroke="#fff" 
+                                    strokeWidth={25} 
+                                    fill="none" 
+                                    strokeDasharray={408} 
+                                    strokeDashoffset={408} 
+                                    className="donut-clip-circle"
+                                />
+                            </clipPath>
+                        </defs>
                         <Pie 
                             data={churnDistData} 
                             cx="50%" 
@@ -125,21 +160,23 @@ function ChurnDistCard() {
                             paddingAngle={4}
                             dataKey="value" 
                             labelLine={false} 
-                            stroke="var(--bg-surface)"
+                            stroke="#16161F"
                             strokeWidth={2}
+                            isAnimationActive={false}
+                            className="donut-pie-slices"
                         >
                             {churnDistData.map((_, i) => (
                                 <Cell key={i} fill={COLORS[i]} style={{ outline: 'none', cursor: 'pointer' }} />
                             ))}
                         </Pie>
                         <Tooltip
-                            contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                            labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                            itemStyle={{ color: 'var(--text-secondary)' }}
+                            contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(108,99,255,0.3)', borderRadius: '8px', boxShadow: 'none' }}
+                            labelStyle={{ color: '#fff', fontWeight: 600 }}
+                            itemStyle={{ color: 'rgba(255,255,255,0.7)' }}
                             formatter={(v, n) => [`${v}%`, n]}
                         />
                         <Legend
-                            formatter={(value) => <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', fontWeight: 500 }}>{value}</span>}
+                            formatter={(value) => <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.78rem', fontWeight: 500 }}>{value}</span>}
                         />
                     </PieChart>
                 </ResponsiveContainer>
@@ -151,26 +188,46 @@ function ChurnDistCard() {
 // ─── Card 2: Feature Importance ───────────────────────────────────────────────
 
 function FeatureImportanceCard() {
+    const [ref, inView] = useInView()
+    const [hoveredBar, setHoveredBar] = useState(null)
+
     return (
-        <InsightCard emoji="📊" title="Top Churn Drivers" takeaway="Tenure and complaint behavior are the strongest churn signals">
+        <InsightCard cardRef={ref} title="Top Churn Drivers" takeaway="Tenure and complaint behavior are the strongest churn signals">
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart layout="vertical" data={featureImportanceData} margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
                     <defs>
                         <linearGradient id="importanceGrad" x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.65} />
-                            <stop offset="100%" stopColor="var(--accent)" stopOpacity={1} />
+                            <stop offset="0%" stopColor="#6C63FF" stopOpacity={0.4} />
+                            <stop offset="100%" stopColor="#6C63FF" stopOpacity={1} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
-                    <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'var(--border)' }} domain={[0, 0.18]} tickFormatter={(v) => v.toFixed(2)} />
-                    <YAxis type="category" dataKey="feature" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} width={80} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
+                    <XAxis type="number" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} domain={[0, 0.18]} tickFormatter={(v) => v.toFixed(2)} />
+                    <YAxis type="category" dataKey="feature" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} width={80} />
                     <Tooltip
-                        contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                        labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                        itemStyle={{ color: 'var(--text-secondary)' }}
+                        contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(108,99,255,0.3)', borderRadius: '8px', boxShadow: 'none' }}
+                        labelStyle={{ color: '#fff', fontWeight: 600 }}
+                        itemStyle={{ color: 'rgba(255,255,255,0.7)' }}
                         formatter={(v) => [v.toFixed(3), 'Importance']}
                     />
-                    <Bar dataKey="importance" fill="url(#importanceGrad)" radius={[0, 6, 6, 0]} activeBar={{ fillOpacity: 0.8 }} />
+                    <Bar 
+                        dataKey="importance" 
+                        fill="url(#importanceGrad)" 
+                        radius={[0, 6, 6, 0]} 
+                        isAnimationActive={inView}
+                        animationDuration={1000}
+                        onMouseEnter={(_, index) => setHoveredBar(index)}
+                        onMouseLeave={() => setHoveredBar(null)}
+                    >
+                        {featureImportanceData.map((entry, index) => (
+                            <Cell 
+                                key={`cell-${index}`}
+                                fill="url(#importanceGrad)"
+                                opacity={hoveredBar === null || hoveredBar === index ? 1 : 0.4}
+                                style={{ transition: 'opacity 0.2s ease' }}
+                            />
+                        ))}
+                    </Bar>
                 </BarChart>
             </ResponsiveContainer>
         </InsightCard>
@@ -180,32 +237,69 @@ function FeatureImportanceCard() {
 // ─── Card 3: Model Comparison ─────────────────────────────────────────────────
 
 function ModelComparisonCard() {
+    const [ref, inView] = useInView()
+    const [hoveredBar, setHoveredBar] = useState(null)
+
     return (
-        <InsightCard emoji="🤖" title="Model Comparison" takeaway="Random Forest and XGBoost both achieved 99.6% AUC">
+        <InsightCard cardRef={ref} title="Model Comparison" takeaway="Random Forest and XGBoost both achieved 99.6% AUC">
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={modelComparisonData} margin={{ left: 0, right: 10, top: 10, bottom: 20 }}>
                     <defs>
                         <linearGradient id="aucGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
-                            <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.6} />
+                            <stop offset="0%" stopColor="#6C63FF" stopOpacity={1} />
+                            <stop offset="100%" stopColor="#6C63FF" stopOpacity={0.4} />
                         </linearGradient>
                         <linearGradient id="f1Grad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="var(--success)" stopOpacity={1} />
-                            <stop offset="100%" stopColor="var(--success)" stopOpacity={0.6} />
+                            <stop offset="0%" stopColor="#A78BFA" stopOpacity={1} />
+                            <stop offset="100%" stopColor="#A78BFA" stopOpacity={0.4} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                    <XAxis dataKey="model" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'var(--border)' }} />
-                    <YAxis domain={[0.6, 1.0]} tickFormatter={(v) => v.toFixed(1)} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="model" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
+                    <YAxis domain={[0.6, 1.0]} tickFormatter={(v) => v.toFixed(1)} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
                     <Tooltip
-                        contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                        labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                        itemStyle={{ color: 'var(--text-secondary)' }}
+                        contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(108,99,255,0.3)', borderRadius: '8px', boxShadow: 'none' }}
+                        labelStyle={{ color: '#fff', fontWeight: 600 }}
+                        itemStyle={{ color: 'rgba(255,255,255,0.7)' }}
                         formatter={(v, n) => [v.toFixed(3), n.toUpperCase()]}
                     />
-                    <Legend formatter={(v) => <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', fontWeight: 500 }}>{v.toUpperCase()}</span>} />
-                    <Bar dataKey="auc" fill="url(#aucGrad)" radius={[4, 4, 0, 0]} name="AUC" activeBar={{ fillOpacity: 0.85 }} />
-                    <Bar dataKey="f1" fill="url(#f1Grad)" radius={[4, 4, 0, 0]} name="F1" activeBar={{ fillOpacity: 0.85 }} />
+                    <Legend formatter={(v) => <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.78rem', fontWeight: 500 }}>{v.toUpperCase()}</span>} />
+                    <Bar 
+                        dataKey="auc" 
+                        radius={[4, 4, 0, 0]} 
+                        name="AUC" 
+                        isAnimationActive={inView}
+                        animationDuration={1000}
+                        onMouseEnter={(_, index) => setHoveredBar(`${index}-auc`)}
+                        onMouseLeave={() => setHoveredBar(null)}
+                    >
+                        {modelComparisonData.map((entry, index) => (
+                            <Cell 
+                                key={`cell-auc-${index}`}
+                                fill="url(#aucGrad)"
+                                opacity={hoveredBar === null || hoveredBar === `${index}-auc` ? 1 : 0.4}
+                                style={{ transition: 'opacity 0.2s ease' }}
+                            />
+                        ))}
+                    </Bar>
+                    <Bar 
+                        dataKey="f1" 
+                        radius={[4, 4, 0, 0]} 
+                        name="F1" 
+                        isAnimationActive={inView}
+                        animationDuration={1000}
+                        onMouseEnter={(_, index) => setHoveredBar(`${index}-f1`)}
+                        onMouseLeave={() => setHoveredBar(null)}
+                    >
+                        {modelComparisonData.map((entry, index) => (
+                            <Cell 
+                                key={`cell-f1-${index}`}
+                                fill="url(#f1Grad)"
+                                opacity={hoveredBar === null || hoveredBar === `${index}-f1` ? 1 : 0.4}
+                                style={{ transition: 'opacity 0.2s ease' }}
+                            />
+                        ))}
+                    </Bar>
                 </BarChart>
             </ResponsiveContainer>
         </InsightCard>
@@ -215,23 +309,38 @@ function ModelComparisonCard() {
 // ─── Card 4: Segment Churn Rate ───────────────────────────────────────────────
 
 function SegmentChurnCard() {
-    const COLORS = ['var(--warning)', 'var(--danger)', 'var(--success)', 'var(--accent)']
+    const [ref, inView] = useInView()
+    const [hoveredIndex, setHoveredIndex] = useState(null)
+    const COLORS = ['#F5A623', '#FF6B6B', '#A78BFA', '#6C63FF'] // Accent, Danger, Secondary, Primary
+
     return (
-        <InsightCard emoji="👥" title="Customer Segments Churn Rate" takeaway="Segment 1 churns at 34% — newest and least engaged customers">
+        <InsightCard cardRef={ref} title="Customer Segments Churn Rate" takeaway="Segment 1 churns at 34% — newest and least engaged customers">
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={segmentData} margin={{ left: 0, right: 10, top: 10, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                    <XAxis dataKey="segment" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} tickLine={false} axisLine={{ stroke: 'var(--border)' }} />
-                    <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}%`} domain={[0, 40]} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="segment" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
+                    <YAxis tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}%`} domain={[0, 40]} />
                     <Tooltip
-                        contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                        labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                        itemStyle={{ color: 'var(--text-secondary)' }}
+                        contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(108,99,255,0.3)', borderRadius: '8px', boxShadow: 'none' }}
+                        labelStyle={{ color: '#fff', fontWeight: 600 }}
+                        itemStyle={{ color: 'rgba(255,255,255,0.7)' }}
                         formatter={(v, _, props) => [`${v}% churn`, props.payload.label]}
                     />
-                    <Bar dataKey="churn" radius={[6, 6, 0, 0]} activeBar={{ fillOpacity: 0.8 }}>
+                    <Bar 
+                        dataKey="churn" 
+                        radius={[6, 6, 0, 0]} 
+                        isAnimationActive={inView}
+                        animationDuration={1000}
+                        onMouseEnter={(_, index) => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                    >
                         {segmentData.map((entry, index) => (
-                            <Cell key={entry.segment} fill={COLORS[index]} />
+                            <Cell 
+                                key={entry.segment} 
+                                fill={COLORS[index]} 
+                                opacity={hoveredIndex === null || hoveredIndex === index ? 1 : 0.4}
+                                style={{ transition: 'opacity 0.2s ease' }}
+                            />
                         ))}
                     </Bar>
                 </BarChart>
@@ -243,38 +352,39 @@ function SegmentChurnCard() {
 // ─── Card 5: Threshold Optimization ──────────────────────────────────────────
 
 function ThresholdCard() {
+    const [ref, inView] = useInView()
     return (
-        <InsightCard emoji="🎯" title="Threshold Optimization" takeaway="Threshold set to 0.40 to minimize missed churners (costly false negatives)">
+        <InsightCard cardRef={ref} title="Threshold Optimization" takeaway="Threshold set to 0.40 to minimize missed churners (costly false negatives)">
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={thresholdData} margin={{ left: 0, right: 10, top: 10, bottom: 5 }}>
                     <defs>
                         <linearGradient id="precisionGradArea" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.15} />
-                            <stop offset="95%" stopColor="var(--accent)" stopOpacity={0} />
+                            <stop offset="5%" stopColor="#F5A623" stopOpacity={0.2} />
+                            <stop offset="95%" stopColor="#F5A623" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="recallGradArea" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="var(--danger)" stopOpacity={0.15} />
-                            <stop offset="95%" stopColor="var(--danger)" stopOpacity={0} />
+                            <stop offset="5%" stopColor="#FF6B6B" stopOpacity={0.2} />
+                            <stop offset="95%" stopColor="#FF6B6B" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="f1GradArea" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="var(--success)" stopOpacity={0.15} />
-                            <stop offset="95%" stopColor="var(--success)" stopOpacity={0} />
+                            <stop offset="5%" stopColor="#6C63FF" stopOpacity={0.2} />
+                            <stop offset="95%" stopColor="#6C63FF" stopOpacity={0} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="t" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'var(--border)' }} tickFormatter={(v) => v.toFixed(1)} />
-                    <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} domain={[0, 1.1]} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <XAxis dataKey="t" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} tickFormatter={(v) => v.toFixed(1)} />
+                    <YAxis tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} domain={[0, 1.1]} />
                     <Tooltip
-                        contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                        labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                        itemStyle={{ color: 'var(--text-secondary)' }}
+                        contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(108,99,255,0.3)', borderRadius: '8px', boxShadow: 'none' }}
+                        labelStyle={{ color: '#fff', fontWeight: 600 }}
+                        itemStyle={{ color: 'rgba(255,255,255,0.7)' }}
                         labelFormatter={(v) => `Threshold: ${v}`}
                     />
-                    <Legend formatter={(v) => <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', textTransform: 'capitalize', fontWeight: 500 }}>{v}</span>} />
-                    <ReferenceLine x={0.4} stroke="var(--warning)" strokeDasharray="4 4" strokeWidth={2} label={{ value: '0.40 ★', position: 'top', fill: 'var(--warning)', fontSize: 11, fontWeight: 700 }} />
-                    <Area type="monotone" dataKey="precision" stroke="var(--accent)" strokeWidth={2} fillOpacity={1} fill="url(#precisionGradArea)" name="Precision" dot={false} />
-                    <Area type="monotone" dataKey="recall" stroke="var(--danger)" strokeWidth={2} fillOpacity={1} fill="url(#recallGradArea)" name="Recall" dot={false} />
-                    <Area type="monotone" dataKey="f1" stroke="var(--success)" strokeWidth={2} fillOpacity={1} fill="url(#f1GradArea)" name="F1" dot={false} />
+                    <Legend formatter={(v) => <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.78rem', textTransform: 'capitalize', fontWeight: 500 }}>{v}</span>} />
+                    <ReferenceLine x={0.4} stroke="#F5A623" strokeDasharray="4 4" strokeWidth={2} label={{ value: '0.40 ★', position: 'top', fill: '#F5A623', fontSize: 11, fontWeight: 700 }} />
+                    <Area type="monotone" dataKey="precision" stroke="#F5A623" strokeWidth={2} fillOpacity={1} fill="url(#precisionGradArea)" name="precision" dot={false} isAnimationActive={false} />
+                    <Area type="monotone" dataKey="recall" stroke="#FF6B6B" strokeWidth={2} fillOpacity={1} fill="url(#recallGradArea)" name="recall" dot={false} isAnimationActive={false} />
+                    <Area type="monotone" dataKey="f1" stroke="#6C63FF" strokeWidth={2} fillOpacity={1} fill="url(#f1GradArea)" name="f1" dot={false} isAnimationActive={false} />
                 </AreaChart>
             </ResponsiveContainer>
         </InsightCard>
@@ -284,28 +394,29 @@ function ThresholdCard() {
 // ─── Card 6: Cross Validation ─────────────────────────────────────────────────
 
 function CrossValidationCard() {
+    const [ref, inView] = useInView()
     const mean = 0.996
     return (
-        <InsightCard emoji="📐" title="Cross Validation Stability (5-Fold)" takeaway="Std deviation < 0.002 — model is highly stable across all folds">
+        <InsightCard cardRef={ref} title="Cross Validation Stability (5-Fold)" takeaway="Std deviation < 0.002 — model is highly stable across all folds">
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={cvFoldData} margin={{ left: 0, right: 10, top: 15, bottom: 5 }}>
                     <defs>
                         <linearGradient id="cvGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.25} />
-                            <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.01} />
+                            <stop offset="5%" stopColor="#6C63FF" stopOpacity={0.2} />
+                            <stop offset="95%" stopColor="#6C63FF" stopOpacity={0} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                    <XAxis dataKey="fold" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'var(--border)' }} />
-                    <YAxis domain={[0.99, 1.0]} tickFormatter={(v) => v.toFixed(3)} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="fold" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
+                    <YAxis domain={[0.99, 1.0]} tickFormatter={(v) => v.toFixed(3)} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
                     <Tooltip
-                        contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                        labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                        itemStyle={{ color: 'var(--text-secondary)' }}
+                        contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(108,99,255,0.3)', borderRadius: '8px', boxShadow: 'none' }}
+                        labelStyle={{ color: '#fff', fontWeight: 600 }}
+                        itemStyle={{ color: 'rgba(255,255,255,0.7)' }}
                         formatter={(v) => [v.toFixed(4), 'AUC']}
                     />
-                    <ReferenceLine y={mean} stroke="var(--danger)" strokeDasharray="5 3" strokeWidth={2} label={{ value: `Mean: ${mean}`, position: 'insideTopRight', fill: 'var(--danger)', fontSize: 10, fontWeight: 600 }} />
-                    <Area type="monotone" dataKey="auc" stroke="var(--accent)" strokeWidth={2.5} fillOpacity={1} fill="url(#cvGrad)" dot={{ fill: 'var(--accent)', r: 4, strokeWidth: 1, stroke: 'var(--bg-surface)' }} activeDot={{ r: 6 }} />
+                    <ReferenceLine y={mean} stroke="#FF6B6B" strokeDasharray="5 3" strokeWidth={2} label={{ value: `Mean: ${mean}`, position: 'insideTopRight', fill: '#FF6B6B', fontSize: 10, fontWeight: 600 }} />
+                    <Area type="monotone" dataKey="auc" stroke="#6C63FF" strokeWidth={2.5} fillOpacity={1} fill="url(#cvGrad)" dot={{ fill: '#6C63FF', r: 4, strokeWidth: 1, stroke: '#16161F' }} activeDot={{ r: 6 }} isAnimationActive={false} />
                 </AreaChart>
             </ResponsiveContainer>
         </InsightCard>
