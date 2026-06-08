@@ -23,7 +23,7 @@ function Slider({ label, min, max, value, onChange, format }) {
                     onChange={(e) => onChange(Number(e.target.value))}
                     style={{
                         position: 'absolute', inset: 0, width: '100%', opacity: 0,
-                        cursor: 'pointer', height: '100%',
+                        height: '100%',
                     }}
                 />
             </div>
@@ -152,6 +152,23 @@ export default function BusinessImpact() {
                     style={{ background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: 'var(--shadow-sm)' }}
                 >
                     <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Adjust Parameters</p>
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '10px 14px',
+                      background: 'var(--bg-accent-light)',
+                      border: '1px solid rgba(193,127,62,0.2)',
+                      borderRadius: '6px',
+                      marginBottom: '20px',
+                      fontSize: '12px',
+                      color: 'var(--accent)',
+                      fontWeight: '500'
+                    }}>
+                      <span>↕</span>
+                      Drag sliders to adjust parameters and see live ROI projections
+                    </div>
                     <Slider label="Total Customers" min={1000} max={50000} value={customers} onChange={setCustomers} format={fmtNum} />
                     <Slider label="Avg Monthly Revenue per Customer (₹)" min={500} max={10000} value={revenue} onChange={setRevenue} format={fmtINR} />
                     <Slider label="Churn Rate (%)" min={5} max={40} value={churnRate} onChange={setChurnRate} format={fmtPct} />
@@ -191,6 +208,8 @@ export default function BusinessImpact() {
 
             <style>{`
         @media (max-width: 768px) { .calc-grid { grid-template-columns: 1fr !important; } }
+        input[type="range"] { cursor: grab !important; }
+        input[type="range"]:active { cursor: grabbing !important; }
       `}</style>
         </section>
     )

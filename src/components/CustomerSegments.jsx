@@ -192,34 +192,40 @@ export default function CustomerSegments() {
                 {SEGMENTS.map((seg) => <SegmentCard key={seg.id} seg={seg} />)}
             </div>
 
-            {/* Churn Rate Chart */}
-            <div
-                className="animate-ready animate-card"
-                style={{ background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
-            >
-                <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', textAlign: 'center' }}>
+            <div className="animate-ready animate-card dark-chart-card">
+                <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: 600, color: '#FFFFFF', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Churn Rate by Segment
                 </p>
                 <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={segmentChurnData} margin={{ top: 15, right: 20, bottom: 20, left: 10 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                    <BarChart data={segmentChurnData} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                         <XAxis
                             dataKey="segment"
-                            axisLine={{ stroke: 'var(--border)' }}
-                            tickLine={false}
-                            tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-                        />
-                        <YAxis
+                            stroke="rgba(255,255,255,0.4)"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                            tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
+                        />
+                        <YAxis
+                            stroke="rgba(255,255,255,0.4)"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
                             tickFormatter={(v) => `${v}%`}
                         />
                         <Tooltip
-                            contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                            labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                            itemStyle={{ color: 'var(--text-secondary)' }}
-                            cursor={{ fill: 'var(--bg-primary)' }}
+                            contentStyle={{
+                                background: '#1E1E2E',
+                                border: '1px solid rgba(108,99,255,0.3)',
+                                borderRadius: '6px',
+                                padding: '8px 12px',
+                                fontSize: '12px',
+                                color: '#FFFFFF',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                maxWidth: '160px'
+                            }}
+                            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                            wrapperStyle={{ zIndex: 10, outline: 'none' }}
                             formatter={(value) => [`${value}%`, 'Churn Rate']}
                         />
                         <ReferenceLine

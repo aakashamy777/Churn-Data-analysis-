@@ -347,39 +347,41 @@ Same structure every time regardless of dataset.`
 
                 {/* SECTION 3 — Two charts side by side */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', marginBottom: '32px' }}>
-                    <div className="animate-ready animate-card" style={{
-                        flex: '1', minWidth: '300px', background: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)',
-                        border: '1px solid var(--border)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)'
-                    }}>
-                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
+                    <div className="animate-ready animate-card dark-chart-card" style={{ flex: '1', minWidth: '300px' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: '#FFFFFF', letterSpacing: '0.01em' }}>
                             {result.chartData?.barChart?.title}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={result.chartData?.barChart?.data || []}>
+                            <BarChart data={result.chartData?.barChart?.data || []} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
                                 <defs>
                                     <linearGradient id="analyzerBarGrad" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
                                         <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.65} />
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                                <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-                                <YAxis stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                                <XAxis dataKey="label" stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} />
+                                <YAxis stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} />
                                 <Tooltip
-                                    cursor={{ fill: 'var(--bg-surface-2)' }}
-                                    contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                                    labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                                    itemStyle={{ color: 'var(--text-secondary)' }}
+                                    contentStyle={{
+                                        background: '#1E1E2E',
+                                        border: '1px solid rgba(108,99,255,0.3)',
+                                        borderRadius: '6px',
+                                        padding: '8px 12px',
+                                        fontSize: '12px',
+                                        color: '#FFFFFF',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                        maxWidth: '160px'
+                                    }}
+                                    cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                    wrapperStyle={{ zIndex: 10, outline: 'none' }}
                                 />
                                 <Bar dataKey="value" fill="url(#analyzerBarGrad)" radius={[6, 6, 0, 0]} activeBar={{ fillOpacity: 0.8 }} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="animate-ready animate-card" style={{
-                        flex: '1', minWidth: '300px', background: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)',
-                        border: '1px solid var(--border)', borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)'
-                    }}>
-                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
+                    <div className="animate-ready animate-card dark-chart-card" style={{ flex: '1', minWidth: '300px' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: '#FFFFFF', letterSpacing: '0.01em' }}>
                             {result.chartData?.pieChart?.title}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
@@ -398,26 +400,29 @@ Same structure every time regardless of dataset.`
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                                    labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                                    itemStyle={{ color: 'var(--text-secondary)' }}
+                                    contentStyle={{
+                                        background: '#1E1E2E',
+                                        border: '1px solid rgba(108,99,255,0.3)',
+                                        borderRadius: '6px',
+                                        padding: '8px 12px',
+                                        fontSize: '12px',
+                                        color: '#FFFFFF',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                        maxWidth: '160px'
+                                    }}
+                                    cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                    wrapperStyle={{ zIndex: 10, outline: 'none' }}
                                 />
-                                <Legend wrapperStyle={{ fontSize: '12px' }} formatter={(v) => <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>{v}</span>} />
+                                <Legend wrapperStyle={{ fontSize: '12px' }} formatter={(v) => <span style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{v}</span>} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
                 
                 {result.chartData?.secondBarChart && (
-                  <div className="animate-ready animate-card" style={{
-                    background: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--card-radius)',
-                    padding: 'var(--card-padding)',
-                    marginBottom: '32px'
-                  }}>
+                  <div className="animate-ready animate-card dark-chart-card" style={{ marginBottom: '32px' }}>
                     <h3 className="animate-ready animate-heading" style={{
-                      color: 'var(--text-primary)',
+                      color: '#FFFFFF',
                       fontSize: '15px',
                       fontWeight: '600',
                       marginBottom: '16px',
@@ -427,22 +432,31 @@ Same structure every time regardless of dataset.`
                       {result.chartData.secondBarChart.title}
                     </h3>
                     <ResponsiveContainer width="100%" height={220}>
-                      <AreaChart data={result.chartData.secondBarChart.data} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
+                      <AreaChart data={result.chartData.secondBarChart.data} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
                         <defs>
                           <linearGradient id="analyzerSecondAreaGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.25} />
                             <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.01} />
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                         <XAxis dataKey="label" 
-                          tick={{ fill: 'var(--text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
+                          tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} stroke="rgba(255,255,255,0.4)" tickLine={false} axisLine={false} />
                         <YAxis 
-                          tick={{ fill: 'var(--text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
+                          tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} stroke="rgba(255,255,255,0.4)" tickLine={false} axisLine={false} />
                         <Tooltip
-                          contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                          labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                          itemStyle={{ color: 'var(--text-secondary)' }}
+                            contentStyle={{
+                                background: '#1E1E2E',
+                                border: '1px solid rgba(108,99,255,0.3)',
+                                borderRadius: '6px',
+                                padding: '8px 12px',
+                                fontSize: '12px',
+                                color: '#FFFFFF',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                maxWidth: '160px'
+                            }}
+                            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                            wrapperStyle={{ zIndex: 10, outline: 'none' }}
                         />
                         <Area type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2.5} fillOpacity={1} fill="url(#analyzerSecondAreaGrad)" dot={{ fill: 'var(--accent)', r: 4, strokeWidth: 1, stroke: 'var(--bg-surface)' }} activeDot={{ r: 6 }} name="Value" />
                       </AreaChart>
@@ -528,27 +542,36 @@ Same structure every time regardless of dataset.`
                                 </div>
                             </div>
                             
-                            <div style={{ height: '300px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
+                            <div className="dark-chart-card" style={{ height: '300px', borderRadius: '12px' }}>
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={dataObject.sample.slice(0, 15)}>
+                                    <BarChart data={dataObject.sample.slice(0, 15)} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
                                         <defs>
                                             <linearGradient id="explorerBarGrad" x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
                                                 <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.65} />
                                             </linearGradient>
                                         </defs>
-                                        <XAxis dataKey={explorerX} stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                                        <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                                        <XAxis dataKey={explorerX} stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} />
                                         <Tooltip 
-                                            contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                                            labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                                            itemStyle={{ color: 'var(--text-secondary)' }}
-                                            cursor={{ fill: 'var(--bg-surface-2)' }}
+                                            contentStyle={{
+                                                background: '#1E1E2E',
+                                                border: '1px solid rgba(108,99,255,0.3)',
+                                                borderRadius: '6px',
+                                                padding: '8px 12px',
+                                                fontSize: '12px',
+                                                color: '#FFFFFF',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                                maxWidth: '160px'
+                                            }}
+                                            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                            wrapperStyle={{ zIndex: 10, outline: 'none' }}
                                         />
                                         <Bar dataKey={explorerY} fill="url(#explorerBarGrad)" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8 }} />
                                     </BarChart>
                                 </ResponsiveContainer>
-                                <p style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '10px' }}>
+                                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', textAlign: 'center', marginTop: '10px' }}>
                                     Showing distribution for first 15 records in dataset
                                 </p>
                             </div>

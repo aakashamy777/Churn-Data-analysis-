@@ -269,28 +269,28 @@ export default function SentimentAnalysis() {
                 }}
             >
                 {/* CHART 1: Sentiment Distribution */}
-                <div
-                    className="animate-ready animate-card"
-                    style={{
-                        background: 'var(--bg-surface)',
-                        borderRadius: 'var(--card-radius)',
-                        padding: 'var(--card-padding)',
-                        border: '1px solid var(--border)',
-                        boxShadow: 'var(--shadow-sm)',
-                    }}
-                >
-                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div className="animate-ready animate-card dark-chart-card">
+                    <h4 style={{ color: '#FFFFFF', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Sentiment Distribution
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
-                        <BarChart layout="vertical" data={sentimentData.distribution} margin={{ top: 10, right: 30, left: 10, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                            <XAxis type="number" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                            <YAxis type="category" dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} width={70} />
+                        <BarChart layout="vertical" data={sentimentData.distribution} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                            <XAxis type="number" stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} />
+                            <YAxis type="category" dataKey="label" stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} width={70} />
                             <Tooltip
-                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                                labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                                itemStyle={{ color: 'var(--text-secondary)' }}
+                                contentStyle={{
+                                    background: '#1E1E2E',
+                                    border: '1px solid rgba(108,99,255,0.3)',
+                                    borderRadius: '6px',
+                                    padding: '8px 12px',
+                                    fontSize: '12px',
+                                    color: '#FFFFFF',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                    maxWidth: '160px'
+                                }}
+                                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                wrapperStyle={{ zIndex: 10, outline: 'none' }}
                                 formatter={(val) => [val.toLocaleString(), 'Customers']}
                             />
                             <Bar dataKey="count" radius={[0, 6, 6, 0]} barSize={24} activeBar={{ fillOpacity: 0.8 }}>
@@ -303,28 +303,28 @@ export default function SentimentAnalysis() {
                 </div>
 
                 {/* CHART 2: Churn Rate by Sentiment */}
-                <div
-                    className="animate-ready animate-card"
-                    style={{
-                        background: 'var(--bg-surface)',
-                        borderRadius: 'var(--card-radius)',
-                        padding: 'var(--card-padding)',
-                        border: '1px solid var(--border)',
-                        boxShadow: 'var(--shadow-sm)',
-                    }}
-                >
-                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div className="animate-ready animate-card dark-chart-card">
+                    <h4 style={{ color: '#FFFFFF', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Churn Rate by Sentiment
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
-                        <BarChart data={sentimentData.distribution} margin={{ top: 15, right: 30, left: 0, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                            <XAxis dataKey="label" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-                            <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
+                        <BarChart data={sentimentData.distribution} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                            <XAxis dataKey="label" stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} />
+                            <YAxis stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
                             <Tooltip
-                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                                labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                                itemStyle={{ color: 'var(--text-secondary)' }}
+                                contentStyle={{
+                                    background: '#1E1E2E',
+                                    border: '1px solid rgba(108,99,255,0.3)',
+                                    borderRadius: '6px',
+                                    padding: '8px 12px',
+                                    fontSize: '12px',
+                                    color: '#FFFFFF',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                    maxWidth: '160px'
+                                }}
+                                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                wrapperStyle={{ zIndex: 10, outline: 'none' }}
                                 formatter={(val) => [`${val}%`, 'Churn Rate']}
                             />
                             <ReferenceLine y={16.8} stroke="var(--text-muted)" strokeDasharray="4 4" label={{ value: 'Avg 16.8%', position: 'top', fill: 'var(--text-secondary)', fontSize: 10, fontWeight: 600 }} />
@@ -338,47 +338,47 @@ export default function SentimentAnalysis() {
                 </div>
 
                 {/* CHART 3: Sentiment vs Satisfaction */}
-                <div
-                    className="animate-ready animate-card"
-                    style={{
-                        background: 'var(--bg-surface)',
-                        borderRadius: 'var(--card-radius)',
-                        padding: 'var(--card-padding)',
-                        border: '1px solid var(--border)',
-                        boxShadow: 'var(--shadow-sm)',
-                    }}
-                >
-                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div className="animate-ready animate-card dark-chart-card">
+                    <h4 style={{ color: '#FFFFFF', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Sentiment vs Satisfaction
                     </h4>
                     <ResponsiveContainer width="100%" height={220}>
-                        <AreaChart data={sentimentData.avgScoreBySatisfaction} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
+                        <AreaChart data={sentimentData.avgScoreBySatisfaction} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
                             <defs>
                                 <linearGradient id="sentimentSatGrad" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.25} />
                                     <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.01} />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                             <XAxis
                                 dataKey="score"
-                                label={{ value: 'Satisfaction Score (1-5)', position: 'bottom', fill: 'var(--text-muted)', fontSize: 10, offset: 10 }}
-                                stroke="var(--text-muted)"
+                                label={{ value: 'Satisfaction Score (1-5)', position: 'bottom', fill: 'rgba(255,255,255,0.4)', fontSize: 10, offset: 10 }}
+                                stroke="rgba(255,255,255,0.4)"
                                 fontSize={12}
                                 tickLine={false}
                                 axisLine={false}
                             />
                             <YAxis
-                                label={{ value: 'Avg Polarity', angle: -90, position: 'insideLeft', fill: 'var(--text-muted)', fontSize: 10 }}
-                                stroke="var(--text-muted)"
+                                label={{ value: 'Avg Polarity', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.4)', fontSize: 10 }}
+                                stroke="rgba(255,255,255,0.4)"
                                 fontSize={11}
                                 tickLine={false}
                                 axisLine={false}
                             />
                             <Tooltip
-                                contentStyle={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}
-                                labelStyle={{ color: 'var(--text-primary)', fontWeight: 600 }}
-                                itemStyle={{ color: 'var(--text-secondary)' }}
+                                contentStyle={{
+                                    background: '#1E1E2E',
+                                    border: '1px solid rgba(108,99,255,0.3)',
+                                    borderRadius: '6px',
+                                    padding: '8px 12px',
+                                    fontSize: '12px',
+                                    color: '#FFFFFF',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                    maxWidth: '160px'
+                                }}
+                                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                wrapperStyle={{ zIndex: 10, outline: 'none' }}
                             />
                             <ReferenceLine y={0} stroke="var(--text-muted)" strokeDasharray="4 4" />
                             <Area
