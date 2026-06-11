@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, PieChart, Pie, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
+import { BarChart, Bar, PieChart, Pie, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend, AreaChart, Area } from 'recharts';
 
 const GROQ_KEY = import.meta.env.VITE_GROQ_KEY;
 
@@ -175,7 +175,7 @@ REQUIRED JSON STRUCTURE — fill every field:
       "data": [
         {"name": "<category>", "value": <number>, "color": "#22c55e"},
         {"name": "<category>", "value": <number>, "color": "#ef4444"},
-        {"name": "<category>", "value": <number>, "color": "#3b82f6"},
+        {"name": "<category>", "value": <number>, "color": "var(--accent)"},
         {"name": "<category>", "value": <number>, "color": "#f59e0b"}
       ]
     },
@@ -283,44 +283,44 @@ Same structure every time regardless of dataset.`
 
         const getTrendStyle = (trend) => {
             const t = String(trend).toLowerCase();
-            if (t.includes('positive')) return { color: '#22c55e', symbol: '↑' };
-            if (t.includes('negative')) return { color: '#ef4444', symbol: '↓' };
-            return { color: '#f59e0b', symbol: '→' };
+            if (t.includes('positive')) return { color: 'var(--success)', symbol: '↑' };
+            if (t.includes('negative')) return { color: 'var(--danger)', symbol: '↓' };
+            return { color: 'var(--warning)', symbol: '→' };
         };
 
         const getPriorityStyle = (priority) => {
             const p = String(priority).toLowerCase();
-            if (p.includes('high')) return { bg: 'rgba(239,68,68,0.2)', color: '#ef4444' };
-            if (p.includes('medium')) return { bg: 'rgba(245,158,11,0.2)', color: '#f59e0b' };
-            return { bg: 'rgba(59,130,246,0.2)', color: '#3b82f6' };
+            if (p.includes('high')) return { bg: 'var(--danger-bg)', color: 'var(--danger)' };
+            if (p.includes('medium')) return { bg: 'var(--warning-bg)', color: 'var(--warning)' };
+            return { bg: 'var(--bg-accent-light)', color: 'var(--accent)' };
         };
 
         const getRiskStyle = (level) => {
             const l = String(level).toLowerCase();
-            if (l.includes('high')) return { bg: '#ef4444', color: 'white' };
-            if (l.includes('medium')) return { bg: '#f59e0b', color: 'white' };
-            return { bg: '#22c55e', color: 'white' };
+            if (l.includes('high')) return { bg: 'var(--danger)', color: 'var(--bg-primary)' };
+            if (l.includes('medium')) return { bg: 'var(--warning)', color: 'var(--bg-primary)' };
+            return { bg: 'var(--success)', color: 'var(--bg-primary)' };
         };
 
         return (
-            <div style={{ maxWidth: '1000px', margin: '0 auto', color: 'white' }}>
+            <div style={{ maxWidth: '1000px', margin: '0 auto', color: 'var(--text-primary)' }}>
                 {/* SECTION 1 — Summary Banner */}
-                <div style={{
-                    background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '16px', padding: '24px', marginBottom: '24px'
+                <div className="animate-ready animate-card" style={{
+                    background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                    borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)', marginBottom: '24px',
+                    boxShadow: 'var(--shadow-sm)'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
-                        <div style={{ fontSize: '20px', fontWeight: '700' }}>{result.datasetType}</div>
-                        <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', maxWidth: '500px', textAlign: 'right' }}>
+                        <div className="animate-ready animate-heading" style={{ fontSize: '20px', fontWeight: '700', color: 'var(--text-primary)' }}>{result.datasetType}</div>
+                        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', maxWidth: '500px', textAlign: 'right' }}>
                             {result.plainEnglishSummary}
                         </div>
                     </div>
                     <div style={{
-                        background: 'rgba(239,68,68,0.1)', borderLeft: '4px solid #ef4444',
-                        padding: '12px 20px', borderRadius: '8px'
+                        background: 'var(--danger-bg)', borderLeft: '3px solid var(--danger)',
+                        padding: '16px 20px', borderRadius: '0 var(--card-radius) var(--card-radius) 0'
                     }}>
-                        ⚡ <span style={{ color: 'white' }}>{result.urgentAction}</span>
+                        ⚡ <span style={{ color: 'var(--danger)', fontWeight: 500 }}>{result.urgentAction}</span>
                     </div>
                 </div>
 
@@ -329,17 +329,17 @@ Same structure every time regardless of dataset.`
                     {result.keyMetrics?.map((metric, i) => {
                         const trend = getTrendStyle(metric.trend);
                         return (
-                            <div key={i} style={{
-                                minWidth: '200px', flex: '1', background: 'rgba(255,255,255,0.05)',
-                                backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '16px', padding: '20px'
+                            <div key={i} className="animate-ready animate-card" style={{
+                                minWidth: '200px', flex: '1', background: 'var(--bg-surface)',
+                                border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
+                                borderRadius: 'var(--card-radius)', padding: 'var(--card-padding)'
                             }}>
-                                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>{metric.label}</div>
-                                <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 600, textTransform: 'uppercase' }}>{metric.label}</div>
+                                <div className="animate-ready animate-stat" style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                                     {metric.value}
                                     <span style={{ fontSize: '20px', color: trend.color }}>{trend.symbol}</span>
                                 </div>
-                                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>{metric.interpretation}</div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{metric.interpretation}</div>
                             </div>
                         );
                     })}
@@ -347,27 +347,41 @@ Same structure every time regardless of dataset.`
 
                 {/* SECTION 3 — Two charts side by side */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', marginBottom: '32px' }}>
-                    <div style={{
-                        flex: '1', minWidth: '300px', background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '20px'
-                    }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'white' }}>
+                    <div className="animate-ready animate-card dark-chart-card" style={{ flex: '1', minWidth: '300px' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: '#FFFFFF', letterSpacing: '0.01em' }}>
                             {result.chartData?.barChart?.title}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={result.chartData?.barChart?.data || []}>
-                                <XAxis dataKey="label" stroke="rgba(255,255,255,0.5)" fontSize={12} tickLine={false} axisLine={false} />
-                                <YAxis stroke="rgba(255,255,255,0.5)" fontSize={12} tickLine={false} axisLine={false} />
-                                <Tooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} contentStyle={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'white' }} />
-                                <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                            <BarChart data={result.chartData?.barChart?.data || []} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                                <defs>
+                                    <linearGradient id="analyzerBarGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.65} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                                <XAxis dataKey="label" stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} />
+                                <YAxis stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} />
+                                <Tooltip
+                                    contentStyle={{
+                                        background: '#1E1E2E',
+                                        border: '1px solid rgba(108,99,255,0.3)',
+                                        borderRadius: '6px',
+                                        padding: '8px 12px',
+                                        fontSize: '12px',
+                                        color: '#FFFFFF',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                        maxWidth: '160px'
+                                    }}
+                                    cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                    wrapperStyle={{ zIndex: 10, outline: 'none' }}
+                                />
+                                <Bar dataKey="value" fill="url(#analyzerBarGrad)" radius={[6, 6, 0, 0]} activeBar={{ fillOpacity: 0.8 }} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                    <div style={{
-                        flex: '1', minWidth: '300px', background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '20px'
-                    }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: 'white' }}>
+                    <div className="animate-ready animate-card dark-chart-card" style={{ flex: '1', minWidth: '300px' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', textAlign: 'center', color: '#FFFFFF', letterSpacing: '0.01em' }}>
                             {result.chartData?.pieChart?.title}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
@@ -377,134 +391,187 @@ Same structure every time regardless of dataset.`
                                     dataKey="value" 
                                     nameKey="name" 
                                     cx="50%" cy="50%" 
-                                    outerRadius={80}
+                                    innerRadius={55}
+                                    outerRadius={75}
+                                    paddingAngle={3}
                                 >
                                     {(result.chartData?.pieChart?.data || []).map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color || '#3b82f6'} />
+                                        <Cell key={`cell-${index}`} fill={entry.color || 'var(--accent)'} style={{ outline: 'none', cursor: 'pointer' }} />
                                     ))}
                                 </Pie>
-                                <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'white' }} />
-                                <Legend wrapperStyle={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }} />
+                                <Tooltip
+                                    contentStyle={{
+                                        background: '#1E1E2E',
+                                        border: '1px solid rgba(108,99,255,0.3)',
+                                        borderRadius: '6px',
+                                        padding: '8px 12px',
+                                        fontSize: '12px',
+                                        color: '#FFFFFF',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                        maxWidth: '160px'
+                                    }}
+                                    cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                    wrapperStyle={{ zIndex: 10, outline: 'none' }}
+                                />
+                                <Legend wrapperStyle={{ fontSize: '12px' }} formatter={(v) => <span style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{v}</span>} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
                 
                 {result.chartData?.secondBarChart && (
-                  <div style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '16px',
-                    padding: '20px',
-                    marginBottom: '32px'
-                  }}>
-                    <p style={{
-                      color: 'white',
-                      fontSize: '14px',
+                  <div className="animate-ready animate-card dark-chart-card" style={{ marginBottom: '32px' }}>
+                    <h3 className="animate-ready animate-heading" style={{
+                      color: '#FFFFFF',
+                      fontSize: '15px',
                       fontWeight: '600',
-                      marginBottom: '12px',
-                      textAlign: 'center'
+                      marginBottom: '16px',
+                      textAlign: 'center',
+                      letterSpacing: '0.01em'
                     }}>
                       {result.chartData.secondBarChart.title}
-                    </p>
+                    </h3>
                     <ResponsiveContainer width="100%" height={220}>
-                      <BarChart data={result.chartData.secondBarChart.data}>
+                      <AreaChart data={result.chartData.secondBarChart.data} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                        <defs>
+                          <linearGradient id="analyzerSecondAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.25} />
+                            <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.01} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                         <XAxis dataKey="label" 
-                          tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }} />
+                          tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} stroke="rgba(255,255,255,0.4)" tickLine={false} axisLine={false} />
                         <YAxis 
-                          tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }} />
+                          tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} stroke="rgba(255,255,255,0.4)" tickLine={false} axisLine={false} />
                         <Tooltip
-                          contentStyle={{
-                            background: '#1a1a2e',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            borderRadius: '8px',
-                            color: 'white'
-                          }} />
-                        <Bar dataKey="value" fill="#f59e0b" radius={[4,4,0,0]} />
-                      </BarChart>
+                            contentStyle={{
+                                background: '#1E1E2E',
+                                border: '1px solid rgba(108,99,255,0.3)',
+                                borderRadius: '6px',
+                                padding: '8px 12px',
+                                fontSize: '12px',
+                                color: '#FFFFFF',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                maxWidth: '160px'
+                            }}
+                            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                            wrapperStyle={{ zIndex: 10, outline: 'none' }}
+                        />
+                        <Area type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2.5} fillOpacity={1} fill="url(#analyzerSecondAreaGrad)" dot={{ fill: 'var(--accent)', r: 4, strokeWidth: 1, stroke: 'var(--bg-surface)' }} activeDot={{ r: 6 }} name="Value" />
+                      </AreaChart>
                     </ResponsiveContainer>
                   </div>
                 )}
 
                 {/* SECTION 4 — Insights tabs */}
                 <div style={{ marginBottom: '32px' }}>
-                    <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>
+                    <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '16px' }}>
                         <button
                             onClick={() => setActiveTab('churn')}
                             style={{
-                                background: activeTab === 'churn' ? '#3b82f6' : 'transparent',
-                                color: activeTab === 'churn' ? 'white' : 'rgba(255,255,255,0.7)',
-                                border: activeTab === 'churn' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)',
-                                padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
+                                background: activeTab === 'churn' ? 'var(--bg-surface-2)' : 'transparent',
+                                color: activeTab === 'churn' ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                border: 'none',
+                                borderBottom: activeTab === 'churn' ? 'none' : '2px solid transparent',
+                                borderRadius: activeTab === 'churn' ? '4px' : '0',
+                                padding: '8px 20px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
                                 transition: 'all 0.2s'
                             }}
+                            onMouseEnter={(e) => { if (activeTab !== 'churn') e.target.style.color = 'var(--text-primary)'; }}
+                            onMouseLeave={(e) => { if (activeTab !== 'churn') e.target.style.color = 'var(--text-secondary)'; }}
                         >
                             🚨 Churn Risk
                         </button>
                         <button
                             onClick={() => setActiveTab('sales')}
                             style={{
-                                background: activeTab === 'sales' ? '#3b82f6' : 'transparent',
-                                color: activeTab === 'sales' ? 'white' : 'rgba(255,255,255,0.7)',
-                                border: activeTab === 'sales' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)',
-                                padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
+                                background: activeTab === 'sales' ? 'var(--bg-surface-2)' : 'transparent',
+                                color: activeTab === 'sales' ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                border: 'none',
+                                borderBottom: activeTab === 'sales' ? 'none' : '2px solid transparent',
+                                borderRadius: activeTab === 'sales' ? '4px' : '0',
+                                padding: '8px 20px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
                                 transition: 'all 0.2s'
                             }}
+                            onMouseEnter={(e) => { if (activeTab !== 'sales') e.target.style.color = 'var(--text-primary)'; }}
+                            onMouseLeave={(e) => { if (activeTab !== 'sales') e.target.style.color = 'var(--text-secondary)'; }}
                         >
                             📈 Sales Opportunities
                         </button>
                         <button
                             onClick={() => setActiveTab('explorer')}
                             style={{
-                                background: activeTab === 'explorer' ? '#8b5cf6' : 'transparent',
-                                color: activeTab === 'explorer' ? 'white' : 'rgba(255,255,255,0.7)',
-                                border: activeTab === 'explorer' ? '1px solid #8b5cf6' : '1px solid rgba(255,255,255,0.2)',
-                                padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
+                                background: activeTab === 'explorer' ? 'var(--bg-surface-2)' : 'transparent',
+                                color: activeTab === 'explorer' ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                border: 'none',
+                                borderBottom: activeTab === 'explorer' ? 'none' : '2px solid transparent',
+                                borderRadius: activeTab === 'explorer' ? '4px' : '0',
+                                padding: '8px 20px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
                                 transition: 'all 0.2s'
                             }}
+                            onMouseEnter={(e) => { if (activeTab !== 'explorer') e.target.style.color = 'var(--text-primary)'; }}
+                            onMouseLeave={(e) => { if (activeTab !== 'explorer') e.target.style.color = 'var(--text-secondary)'; }}
                         >
                             🔍 Data Explorer
                         </button>
                     </div>
 
                     {activeTab === 'explorer' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '12px' }}>
+                        <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', background: 'var(--bg-surface)', border: '1px solid var(--border)', padding: '16px', borderRadius: '12px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>X-Axis (Category)</label>
+                                    <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>X-Axis (Category)</label>
                                     <select 
                                         value={explorerX} 
                                         onChange={(e) => setExplorerX(e.target.value)}
-                                        style={{ width: '100%', background: '#1e293b', border: '1px solid #334155', color: 'white', padding: '8px', borderRadius: '6px', fontSize: '14px' }}
+                                        style={{ width: '100%', background: 'var(--bg-surface-2)', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '8px', borderRadius: '6px', fontSize: '14px' }}
                                     >
                                         {dataObject.columns.allColumns.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>Y-Axis (Numeric)</label>
+                                    <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>Y-Axis (Numeric)</label>
                                     <select 
                                         value={explorerY} 
                                         onChange={(e) => setExplorerY(e.target.value)}
-                                        style={{ width: '100%', background: '#1e293b', border: '1px solid #334155', color: 'white', padding: '8px', borderRadius: '6px', fontSize: '14px' }}
+                                        style={{ width: '100%', background: 'var(--bg-surface-2)', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '8px', borderRadius: '6px', fontSize: '14px' }}
                                     >
                                         {dataObject.columns.possibleNumeric.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
                                 </div>
                             </div>
                             
-                            <div style={{ height: '300px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '20px' }}>
+                            <div className="dark-chart-card" style={{ height: '300px', borderRadius: '12px' }}>
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={dataObject.sample.slice(0, 15)}>
+                                    <BarChart data={dataObject.sample.slice(0, 15)} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                                        <defs>
+                                            <linearGradient id="explorerBarGrad" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor="var(--accent)" stopOpacity={1} />
+                                                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.65} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                                         <XAxis dataKey={explorerX} stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} />
                                         <YAxis stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} />
                                         <Tooltip 
-                                            contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px' }}
-                                            cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                                            contentStyle={{
+                                                background: '#1E1E2E',
+                                                border: '1px solid rgba(108,99,255,0.3)',
+                                                borderRadius: '6px',
+                                                padding: '8px 12px',
+                                                fontSize: '12px',
+                                                color: '#FFFFFF',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                                maxWidth: '160px'
+                                            }}
+                                            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                                            wrapperStyle={{ zIndex: 10, outline: 'none' }}
                                         />
-                                        <Bar dataKey={explorerY} fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey={explorerY} fill="url(#explorerBarGrad)" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8 }} />
                                     </BarChart>
                                 </ResponsiveContainer>
-                                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', textAlign: 'center', marginTop: '10px' }}>
+                                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', textAlign: 'center', marginTop: '10px' }}>
                                     Showing distribution for first 15 records in dataset
                                 </p>
                             </div>
@@ -512,9 +579,9 @@ Same structure every time regardless of dataset.`
                     )}
 
                     {activeTab === 'churn' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <span style={{ fontSize: '15px' }}>Estimated churn: {result.churnInsights?.estimatedChurnRate}</span>
+                                <span style={{ fontSize: '15px', color: 'var(--text-primary)' }}>Estimated churn: {result.churnInsights?.estimatedChurnRate}</span>
                                 <span style={{
                                     background: getRiskStyle(result.churnInsights?.riskLevel).bg,
                                     color: getRiskStyle(result.churnInsights?.riskLevel).color,
@@ -525,38 +592,38 @@ Same structure every time regardless of dataset.`
                             </div>
                             
                             <div>
-                                <div style={{ fontSize: '15px', fontWeight: '600', marginBottom: '8px' }}>Top Risk Factors:</div>
+                                <div className="animate-ready animate-heading" style={{ fontSize: '15px', fontWeight: '600', marginBottom: '8px', color: 'var(--text-primary)' }}>Top Risk Factors:</div>
                                 {result.churnInsights?.topRiskFactors?.map((factor, i) => (
-                                    <div key={i} style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', margin: '4px 0', fontSize: '14px' }}>
+                                    <div key={i} className="animate-ready animate-card" style={{ padding: '8px 12px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '6px', margin: '4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
                                         {i + 1}. {factor}
                                     </div>
                                 ))}
                             </div>
                             
-                            <div style={{ background: 'rgba(245,158,11,0.1)', borderLeft: '4px solid #f59e0b', padding: '16px', borderRadius: '8px' }}>
-                                <strong style={{ color: '#f59e0b', display: 'block', marginBottom: '4px' }}>At Risk Segment:</strong>
-                                <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)' }}>{result.churnInsights?.atRiskSegment}</span>
+                            <div style={{ background: 'var(--warning-bg)', borderLeft: '4px solid var(--warning)', padding: '16px', borderRadius: '8px' }}>
+                                <strong style={{ color: 'var(--warning)', display: 'block', marginBottom: '4px' }}>At Risk Segment:</strong>
+                                <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{result.churnInsights?.atRiskSegment}</span>
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'sales' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <div style={{ background: 'rgba(34,197,94,0.1)', borderLeft: '4px solid #22c55e', padding: '16px', borderRadius: '8px' }}>
-                                <strong style={{ color: '#22c55e', display: 'block', marginBottom: '4px' }}>Top Performing Segment:</strong>
-                                <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)' }}>{result.salesInsights?.topPerformingSegment}</span>
+                        <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div style={{ background: 'var(--success-bg)', borderLeft: '4px solid var(--success)', padding: '16px', borderRadius: '8px' }}>
+                                <strong style={{ color: 'var(--success)', display: 'block', marginBottom: '4px' }}>Top Performing Segment:</strong>
+                                <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{result.salesInsights?.topPerformingSegment}</span>
                             </div>
-                            <div style={{ background: 'rgba(245,158,11,0.1)', borderLeft: '4px solid #f59e0b', padding: '16px', borderRadius: '8px' }}>
-                                <strong style={{ color: '#f59e0b', display: 'block', marginBottom: '4px' }}>Underperforming Segment:</strong>
-                                <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)' }}>{result.salesInsights?.underperformingSegment}</span>
+                            <div style={{ background: 'var(--warning-bg)', borderLeft: '4px solid var(--warning)', padding: '16px', borderRadius: '8px' }}>
+                                <strong style={{ color: 'var(--warning)', display: 'block', marginBottom: '4px' }}>Underperforming Segment:</strong>
+                                <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{result.salesInsights?.underperformingSegment}</span>
                             </div>
                             <div>
-                                <strong style={{ display: 'block', marginBottom: '4px' }}>Revenue Pattern:</strong>
-                                <p style={{ fontSize: '14px', color: 'white', margin: 0, lineHeight: '1.5' }}>{result.salesInsights?.revenuePattern}</p>
+                                <strong style={{ display: 'block', marginBottom: '4px', color: 'var(--text-primary)' }}>Revenue Pattern:</strong>
+                                <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.5' }}>{result.salesInsights?.revenuePattern}</p>
                             </div>
-                            <div style={{ background: 'rgba(59,130,246,0.1)', borderLeft: '4px solid #3b82f6', padding: '16px', borderRadius: '8px' }}>
-                                <strong style={{ color: '#60a5fa', display: 'block', marginBottom: '4px' }}>Growth Opportunity:</strong>
-                                <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)' }}>{result.salesInsights?.growthOpportunity}</span>
+                            <div style={{ background: 'var(--bg-accent-light)', borderLeft: '4px solid var(--accent)', padding: '16px', borderRadius: '8px' }}>
+                                <strong style={{ color: 'var(--accent)', display: 'block', marginBottom: '4px' }}>Growth Opportunity:</strong>
+                                <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{result.salesInsights?.growthOpportunity}</span>
                             </div>
                         </div>
                     )}
@@ -565,56 +632,56 @@ Same structure every time regardless of dataset.`
                 {/* SECTION 5 — Recommendations two columns */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
                     <div style={{ flex: '1', minWidth: '300px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                             🛡️ Reduce Churn
                         </h3>
                         {result.churnRecommendations?.map((rec, i) => {
                             const pStyle = getPriorityStyle(rec.priority);
                             return (
-                                <div key={i} style={{
-                                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: '16px', padding: '20px', marginBottom: '12px', position: 'relative'
+                                <div key={i} className="animate-ready animate-card" style={{
+                                    background: 'var(--bg-surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
+                                    borderRadius: 'var(--card-radius)', padding: '20px', marginBottom: '12px', position: 'relative'
                                 }}>
                                     <span style={{
                                         position: 'absolute', top: '20px', right: '20px',
                                         background: pStyle.bg, color: pStyle.color,
-                                        padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '600'
+                                        padding: '4px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: '600'
                                     }}>
                                         {rec.priority}
                                     </span>
-                                    <div style={{ color: 'white', fontWeight: '600', fontSize: '15px', paddingRight: '80px', marginBottom: '8px' }}>{rec.action}</div>
-                                    <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', margin: '8px 0', lineHeight: '1.5' }}>{rec.detail}</div>
+                                    <div style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '15px', paddingRight: '80px', marginBottom: '8px' }}>{rec.action}</div>
+                                    <div style={{ color: 'var(--text-secondary)', fontSize: '13px', margin: '8px 0', lineHeight: '1.5' }}>{rec.detail}</div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                                        <div style={{ color: '#22c55e', fontSize: '12px', fontWeight: '500' }}>📈 {rec.expectedImpact}</div>
-                                        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>⏱️ {rec.timeframe}</div>
+                                        <div style={{ color: 'var(--success)', fontSize: '12px', fontWeight: '500' }}>📈 {rec.expectedImpact}</div>
+                                        <div style={{ color: 'var(--text-muted)', fontSize: '12px' }}>⏱️ {rec.timeframe}</div>
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
                     <div style={{ flex: '1', minWidth: '300px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <h3 className="animate-ready animate-heading" style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                             📈 Boost Sales
                         </h3>
                         {result.salesRecommendations?.map((rec, i) => {
                             const pStyle = getPriorityStyle(rec.priority);
                             return (
-                                <div key={i} style={{
-                                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: '16px', padding: '20px', marginBottom: '12px', position: 'relative'
+                                <div key={i} className="animate-ready animate-card" style={{
+                                    background: 'var(--bg-surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
+                                    borderRadius: 'var(--card-radius)', padding: '20px', marginBottom: '12px', position: 'relative'
                                 }}>
                                     <span style={{
                                         position: 'absolute', top: '20px', right: '20px',
                                         background: pStyle.bg, color: pStyle.color,
-                                        padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '600'
+                                        padding: '4px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: '600'
                                     }}>
                                         {rec.priority}
                                     </span>
-                                    <div style={{ color: 'white', fontWeight: '600', fontSize: '15px', paddingRight: '80px', marginBottom: '8px' }}>{rec.action}</div>
-                                    <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', margin: '8px 0', lineHeight: '1.5' }}>{rec.detail}</div>
+                                    <div style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '15px', paddingRight: '80px', marginBottom: '8px' }}>{rec.action}</div>
+                                    <div style={{ color: 'var(--text-secondary)', fontSize: '13px', margin: '8px 0', lineHeight: '1.5' }}>{rec.detail}</div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                                        <div style={{ color: '#22c55e', fontSize: '12px', fontWeight: '500' }}>📈 {rec.expectedImpact}</div>
-                                        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>⏱️ {rec.timeframe}</div>
+                                        <div style={{ color: 'var(--success)', fontSize: '12px', fontWeight: '500' }}>📈 {rec.expectedImpact}</div>
+                                        <div style={{ color: 'var(--text-muted)', fontSize: '12px' }}>⏱️ {rec.timeframe}</div>
                                     </div>
                                 </div>
                             );
@@ -625,13 +692,14 @@ Same structure every time regardless of dataset.`
                 {/* SECTION 6 — Download button */}
                 <div style={{ textAlign: 'center', marginTop: '32px' }}>
                     <button
+                        className="animate-ready animate-card"
                         onClick={handleDownload}
                         style={{
-                            background: 'transparent', color: '#3b82f6', border: '1px solid #3b82f6',
+                            background: 'transparent', color: 'var(--accent)', border: '1px solid var(--accent)',
                             borderRadius: '8px', padding: '12px 24px', cursor: 'pointer', fontSize: '15px', fontWeight: '600',
                             transition: 'all 0.2s ease'
                         }}
-                        onMouseEnter={(e) => e.target.style.background = 'rgba(59,130,246,0.1)'}
+                        onMouseEnter={(e) => e.target.style.background = 'var(--bg-accent-light)'}
                         onMouseLeave={(e) => e.target.style.background = 'transparent'}
                     >
                         📥 Download Analysis Report
@@ -655,16 +723,15 @@ Same structure every time regardless of dataset.`
     const Spinner = () => (
         <div style={{
             width: '16px', height: '16px', borderRadius: '50%',
-            border: '2px solid rgba(255,255,255,0.2)', borderTop: '2px solid #3b82f6',
+            border: '2px solid var(--border)', borderTop: '2px solid var(--accent)',
             animation: 'spin 1s linear infinite'
         }} />
     );
 
     return (
-        <div style={{
-            background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: '16px', padding: '40px', maxWidth: '700px', margin: '0 auto'
+        <div className="animate-ready animate-card" style={{
+            background: 'var(--bg-surface)', border: '1px solid var(--border)',
+            borderRadius: 'var(--card-radius)', padding: '40px', maxWidth: '700px', margin: '0 auto'
         }}>
             <style>{`
                 @keyframes spin {
@@ -673,28 +740,28 @@ Same structure every time regardless of dataset.`
                 }
             `}</style>
             
-            <h2 style={{ color: 'white', fontSize: '24px', fontWeight: '700', marginBottom: '32px', textAlign: 'center' }}>
+            <h2 className="animate-ready animate-heading" style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '700', marginBottom: '32px', textAlign: 'center' }}>
                 AI Analysis in Progress
             </h2>
 
             {/* ERROR STATE */}
             {error && (
                 <div style={{
-                    background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
+                    background: 'var(--danger-bg)', border: '1px solid var(--danger)',
                     borderRadius: '8px', padding: '20px', textAlign: 'center', marginBottom: '24px'
                 }}>
-                    <div style={{ color: '#f87171', fontSize: '15px', fontWeight: '600', marginBottom: '20px' }}>
+                    <div style={{ color: 'var(--danger)', fontSize: '15px', fontWeight: '600', marginBottom: '20px' }}>
                         ⚠️ Analysis failed: {error}
                     </div>
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
                         <button onClick={() => setRetryCount(c => c + 1)} style={{
-                            background: '#3b82f6', color: 'white', border: 'none',
+                            background: 'var(--accent)', color: 'white', border: 'none',
                             borderRadius: '8px', padding: '10px 24px', cursor: 'pointer', fontSize: '14px', fontWeight: '600'
                         }}>
                             Retry
                         </button>
                         <button style={{
-                            background: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)',
+                            background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border)',
                             borderRadius: '8px', padding: '10px 24px', cursor: 'pointer', fontSize: '14px'
                         }}>
                             Try Demo Data
@@ -708,34 +775,35 @@ Same structure every time regardless of dataset.`
                 <div style={{ maxWidth: '400px', margin: '0 auto' }}>
                     {/* Progress Bar */}
                     <div style={{
-                        background: 'rgba(255,255,255,0.1)', height: '4px', width: '100%',
+                        background: 'var(--border)', height: '4px', width: '100%',
                         borderRadius: '4px', marginBottom: '32px', overflow: 'hidden'
                     }}>
                         <div style={{
-                            background: '#3b82f6', height: '100%', width: `${progress}%`,
+                            background: 'var(--accent)', height: '100%', width: `${progress}%`,
                             transition: 'width 0.2s linear'
                         }} />
                     </div>
 
                     {/* Steps */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div className="animate-ready animate-card" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {stepLabels.map((label, index) => {
                             const isCurrent = index === stepsCompleted;
                             const isDone = index < stepsCompleted;
 
                             let icon = null;
-                            if (isDone) icon = <span style={{ color: '#22c55e', fontSize: '16px' }}>✅</span>;
+                            if (isDone) icon = <span style={{ color: 'var(--success)', fontSize: '16px' }}>✅</span>;
                             else if (isCurrent) icon = <Spinner />;
                             else icon = <div style={{ width: '16px', height: '16px' }} />;
 
-                            let textColor = 'rgba(255,255,255,0.3)';
-                            if (isDone) textColor = 'white';
-                            if (isCurrent) textColor = 'rgba(255,255,255,0.9)';
+                            let textColor = 'var(--text-muted)';
+                            if (isDone) textColor = 'var(--success)';
+                            if (isCurrent) textColor = 'var(--accent)';
 
                             return (
                                 <div key={index} style={{
                                     display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0',
-                                    transition: 'color 0.3s ease', color: textColor, fontSize: '14px'
+                                    transition: 'color 0.3s ease', color: textColor, fontSize: '14px',
+                                    fontWeight: isCurrent ? 500 : 400
                                 }}>
                                     <div style={{ width: '24px', display: 'flex', justifyContent: 'center' }}>
                                         {icon}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import ChurnPredictor from './components/ChurnPredictor'
 import EDAInsights from './components/EDAInsights'
 import ModelDashboard from './components/ModelDashboard'
@@ -27,11 +27,11 @@ const GlobalStyles = () => (
       display: inline-block;
       width: 6px;
       height: 6px;
-      background: #22c55e;
+      background: var(--success);
       border-radius: 50%;
       margin-left: 8px;
       vertical-align: middle;
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+      box-shadow: 0 0 8px var(--success);
       animation: pulse 2s infinite ease-in-out;
     }
   `}</style>
@@ -72,18 +72,76 @@ const TECH_BADGES = [
   { emoji: '☁️', label: 'Google Colab' },
   { emoji: '🏆', label: 'Kaggle' },
 ]
+// Helper to format numbers dynamically
+const formatNumber = (value, originalStr) => {
+  const hasCommas = originalStr.includes(',');
+  const isDecimal = originalStr.includes('.');
+  const hasRupee = originalStr.includes('₹');
+  const hasPercent = originalStr.includes('%');
+  
+  let formatted = '';
+  if (isDecimal) {
+    formatted = value.toFixed(1);
+  } else {
+    formatted = Math.round(value).toString();
+  }
+  
+  if (hasCommas) {
+    const parts = formatted.split('.');
+    if (originalStr.includes('1,60,800')) {
+      let lastThree = parts[0].substring(parts[0].length - 3);
+      const otherBits = parts[0].substring(0, parts[0].length - 3);
+      if (otherBits !== '') {
+        lastThree = ',' + lastThree;
+      }
+      const res = otherBits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+      formatted = res + (parts[1] ? '.' + parts[1] : '');
+    } else {
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      formatted = parts.join('.');
+    }
+  }
+  
+  if (hasRupee) formatted = '₹' + formatted;
+  if (hasPercent) formatted = formatted + '%';
+  return formatted;
+}
+
+// Helper to run counter animation
+const animateCounter = (el) => {
+  const originalText = el.getAttribute('data-original-text') || el.innerText;
+  if (!el.getAttribute('data-original-text')) {
+    el.setAttribute('data-original-text', originalText);
+  }
+  
+  const cleanNum = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+  if (isNaN(cleanNum)) return;
+  
+  const duration = 1200; // 1.2s
+  const startTime = performance.now();
+  
+  const update = (currentTime) => {
+    const elapsed = currentTime - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    const progress = 1 - Math.pow(1 - t, 4); // easeOutQuart
+    
+    const currentValue = progress * cleanNum;
+    el.innerText = formatNumber(currentValue, originalText);
+    
+    if (t < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.innerText = originalText;
+    }
+  }
+  
+  requestAnimationFrame(update);
+}
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 
 function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   const handleNavClick = (e, href) => {
     e.preventDefault()
@@ -95,50 +153,54 @@ function Navbar() {
   return (
     <nav
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
+        position: 'sticky',
+        top: '52px',
         zIndex: 50,
-        transition: 'all 0.3s ease',
-        backgroundColor: scrolled ? 'rgba(15,23,42,0.85)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(51,65,85,0.5)' : 'none',
-        marginTop: '48px',
+        background: 'var(--bg-surface)',
+        borderBottom: '1px solid var(--border)',
+        height: '48px',
       }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '48px' }}>
           {/* Logo */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img 
-                src="/regainer-logo.jpg" 
-                alt="ReGainer"
-                style={{ 
-                  height: '50px',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  borderRadius: '6px'
-                }}
-              />
-            </div>
+          <a
+            href="#hero"
+            onClick={(e) => handleNavClick(e, '#hero')}
+            style={{
+              color: 'var(--accent)',
+              fontWeight: 700,
+              fontSize: '15px',
+              textDecoration: 'none',
+            }}
+          >
+            ReGainer
+          </a>
 
           {/* Desktop Links */}
-          <div className="desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+          <div className="desktop-nav" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
                 style={{
-                  color: '#94a3b8',
+                  color: 'var(--text-secondary)',
                   textDecoration: 'none',
-                  fontSize: '0.9rem',
+                  fontSize: '13px',
                   fontWeight: 500,
-                  transition: 'color 0.2s',
+                  padding: '4px 0',
+                  borderBottom: '2px solid transparent',
+                  transition: 'all 0.15s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#f1f5f9')}
-                onMouseLeave={(e) => (e.target.style.color = '#94a3b8')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = 'var(--text-primary)'
+                  e.target.style.borderBottomColor = 'var(--accent)'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = 'var(--text-secondary)'
+                  e.target.style.borderBottomColor = 'transparent'
+                }}
               >
                 {link.label}
               </a>
@@ -155,7 +217,7 @@ function Navbar() {
               border: 'none',
               cursor: 'pointer',
               padding: '0.5rem',
-              color: '#94a3b8',
+              color: 'var(--text-secondary)',
             }}
             aria-label="Toggle menu"
           >
@@ -172,7 +234,9 @@ function Navbar() {
               paddingBottom: '1rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
+              gap: '0.5rem',
+              background: 'var(--bg-surface)',
+              borderBottom: '1px solid var(--border)',
             }}
           >
             {NAV_LINKS.map((link) => (
@@ -181,12 +245,12 @@ function Navbar() {
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
                 style={{
-                  color: '#94a3b8',
+                  color: 'var(--text-secondary)',
                   textDecoration: 'none',
-                  fontSize: '1rem',
+                  fontSize: '13px',
                   fontWeight: 500,
-                  padding: '0.5rem 0',
-                  borderBottom: '1px solid #1e293b',
+                  padding: '8px 0',
+                  borderBottom: '1px solid var(--border)',
                 }}
               >
                 {link.label}
@@ -214,264 +278,168 @@ function Hero() {
     if (target) target.scrollIntoView({ behavior: 'smooth' })
   }
 
+  useEffect(() => {
+    // Run count-up for hero stat numbers on load
+    const timers = [];
+    const elements = document.querySelectorAll('.hero-stat-number');
+    elements.forEach((el, i) => {
+      const delay = (0.4 + i * 0.15) * 1000; // 0.4s delay + 0.15s stagger
+      const t = setTimeout(() => {
+        animateCounter(el);
+      }, delay);
+      timers.push(t);
+    });
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <section
       id="hero"
       style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '6rem 1.5rem 4rem',
-        position: 'relative',
-        overflow: 'hidden',
+        background: 'radial-gradient(circle at 50% 40%, rgba(108, 99, 255, 0.15), transparent 60%), var(--bg-primary)',
+        paddingTop: '120px',
+        paddingBottom: '80px',
         textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      {/* Animated background blobs */}
-      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: '10%',
-            left: '20%',
-            width: '500px',
-            height: '500px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)',
-            animation: 'blob 7s infinite',
-            filter: 'blur(40px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '30%',
-            right: '15%',
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
-            animation: 'blob 7s infinite 2s',
-            filter: 'blur(40px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '10%',
-            left: '40%',
-            width: '350px',
-            height: '350px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)',
-            animation: 'blob 7s infinite 4s',
-            filter: 'blur(40px)',
-          }}
-        />
-      </div>
-
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', width: '100%' }}>
-        {/* Badge */}
-        <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
+        {/* Context Badge */}
+        <div style={{ marginBottom: '24px' }} className="animate-hero-heading">
           <span
             style={{
               display: 'inline-block',
-              background: 'rgba(59,130,246,0.15)',
-              border: '1px solid rgba(59,130,246,0.4)',
-              color: '#3b82f6',
-              borderRadius: '20px',
-              padding: '4px 16px',
-              fontSize: '12px',
-              fontWeight: 500,
-              letterSpacing: '1px',
+              background: 'var(--bg-accent-light)',
+              color: 'var(--accent)',
+              border: '1px solid rgba(var(--accent-rgb), 0.2)',
+              borderRadius: '4px',
+              padding: '4px 12px',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '1.5px',
+              textTransform: 'uppercase',
             }}
           >
             CASE STUDY — E-COMMERCE CHURN ANALYSIS
           </span>
         </div>
 
-        {/* Heading */}
+        {/* Main Heading */}
         <h1
+          className="animate-hero-heading"
           style={{
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-            fontWeight: 900,
-            color: '#f1f5f9',
+            fontSize: 'clamp(3rem, 6vw, 5rem)',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
             lineHeight: 1.1,
-            marginBottom: '0.5rem',
+            marginBottom: '8px',
             letterSpacing: '-0.03em',
           }}
         >
           Predicting Customer{' '}
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
+          <span style={{
+            background: 'linear-gradient(to right, #6C63FF, #A78BFA)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline-block'
+          }}>
             Churn
           </span>
         </h1>
+
+        {/* Subheading */}
         <h2
+          className="animate-hero-heading"
           style={{
-            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
-            fontWeight: 800,
-            color: '#94a3b8',
-            marginBottom: '1.5rem',
-            letterSpacing: '-0.02em',
+            fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
+            fontWeight: 700,
+            color: 'var(--text-secondary)',
+            marginBottom: '24px',
+            letterSpacing: '-0.03em',
+            lineHeight: 1.1,
           }}
         >
           Before They Leave
         </h2>
 
-        {/* Description */}
+        {/* Description / Subtitle */}
         <p
+          className="animate-hero-subtitle"
           style={{
-            fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-            color: '#94a3b8',
+            fontSize: '1.1rem',
+            color: 'var(--text-secondary)',
+            opacity: 0.6,
             lineHeight: 1.7,
-            marginBottom: '3rem',
-            maxWidth: '600px',
-            margin: '0 auto 3rem',
+            maxWidth: '520px',
+            margin: '0 auto 36px auto',
+            textAlign: 'center'
           }}
         >
           An end-to-end ML system that identifies at-risk e-commerce customers
-          and enables proactive retention
+          and enables proactive retention strategies
         </p>
 
-        {/* CTA Buttons */}
+        {/* Buttons Row */}
         <div
+          className="animate-hero-buttons"
           style={{
             display: 'flex',
-            gap: '1rem',
+            gap: '12px',
             justifyContent: 'center',
-            flexWrap: 'wrap',
-            marginBottom: '4rem',
+            marginBottom: '64px',
           }}
         >
           <button
             onClick={() => handleScroll('#predictor')}
-            style={{
-              padding: '0.875rem 2rem',
-              background: '#3b82f6',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '0.75rem',
-              fontSize: '0.95rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              boxShadow: '0 0 24px rgba(59,130,246,0.35)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#2563eb'
-              e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 0 32px rgba(59,130,246,0.5)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#3b82f6'
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = '0 0 24px rgba(59,130,246,0.35)'
-            }}
+            className="hero-btn-primary"
           >
             Try Live Predictor
           </button>
           <a
-            href="https://github.com"
+            href="https://github.com/aakashamy777/Churn-Data-analysis-"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              padding: '0.875rem 2rem',
-              background: 'transparent',
-              color: '#f1f5f9',
-              border: '1px solid #334155',
-              borderRadius: '0.75rem',
-              fontSize: '0.95rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              textDecoration: 'none',
-              transition: 'all 0.2s',
-              display: 'inline-block',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#3b82f6'
-              e.currentTarget.style.color = '#60a5fa'
-              e.currentTarget.style.transform = 'translateY(-2px)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#334155'
-              e.currentTarget.style.color = '#f1f5f9'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
+            className="hero-btn-ghost"
           >
             View on GitHub
           </a>
         </div>
 
-        {/* Stat Cards */}
+        {/* Stat Cards Row */}
         <div
           style={{
+            borderTop: '1px solid var(--border)',
+            paddingTop: '32px',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '1rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: '16px',
             width: '100%',
           }}
         >
           {STATS.map((stat, i) => (
-            <StatCard key={i} stat={stat} delay={i * 100} />
+            <div
+              key={i}
+              className="animate-hero-stat-card hero-stat-card"
+              style={{
+                animationDelay: `${0.4 + i * 0.15}s`
+              }}
+            >
+              <div
+                className="hero-stat-number"
+              >
+                {stat.value}
+              </div>
+              <div
+                className="hero-stat-label"
+              >
+                {stat.label}
+              </div>
+            </div>
           ))}
         </div>
       </div>
     </section>
-  )
-}
-
-function StatCard({ stat, delay }) {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), delay + 300)
-    return () => clearTimeout(timer)
-  }, [delay])
-
-  return (
-    <div
-      style={{
-        background: 'rgba(255,255,255,0.03)',
-        borderRadius: '0.75rem',
-        padding: '16px 12px',
-        border: '1px solid rgba(255,255,255,0.06)',
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
-      }}
-    >
-      <div
-        style={{
-          fontSize: '22px',
-          fontWeight: 800,
-          color: '#f1f5f9',
-          marginBottom: '0.25rem',
-          letterSpacing: '-0.02em',
-        }}
-      >
-        {stat.value}
-      </div>
-      <div
-        style={{
-          fontSize: '10px',
-          color: '#94a3b8',
-          fontWeight: 500,
-          textTransform: 'uppercase',
-          letterSpacing: '0.04em',
-        }}
-      >
-        {stat.label}
-      </div>
-    </div>
   )
 }
 
@@ -488,11 +456,12 @@ function TechStack() {
       }}
     >
       <h2
+        className="animate-ready animate-heading"
         style={{
           textAlign: 'center',
           fontSize: '1.8rem',
           fontWeight: 700,
-          color: '#f1f5f9',
+          color: 'var(--text-primary)',
           marginBottom: '0.75rem',
         }}
       >
@@ -501,7 +470,7 @@ function TechStack() {
       <p
         style={{
           textAlign: 'center',
-          color: '#94a3b8',
+          color: 'var(--text-secondary)',
           marginBottom: '2.5rem',
           fontSize: '0.95rem',
         }}
@@ -519,30 +488,31 @@ function TechStack() {
         {TECH_BADGES.map((badge) => (
           <span
             key={badge.label}
+            className="animate-ready animate-card"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
               padding: '0.5rem 1.1rem',
-              background: '#1e293b',
-              border: '1px solid rgba(59,130,246,0.4)',
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border)',
               borderRadius: '9999px',
-              color: '#cbd5e1',
+              color: 'var(--text-secondary)',
               fontSize: '0.875rem',
               fontWeight: 500,
               cursor: 'default',
               transition: 'all 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#3b82f6'
-              e.currentTarget.style.background = 'rgba(59,130,246,0.1)'
-              e.currentTarget.style.color = '#f1f5f9'
+              e.currentTarget.style.borderColor = 'var(--accent)'
+              e.currentTarget.style.background = 'var(--bg-accent-light)'
+              e.currentTarget.style.color = 'var(--text-primary)'
               e.currentTarget.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)'
-              e.currentTarget.style.background = '#1e293b'
-              e.currentTarget.style.color = '#cbd5e1'
+              e.currentTarget.style.borderColor = 'var(--border)'
+              e.currentTarget.style.background = 'var(--bg-surface)'
+              e.currentTarget.style.color = 'var(--text-secondary)'
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
@@ -559,9 +529,11 @@ function TechStack() {
 
 function SectionDivider() {
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
-      <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, #334155, transparent)' }} />
-    </div>
+    <hr style={{
+      border: 'none',
+      borderTop: '1px solid var(--border)',
+      margin: '0'
+    }} />
   )
 }
 
@@ -598,21 +570,22 @@ function ProblemStatement() {
         style={{
           maxWidth: '800px',
           width: '100%',
-          background: '#1e293b',
+          background: 'var(--bg-surface-2)',
           borderRadius: '1rem',
-          borderLeft: '4px solid #3b82f6',
+          borderLeft: '4px solid var(--accent)',
           padding: '2.5rem',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+          boxShadow: 'var(--shadow-md)',
         }}
       >
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <span style={{ fontSize: '2.5rem' }}>🎯</span>
           <h2
+            className="animate-ready animate-heading"
             style={{
               fontSize: '1.75rem',
               fontWeight: 800,
-              color: '#f1f5f9',
+              color: 'var(--text-primary)',
               marginTop: '0.5rem',
               letterSpacing: '-0.02em',
             }}
@@ -631,12 +604,12 @@ function ProblemStatement() {
           }}
         >
           {columns.map((col) => (
-            <div key={col.title}>
+            <div key={col.title} className="animate-ready animate-card">
               <h3
                 style={{
                   fontSize: '0.95rem',
                   fontWeight: 700,
-                  color: '#60a5fa',
+                  color: 'var(--accent)',
                   marginBottom: '0.5rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
@@ -647,7 +620,7 @@ function ProblemStatement() {
               <p
                 style={{
                   fontSize: '0.875rem',
-                  color: '#94a3b8',
+                  color: 'var(--text-secondary)',
                   lineHeight: 1.7,
                   margin: 0,
                 }}
@@ -663,7 +636,7 @@ function ProblemStatement() {
           style={{
             textAlign: 'center',
             fontSize: '0.8rem',
-            color: '#64748b',
+            color: 'var(--text-muted)',
             margin: 0,
             letterSpacing: '0.02em',
           }}
@@ -678,51 +651,76 @@ function ProblemStatement() {
 // ─── ModeSwitcher ──────────────────────────────────────────────────────────────
 
 function ModeSwitcher({ mode, setMode }) {
-  const btnBase = {
-    borderRadius: '20px',
-    padding: '6px 20px',
+  const [isDark, setIsDark] = useState(
+    () => (localStorage.getItem('regainer-theme') || 'light') === 'dark'
+  )
+
+  useEffect(() => {
+    const saved = localStorage.getItem('regainer-theme') || 'light'
+    document.documentElement.setAttribute('data-theme', saved)
+    setIsDark(saved === 'dark')
+  }, [])
+
+  const toggleDark = useCallback(() => {
+    const html = document.documentElement
+    const current = html.getAttribute('data-theme')
+    const next = current === 'dark' ? 'light' : 'dark'
+    html.setAttribute('data-theme', next)
+    localStorage.setItem('regainer-theme', next)
+    setIsDark(next === 'dark')
+  }, [])
+
+  const activeBtn = {
+    background: 'var(--accent)',
+    color: 'white',
+    borderRadius: '4px',
+    padding: '5px 18px',
     fontSize: '13px',
+    fontWeight: 500,
     border: 'none',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
   }
-  const activeBtn = { ...btnBase, background: '#3b82f6', color: 'white', fontWeight: 600 }
-  const inactiveBtn = { ...btnBase, background: 'transparent', color: 'rgba(255,255,255,0.5)' }
+  const inactiveBtn = {
+    background: 'transparent',
+    color: 'var(--text-secondary)',
+    borderRadius: '4px',
+    padding: '5px 18px',
+    fontSize: '13px',
+    fontWeight: 500,
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  }
 
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0,
       zIndex: 1000,
-      height: '48px',
-      background: 'rgba(15,15,26,0.95)',
-      backdropFilter: 'blur(20px)',
-      WebkitBackdropFilter: 'blur(20px)',
-      borderBottom: '1px solid rgba(255,255,255,0.08)',
+      height: '52px',
+      background: 'var(--bg-surface)',
+      borderBottom: '1px solid var(--border)',
+      boxShadow: 'var(--shadow-sm)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '0 32px',
+      padding: '0 40px',
     }}>
       {/* LEFT — Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img 
-            src="/regainer-logo.jpg" 
-            alt="ReGainer"
-            style={{ 
-              height: '44px',
-              width: 'auto',
-              objectFit: 'contain',
-              borderRadius: '6px'
-            }}
-          />
-        </div>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <img
+          src="/regainer-logo.jpg"
+          alt="ReGainer"
+          style={{ height: '26px', width: 'auto', objectFit: 'contain' }}
+        />
+      </div>
 
       {/* CENTER — Mode Toggle */}
       <div style={{
-        background: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '24px',
-        padding: '4px',
+        background: 'var(--bg-surface-2)',
+        border: '1px solid var(--border)',
+        borderRadius: '6px',
+        padding: '3px',
         display: 'flex',
         gap: '2px',
       }}>
@@ -741,27 +739,56 @@ function ModeSwitcher({ mode, setMode }) {
         </button>
       </div>
 
-      {/* RIGHT — GitHub */}
-      <a
-        href="https://github.com/aakashamy777/Churn-Data-analysis-"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          border: '1px solid rgba(255,255,255,0.2)',
-          color: 'rgba(255,255,255,0.6)',
-          borderRadius: '8px',
-          padding: '6px 16px',
-          fontSize: '12px',
-          background: 'transparent',
-          cursor: 'pointer',
-          textDecoration: 'none',
-          transition: 'all 0.2s ease',
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
-      >
-        GitHub
-      </a>
+      {/* RIGHT — GitHub + Dark Mode */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <a
+          href="https://github.com/aakashamy777/Churn-Data-analysis-"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            border: '1px solid var(--border)',
+            color: 'var(--text-secondary)',
+            background: 'transparent',
+            borderRadius: '6px',
+            padding: '6px 14px',
+            fontSize: '12px',
+            fontWeight: 500,
+            cursor: 'pointer',
+            textDecoration: 'none',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--text-primary)'
+            e.currentTarget.style.borderColor = 'var(--border-strong)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--text-secondary)'
+            e.currentTarget.style.borderColor = 'var(--border)'
+          }}
+        >
+          GitHub
+        </a>
+        <button
+          onClick={toggleDark}
+          aria-label="Toggle dark mode"
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '6px',
+            border: '1px solid var(--border)',
+            background: 'var(--bg-surface-2)',
+            cursor: 'pointer',
+            fontSize: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--text-secondary)',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+      </div>
     </div>
   )
 }
@@ -773,24 +800,24 @@ function CTABanner({ setMode }) {
     <div style={{
       maxWidth: '600px',
       margin: '4rem auto',
-      background: 'rgba(255,255,255,0.05)',
-      backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255,255,255,0.1)',
+      background: 'var(--bg-surface)',
+      border: '1px solid var(--border)',
       borderRadius: '16px',
       padding: '32px 40px',
       textAlign: 'center',
+      boxShadow: 'var(--shadow-md)',
     }}>
-      <h3 style={{ fontSize: '20px', color: 'white', marginBottom: '8px' }}>
+      <h3 style={{ fontSize: '20px', color: 'var(--text-primary)', marginBottom: '8px' }}>
         Want insights on your own data?
       </h3>
-      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginBottom: '24px' }}>
+      <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
         This case study was built on a fixed dataset. Try the Business Analyzer
         to upload your own customer data and get AI-powered insights.
       </p>
       <button
         onClick={() => setMode('analyzer')}
         style={{
-          background: '#3b82f6',
+          background: 'var(--accent)',
           color: 'white',
           border: 'none',
           borderRadius: '8px',
@@ -800,8 +827,8 @@ function CTABanner({ setMode }) {
           cursor: 'pointer',
           transition: 'all 0.2s',
         }}
-        onMouseEnter={(e) => e.target.style.background = '#2563eb'}
-        onMouseLeave={(e) => e.target.style.background = '#3b82f6'}
+        onMouseEnter={(e) => e.target.style.background = 'var(--accent-hover)'}
+        onMouseLeave={(e) => e.target.style.background = 'var(--accent)'}
       >
         Try Business Analyzer →
       </button>
@@ -828,8 +855,69 @@ export default function App() {
       : 'ReGainer — Business Data Analyzer';
   }, [mode])
 
+  useEffect(() => {
+    // Single IntersectionObserver with threshold: 0.15
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          el.classList.add('animate-in');
+          
+          if (el.classList.contains('animate-card')) {
+            const parent = el.parentNode;
+            if (parent) {
+              const cards = Array.from(parent.querySelectorAll('.animate-card'));
+              const idx = cards.indexOf(el);
+              if (idx !== -1) {
+                el.style.transitionDelay = `${idx * 0.1}s`;
+              }
+            }
+          }
+          
+          if (el.classList.contains('animate-stat')) {
+            animateCounter(el);
+          }
+          
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    const observedElements = new Set();
+    const observeNewTargets = () => {
+      const targets = document.querySelectorAll('.animate-ready');
+      targets.forEach((target) => {
+        if (!observedElements.has(target) && !target.classList.contains('animate-in')) {
+          observedElements.add(target);
+          observer.observe(target);
+        }
+      });
+    };
+
+    // Initial check
+    observeNewTargets();
+
+    // Set a short timeout to ensure components are mounted
+    const timer = setTimeout(observeNewTargets, 150);
+
+    // MutationObserver to capture dynamically rendered step cards and wizard steps
+    const mutationObserver = new MutationObserver(() => {
+      observeNewTargets();
+    });
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+      mutationObserver.disconnect();
+    }
+  }, [mode]);
+
   return (
-    <div style={{ background: '#0f172a', minHeight: '100vh', fontFamily: 'Inter, sans-serif', paddingTop: '48px' }}>
+    <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', fontFamily: 'var(--font-sans)', paddingTop: '52px' }}>
       <GlobalStyles />
       <ModeSwitcher mode={mode} setMode={switchMode} />
 
@@ -866,38 +954,44 @@ export default function App() {
             onClick={() => switchMode('casestudy')}
             style={{
               position: 'fixed', top: '60px', right: '24px', zIndex: 999,
-              color: 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer',
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              color: 'var(--text-secondary)', fontSize: '12px', cursor: 'pointer',
+              background: 'var(--bg-surface)', border: '1px solid var(--border)',
               borderRadius: '8px', padding: '6px 14px', transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => { e.target.style.color = 'white'; e.target.style.background = 'rgba(255,255,255,0.1)' }}
-            onMouseLeave={(e) => { e.target.style.color = 'rgba(255,255,255,0.4)'; e.target.style.background = 'rgba(255,255,255,0.05)' }}
+            onMouseEnter={(e) => { e.target.style.color = 'var(--text-primary)'; e.target.style.background = 'var(--bg-surface-2)' }}
+            onMouseLeave={(e) => { e.target.style.color = 'var(--text-secondary)'; e.target.style.background = 'var(--bg-surface)' }}
           >
             ← Back to Case Study
           </button>
 
           {/* Standalone Header */}
           <div style={{ textAlign: 'center', padding: '60px 20px 20px 20px' }}>
-            <div style={{
-              display: 'inline-block', background: 'rgba(59,130,246,0.15)',
-              border: '1px solid rgba(59,130,246,0.4)', color: '#3b82f6',
-              borderRadius: '20px', padding: '4px 16px', fontSize: '12px',
-              marginBottom: '16px', letterSpacing: '1px'
-            }}>
+            <div
+              className="animate-ready animate-label"
+              style={{
+                display: 'inline-block', background: 'var(--bg-accent-light)',
+                border: '1px solid rgba(var(--accent-rgb), 0.2)', color: 'var(--accent)',
+                borderRadius: '20px', padding: '4px 16px', fontSize: '12px',
+                marginBottom: '16px', letterSpacing: '1px'
+              }}
+            >
               AI-POWERED BUSINESS TOOL
             </div>
 
-            <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#3b82f6' }}>ReGainer</p>
-            <h1 style={{ fontSize: '36px', fontWeight: '700', color: 'white', margin: '0 0 12px 0' }}>
+            <p style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: 'var(--accent)' }}>ReGainer</p>
+            <h1
+              className="animate-ready animate-heading"
+              style={{ fontSize: '36px', fontWeight: '700', color: 'var(--text-primary)', margin: '0 0 12px 0' }}
+            >
               Business Data Analyzer
             </h1>
 
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', maxWidth: '520px', margin: '0 auto 8px auto' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '16px', maxWidth: '520px', margin: '0 auto 8px auto' }}>
               Upload any customer CSV dataset and get instant AI-powered churn predictions,
               sales insights, and actionable business recommendations.
             </p>
 
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
               🔒 Your data never leaves your browser. Only 50 rows sent to AI for analysis.
             </p>
           </div>

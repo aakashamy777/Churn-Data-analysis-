@@ -9,39 +9,39 @@ const SEGMENTS = [
     {
         id: 0, icon: '👁️', name: 'Mid-Value Observers',
         churn: 17, tenure: 8.15, cashback: 155, orders: 1.92,
-        risk: 'MEDIUM', riskColor: '#f59e0b', riskBg: 'rgba(245,158,11,0.12)',
+        risk: 'MEDIUM', riskColor: 'var(--warning)', riskBg: 'var(--warning-bg)',
         strategy: 'Push notification with loyalty points offer',
-        borderColor: '#f59e0b',
+        borderColor: 'var(--warning)',
     },
     {
         id: 1, icon: '⚠️', name: 'At-Risk New Joiners',
         churn: 34, tenure: 8.88, cashback: 151, orders: 1.23,
-        risk: 'HIGH', riskColor: '#ef4444', riskBg: 'rgba(239,68,68,0.12)',
+        risk: 'HIGH', riskColor: 'var(--danger)', riskBg: 'var(--danger-bg)',
         strategy: 'Send personalised discount coupon within 48hrs + assign support agent',
-        borderColor: '#ef4444',
+        borderColor: 'var(--danger)',
     },
     {
         id: 2, icon: '🛒', name: 'Active Regulars',
         churn: 16, tenure: 12.04, cashback: 199, orders: 9.09,
-        risk: 'LOW', riskColor: '#22c55e', riskBg: 'rgba(34,197,94,0.12)',
+        risk: 'LOW', riskColor: 'var(--success)', riskBg: 'var(--success-bg)',
         strategy: 'Monthly reward email to maintain engagement',
-        borderColor: '#22c55e',
+        borderColor: 'var(--success)',
     },
     {
         id: 3, icon: '👑', name: 'Loyal High-Value',
         churn: 9, tenure: 16.01, cashback: 249, orders: 2.45,
-        risk: 'VERY LOW', riskColor: '#22c55e', riskBg: 'rgba(34,197,94,0.12)',
+        risk: 'VERY LOW', riskColor: 'var(--success)', riskBg: 'var(--success-bg)',
         strategy: 'VIP program enrollment + early access to sales',
-        borderColor: '#3b82f6',
+        borderColor: 'var(--accent)',
     },
 ]
 
 // Bar chart data
 const segmentChurnData = [
-    { segment: 'At-Risk',   churnRate: 34, fill: '#ef4444' },
-    { segment: 'Mid-Value', churnRate: 17, fill: '#3b82f6' },
-    { segment: 'Active',    churnRate: 16, fill: '#3b82f6' },
-    { segment: 'Loyal',     churnRate: 9,  fill: '#22c55e' }
+    { segment: 'At-Risk',   churnRate: 34, fill: 'var(--danger)' },
+    { segment: 'Mid-Value', churnRate: 17, fill: 'var(--warning)' },
+    { segment: 'Active',    churnRate: 16, fill: 'var(--accent)' },
+    { segment: 'Loyal',     churnRate: 9,  fill: 'var(--success)' }
 ]
 
 // ─── Segment Card ─────────────────────────────────────────────────────────────
@@ -50,19 +50,20 @@ function SegmentCard({ seg }) {
     const [hovered, setHovered] = useState(false)
     return (
         <div
+            className="animate-ready animate-card"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             style={{
-                background: '#1e293b',
-                borderRadius: '0.75rem',
-                border: `1px solid ${hovered ? seg.borderColor : '#334155'}`,
-                padding: '1.5rem',
+                background: 'var(--bg-surface)',
+                borderRadius: 'var(--card-radius)',
+                border: `1px solid ${hovered ? seg.borderColor : 'var(--border)'}`,
+                padding: 'var(--card-padding)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '1rem',
                 transition: 'all 0.25s ease',
                 transform: hovered ? 'scale(1.02)' : 'scale(1)',
-                boxShadow: hovered ? `0 0 24px ${seg.borderColor}22` : '0 4px 16px rgba(0,0,0,0.2)',
+                boxShadow: hovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
                 cursor: 'default',
             }}
         >
@@ -70,19 +71,19 @@ function SegmentCard({ seg }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                     <div>
-                        <p style={{ margin: 0, fontSize: '0.65rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Segment {seg.id}</p>
-                        <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#f1f5f9' }}>{seg.name}</p>
+                        <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Segment {seg.id}</p>
+                        <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{seg.name}</p>
                     </div>
                 </div>
                 <span
                     style={{
                         padding: '0.25rem 0.75rem',
-                        background: seg.riskBg,
-                        border: `1px solid ${seg.riskColor}55`,
+                        background: 'transparent',
+                        border: `1px solid ${seg.borderColor}`,
                         borderRadius: '9999px',
                         fontSize: '0.7rem',
                         fontWeight: 700,
-                        color: seg.riskColor,
+                        color: seg.borderColor,
                         letterSpacing: '0.05em',
                         flexShrink: 0,
                     }}
@@ -102,14 +103,15 @@ function SegmentCard({ seg }) {
                     <div
                         key={stat.label}
                         style={{
-                            background: '#0f172a',
+                            background: 'var(--bg-primary)',
+                            border: '1px solid var(--border)',
                             borderRadius: '0.5rem',
                             padding: '0.5rem 0.75rem',
                             textAlign: 'center',
                         }}
                     >
-                        <div style={{ fontSize: '0.6rem', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.2rem' }}>{stat.label}</div>
-                        <div style={{ fontSize: '0.9rem', fontWeight: 700, color: stat.color || '#f1f5f9' }}>{stat.value}</div>
+                        <div style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.2rem' }}>{stat.label}</div>
+                        <div style={{ fontSize: '0.9rem', fontWeight: 700, color: stat.color }}>{stat.value}</div>
                     </div>
                 ))}
             </div>
@@ -117,14 +119,14 @@ function SegmentCard({ seg }) {
             {/* Strategy */}
             <div
                 style={{
-                    background: 'rgba(59,130,246,0.07)',
-                    border: '1px solid rgba(59,130,246,0.2)',
+                    background: 'var(--bg-primary)',
+                    border: '1px solid var(--border)',
                     borderRadius: '0.5rem',
                     padding: '0.75rem',
                 }}
             >
-                <p style={{ margin: '0 0 0.25rem', fontSize: '0.65rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🎯 Strategy</p>
-                <p style={{ margin: 0, fontSize: '0.8rem', color: '#cbd5e1', lineHeight: 1.5 }}>{seg.strategy}</p>
+                <p style={{ margin: '0 0 0.25rem', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🎯 Strategy</p>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{seg.strategy}</p>
             </div>
         </div>
     )
@@ -133,46 +135,54 @@ function SegmentCard({ seg }) {
 // ─── Customer Segments Section ────────────────────────────────────────────────
 
 export default function CustomerSegments() {
-    const sectionRef = useRef(null)
-    const [visible, setVisible] = useState(false)
-    useEffect(() => {
-        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true) }, { threshold: 0.1 })
-        if (sectionRef.current) obs.observe(sectionRef.current)
-        return () => obs.disconnect()
-    }, [])
-
     return (
         <section
             id="segments"
-            ref={sectionRef}
             style={{
-                padding: '5rem 1.5rem',
-                maxWidth: '1200px',
-                margin: '0 auto',
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'opacity 0.7s ease, transform 0.7s ease',
+                background: 'var(--bg-surface-2)',
             }}
         >
-            {/* Heading */}
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <span
+            <div style={{ 
+              maxWidth: 'var(--max-width)', 
+              margin: '0 auto', 
+              padding: 'var(--section-padding)'
+            }}>
+                <div
+                    className="animate-ready animate-label"
                     style={{
-                        display: 'inline-block', padding: '0.35rem 1rem',
-                        background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.25)',
-                        borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, color: '#a78bfa',
-                        letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '1rem',
+                        display: 'inline-block',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        letterSpacing: '1.5px',
+                        textTransform: 'uppercase',
+                        color: 'var(--accent)',
+                        marginBottom: '12px'
                     }}
                 >
                     K-Means Clustering
-                </span>
-                <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#f1f5f9', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
+                </div>
+                
+                <h2
+                    className="animate-ready animate-heading"
+                    style={{
+                        fontSize: '36px',
+                        fontWeight: '700',
+                        letterSpacing: '-0.02em',
+                        color: 'var(--text-primary)',
+                        marginBottom: '8px'
+                    }}
+                >
                     Customer Segmentation
                 </h2>
-                <p style={{ color: '#94a3b8', fontSize: '1rem', margin: 0 }}>
+                
+                <p style={{
+                    fontSize: '16px',
+                    color: 'var(--text-secondary)',
+                    maxWidth: '480px',
+                    marginBottom: '48px'
+                }}>
                     K-Means clustering revealed 4 distinct customer groups
                 </p>
-            </div>
 
             {/* 2x2 Segment Cards */}
             <div
@@ -182,39 +192,49 @@ export default function CustomerSegments() {
                 {SEGMENTS.map((seg) => <SegmentCard key={seg.id} seg={seg} />)}
             </div>
 
-            {/* Churn Rate Chart */}
-            <div style={{ background: '#1e293b', borderRadius: '0.75rem', padding: '1.75rem', border: '1px solid #334155' }}>
-                <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: 600, color: 'white', textAlign: 'center' }}>
+            <div className="animate-ready animate-card dark-chart-card">
+                <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: 600, color: '#FFFFFF', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Churn Rate by Segment
                 </p>
                 <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={segmentChurnData} margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                    <BarChart data={segmentChurnData} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                         <XAxis
                             dataKey="segment"
-                            axisLine={{ stroke: '#334155' }}
-                            tickLine={false}
-                            tick={{ fill: '#94a3b8', fontSize: 11 }}
-                        />
-                        <YAxis
+                            stroke="rgba(255,255,255,0.4)"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#94a3b8', fontSize: 11 }}
+                            tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
+                        />
+                        <YAxis
+                            stroke="rgba(255,255,255,0.4)"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
                             tickFormatter={(v) => `${v}%`}
-                            label={{ value: 'Churn Rate (%)', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 11, dy: 50 }}
                         />
                         <Tooltip
-                            contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '0.5rem', color: '#f1f5f9', fontSize: '0.8rem' }}
-                            cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                            contentStyle={{
+                                background: '#1E1E2E',
+                                border: '1px solid rgba(108,99,255,0.3)',
+                                borderRadius: '6px',
+                                padding: '8px 12px',
+                                fontSize: '12px',
+                                color: '#FFFFFF',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                                maxWidth: '160px'
+                            }}
+                            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                            wrapperStyle={{ zIndex: 10, outline: 'none' }}
                             formatter={(value) => [`${value}%`, 'Churn Rate']}
                         />
                         <ReferenceLine
                             y={16.8}
                             strokeDasharray="4 4"
-                            stroke="rgba(255,255,255,0.3)"
-                            label={{ value: 'Avg 16.8%', fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
+                            stroke="var(--text-muted)"
+                            label={{ value: 'Avg 16.8%', fill: 'var(--text-secondary)', fontSize: 11, position: 'top', fontWeight: 600 }}
                         />
-                        <Bar dataKey="churnRate" radius={[4, 4, 0, 0]} barSize={40}>
+                        <Bar dataKey="churnRate" radius={[6, 6, 0, 0]} barSize={40} activeBar={{ fillOpacity: 0.8 }}>
                             {segmentChurnData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.fill} />
                             ))}
@@ -222,6 +242,7 @@ export default function CustomerSegments() {
                     </BarChart>
                 </ResponsiveContainer>
             </div>
+        </div>
 
             <style>{`
         @media (max-width: 768px) { .segments-grid { grid-template-columns: 1fr !important; } }

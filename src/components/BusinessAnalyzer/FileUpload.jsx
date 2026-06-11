@@ -31,7 +31,7 @@ export default function FileUpload({ onFileSelect }) {
 14,30,Female,5,3,900,1,Churned
 15,28,Male,12,7,3400,0,Active`;
         const blob = new Blob([demoCSV], { type: 'text/csv' });
-        const demoFile = new File([blob], 'demo-data.csv', { type: 'text/csv' });
+        const demoFile = new File([blob], 'demo-customers.csv', { type: 'text/csv' });
         setFileError(null);
         onFileSelect(demoFile);
     };
@@ -86,27 +86,19 @@ export default function FileUpload({ onFileSelect }) {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     };
 
-    let borderStyle = '2px dashed rgba(255,255,255,0.2)';
-    let bgStyle = 'transparent';
+    let borderStyle = '2px dashed var(--border)';
+    let bgStyle = 'var(--bg-surface)';
 
     if (file) {
-        borderStyle = '2px solid #22c55e';
-        bgStyle = 'rgba(34,197,94,0.05)';
-    } else if (isDragOver) {
-        borderStyle = '2px solid #3b82f6';
-        bgStyle = 'rgba(59,130,246,0.1)';
-    } else if (isHovered) {
-        borderStyle = '2px dashed #3b82f6';
-        bgStyle = 'rgba(59,130,246,0.05)';
+        borderStyle = '2px solid var(--success)';
+        bgStyle = 'var(--success-bg)';
+    } else if (isDragOver || isHovered) {
+        borderStyle = '2px dashed var(--accent)';
+        bgStyle = 'var(--bg-accent-light)';
     }
 
     return (
         <div style={{
-            background: 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: '16px',
             padding: '40px',
             maxWidth: '700px',
             margin: '0 auto',
@@ -114,23 +106,24 @@ export default function FileUpload({ onFileSelect }) {
         }}>
             {/* TOP BADGE */}
             <div style={{ marginBottom: '16px' }}>
-                <span style={{
-                    background: 'rgba(59,130,246,0.2)',
-                    border: '1px solid #3b82f6',
-                    color: '#3b82f6',
+                <span className="animate-ready animate-label" style={{
+                    background: 'var(--bg-accent-light)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--accent)',
                     borderRadius: '20px',
                     padding: '4px 16px',
                     fontSize: '12px',
-                    display: 'inline-block'
+                    display: 'inline-block',
+                    fontWeight: 600
                 }}>
                     🆕 Business Analyzer
                 </span>
             </div>
 
             {/* HEADING */}
-            <h2 style={{
+            <h2 className="animate-ready animate-heading" style={{
                 fontSize: '28px',
-                color: 'white',
+                color: 'var(--text-primary)',
                 fontWeight: '700',
                 margin: '0 0 12px 0'
             }}>
@@ -138,8 +131,8 @@ export default function FileUpload({ onFileSelect }) {
             </h2>
 
             {/* SUBHEADING */}
-            <p style={{
-                color: 'rgba(255,255,255,0.6)',
+            <p className="animate-ready animate-heading" style={{
+                color: 'var(--text-secondary)',
                 fontSize: '14px',
                 margin: '0 auto 32px auto',
                 lineHeight: '1.5'
@@ -149,6 +142,7 @@ export default function FileUpload({ onFileSelect }) {
 
             {/* UPLOAD ZONE */}
             <div
+                className="animate-ready animate-card"
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -160,7 +154,7 @@ export default function FileUpload({ onFileSelect }) {
                     width: '100%',
                     border: borderStyle,
                     backgroundColor: bgStyle,
-                    borderRadius: '12px',
+                    borderRadius: 'var(--card-radius)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -181,17 +175,17 @@ export default function FileUpload({ onFileSelect }) {
                 {!file ? (
                     <>
                         <div style={{ fontSize: '40px' }}>📂</div>
-                        <div style={{ color: 'white', fontSize: '16px' }}>Drop your CSV file here</div>
-                        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>or click to browse</div>
-                        <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px' }}>.csv files up to 10MB</div>
+                        <div style={{ color: 'var(--text-primary)', fontSize: '16px', fontWeight: 500 }}>Drop your CSV file here</div>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>or click to browse</div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '12px' }}>.csv files up to 10MB</div>
                     </>
                 ) : (
                     <>
                         <div style={{ fontSize: '40px' }}>✅</div>
-                        <div style={{ color: 'white', fontSize: '16px', wordBreak: 'break-all', padding: '0 16px' }}>
+                        <div style={{ color: 'var(--text-primary)', fontSize: '16px', wordBreak: 'break-all', padding: '0 16px', fontWeight: 500 }}>
                             {file.name}
                         </div>
-                        <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>
                             {formatSize(file.size)}
                         </div>
                     </>
@@ -201,8 +195,8 @@ export default function FileUpload({ onFileSelect }) {
             {/* VALIDATION ERROR PILL */}
             {fileError && (
                 <div style={{
-                    background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-                    color: '#f87171', borderRadius: '20px', padding: '6px 16px',
+                    background: 'var(--danger-bg)', border: '1px solid var(--border)',
+                    color: 'var(--danger)', borderRadius: '20px', padding: '6px 16px',
                     fontSize: '13px', marginBottom: '12px', display: 'inline-block'
                 }}>
                     ❌ {fileError}
@@ -212,35 +206,46 @@ export default function FileUpload({ onFileSelect }) {
             {/* DEMO DATA LINK */}
             {!file && (
                 <div style={{ marginBottom: '16px' }}>
-                    <span
+                    <button
+                        className="animate-ready animate-card"
                         onClick={loadDemoData}
-                        style={{ color: '#3b82f6', cursor: 'pointer', fontSize: '13px' }}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--accent)',
+                            cursor: 'pointer',
+                            fontSize: '13px',
+                            padding: '0',
+                            fontWeight: 500
+                        }}
                         onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
                         onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
                     >
-                        Don't have a dataset? Try with sample data →
-                    </span>
+                        Don't have a dataset? Try Demo Data →
+                    </button>
                 </div>
             )}
 
             {/* AFTER FILE SELECTED */}
             {file && (
                 <button
+                    className="animate-ready animate-card"
                     onClick={handleAnalyze}
                     style={{
-                        background: '#3b82f6',
+                        background: 'var(--accent)',
                         color: 'white',
                         border: 'none',
-                        borderRadius: '8px',
+                        borderRadius: 'var(--card-radius)',
                         padding: '12px 32px',
                         fontSize: '15px',
+                        fontWeight: 600,
                         cursor: 'pointer',
                         marginTop: '16px',
                         marginBottom: '24px',
                         transition: 'background 0.2s ease'
                     }}
-                    onMouseEnter={(e) => e.target.style.background = '#2563eb'}
-                    onMouseLeave={(e) => e.target.style.background = '#3b82f6'}
+                    onMouseEnter={(e) => e.target.style.background = 'var(--accent-hover)'}
+                    onMouseLeave={(e) => e.target.style.background = 'var(--accent)'}
                 >
                     Analyze This Data →
                 </button>
@@ -248,15 +253,15 @@ export default function FileUpload({ onFileSelect }) {
 
             {/* BOTTOM NOTE */}
             <div style={{
-                color: 'rgba(255,255,255,0.3)',
+                color: 'var(--text-muted)',
                 fontSize: '12px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px',
                 marginTop: file ? '0' : '24px'
             }}>
-                <div>✅ CSV  ✅ Excel (.xlsx)  ⚠️ PDF (limited)</div>
-                <div>🔒 Only 50 rows sent to AI. Data stays in browser.</div>
+                <div className="animate-ready animate-card">✅ CSV  ✅ Excel (.xlsx)  ⚠️ PDF (limited)</div>
+                <div className="animate-ready animate-card">🔒 Only 50 rows sent to AI. Data stays in browser.</div>
             </div>
         </div>
     );
