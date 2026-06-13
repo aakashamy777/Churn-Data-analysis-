@@ -13,7 +13,7 @@ ReGainer is an end-to-end Machine Learning and AI-powered analytics platform des
 
 ReGainer operates in two distinct, interactive modes:
 
-### 1. 📊 Interactive Case Study Mode
+### 1.  Interactive Case Study Mode
 Deep dive into a pre-computed analysis of **5,630 customer records** with rich visualization and ROI modeling:
 - **Exploratory Data Analysis (EDA)**: Interactive Recharts visualizations showcasing churn distribution, top churn drivers, and customer segment metrics.
 - **Model Performance Dashboard**: Comparative analysis of evaluation metrics across Logistic Regression, Random Forest, and XGBoost.
@@ -22,7 +22,7 @@ Deep dive into a pre-computed analysis of **5,630 customer records** with rich v
 - **NLP Sentiment Analysis**: Highlights NLP feature engineering that mapped Complaint and Satisfaction scores into synthetic reviews, ran TextBlob polarity scoring, and demonstrated a **3.8x higher churn risk** for negative-sentiment customers.
 - **Interactive Live Predictor**: Predict individual customer churn risk by filling out a customer profile. Powered by LLM inference (via the Groq API) that outputs JSON structure for risk probability, confidence, key risk factors, and recommended action.
 
-### 2. 🔬 Business Data Analyzer Mode
+### 2. Business Data Analyzer Mode
 Allows business owners to upload their own datasets and generate automated, AI-driven insights:
 - **CSV Upload & Parser**: Integrated client-side parsing using `PapaParse`.
 - **Data Previewer**: Interactive grid showing uploaded data types, missing values, and data statistics.
@@ -30,7 +30,7 @@ Allows business owners to upload their own datasets and generate automated, AI-d
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Frontend**: React 19, Vite 8, Vanilla CSS (with Tailwind CSS setup)
 - **Data Visualization**: Recharts (for interactive line, bar, pie, and scatter charts)
@@ -46,7 +46,7 @@ Allows business owners to upload their own datasets and generate automated, AI-d
 
 ---
 
-## 📈 Machine Learning Performance Summary
+##  Machine Learning Performance Summary
 
 The underlying predictive models were trained on a Kaggle E-Commerce Churn dataset consisting of 5,630 records:
 
@@ -64,7 +64,7 @@ The underlying predictive models were trained on a Kaggle E-Commerce Churn datas
 
 ---
 
-## 👥 Customer Segmentation Breakdown
+##  Customer Segmentation Breakdown
 
 Unsupervised K-Means clustering identified 4 key buyer profiles:
 
@@ -143,7 +143,7 @@ Unsupervised K-Means clustering identified 4 key buyer profiles:
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 Contributions, issues, and feature requests are welcome. Feel free to open a pull request or submit an issue to make ReGainer even more powerful!
 
 ---
